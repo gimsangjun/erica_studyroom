@@ -16,10 +16,12 @@ public class MainController {
 
         User userA = new User("userA",10);
         User userB = new User("userB",20);
+        User userC = new User("userC",23);
 
         List<User> list = new ArrayList<>();
         list.add(userA);
         list.add(userB);
+        list.add(userC);
 
         model.addAttribute("users", list);
         return "index";
@@ -29,6 +31,8 @@ public class MainController {
     public String layout(Model model){
         return "layoutMain";
     }
+
+
 
     @Data
     static class User{
