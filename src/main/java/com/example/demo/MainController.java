@@ -4,6 +4,7 @@ import lombok.Data;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +12,8 @@ import java.util.List;
 @Controller
 public class MainController {
 
-    @GetMapping("/")
-    public String index(Model model){
-
+    @ModelAttribute("lists")
+    public List<User> users(){
         User userA = new User("userA",10);
         User userB = new User("userB",20);
         User userC = new User("userC",23);
@@ -23,7 +23,11 @@ public class MainController {
         list.add(userB);
         list.add(userC);
 
-        model.addAttribute("users", list);
+        return list;
+    }
+
+    @GetMapping("/")
+    public String index(Model model){
         return "index";
     }
 
@@ -32,7 +36,10 @@ public class MainController {
         return "layoutMain";
     }
 
-
+    @GetMapping("/list")
+    public String list(Model model){
+        return "list";
+    }
 
     @Data
     static class User{
