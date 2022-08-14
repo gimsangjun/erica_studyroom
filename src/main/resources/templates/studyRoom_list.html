@@ -1,0 +1,16 @@
+<table>
+    <thead>
+    <tr>
+        <th>이름</th>
+        <th>수용인원</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="studyRoom : ${studyRooms}">
+        <td>
+            <a th:href="@{/studyRoom_list/detail/{id}(id=${studyRoom.id})}" th:text="${studyRoom.name}"></a>
+        </td>
+        <td th:text="${studyRoom.capacity}"></td>
+    </tr>
+    </tbody>
+</table>

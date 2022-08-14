@@ -5,6 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,43 +14,34 @@ import java.util.List;
 @Controller
 public class MainController {
 
-    @ModelAttribute("lists")
-    public List<User> users(){
-        User userA = new User("userA",10);
-        User userB = new User("userB",20);
-        User userC = new User("userC",23);
-
-        List<User> list = new ArrayList<>();
-        list.add(userA);
-        list.add(userB);
-        list.add(userC);
-
-        return list;
+    @ModelAttribute("studyRooms")
+    public List<StudyRoom> users(){
+        List<StudyRoom> studyRooms = new ArrayList<>();
+        studyRooms.add(new StudyRoom(1,"room1", 10));
+        studyRooms.add(new StudyRoom(2,"room2", 20));
+        return studyRooms;
     }
 
-    @GetMapping("/")
-    public String index(Model model){
-        return "index";
+    @RequestMapping("/")
+    public String root(){
+        return "redirect:/studyRoom_list";
     }
 
-    @GetMapping("/layout")
-    public String layout(Model model){
-        return "layoutMain";
+    @GetMapping("/studyRoom_list")
+    public String studyRoomList(){
+        return "studyRoom_list";
     }
 
-    @GetMapping("/list")
-    public String list(Model model){
-        return "list";
+    @GetMapping("/studyRoom_list/detail/{id}")
+    public String studyRoomDetail(@PathVariable("id") int id){
+        return "studyRoom_detail";
     }
 
-    @Data
-    static class User{
-        private String username;
-        private int age;
+    /**
+     * 구현해야하는거
+     * 데이터 조금더 다채롭게
+     * 로그인
+     * 데이터베이스
+     */
 
-        public User(String username, int age){
-            this.username=username;
-            this.age = age;
-        }
-    }
 }
