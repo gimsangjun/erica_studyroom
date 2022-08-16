@@ -6,11 +6,12 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="studyRoom : ${studyRooms}">
+    <tr th:each="studyRoom : ${studyRoomList}">
         <td>
-            <a th:href="@{/studyRoom_list/detail/{id}(id=${studyRoom.id})}" th:text="${studyRoom.name}"></a>
+            <a th:href="@{/studyRoom_list/detail/{id}(id=${studyRoomList.id})}" th:text="${studyRoom.name}"></a>
         </td>
         <td th:text="${studyRoom.capacity}"></td>
+        <td th:text="${studyRoom.client.name}"></td>
     </tr>
     </tbody>
 </table>

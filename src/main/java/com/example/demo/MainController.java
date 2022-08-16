@@ -1,19 +1,22 @@
 package com.example.demo;
 
-import lombok.Data;
+import com.example.demo.studyroom.StudyRoom;
+import com.example.demo.studyroom.StudyRoomService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
 import java.util.List;
 
+
+@RequiredArgsConstructor
 @Controller
 public class MainController {
 
+    /*
     @ModelAttribute("studyRooms")
     public List<StudyRoom> users(){
         List<StudyRoom> studyRooms = new ArrayList<>();
@@ -21,6 +24,9 @@ public class MainController {
         studyRooms.add(new StudyRoom(2,"room2", 20));
         return studyRooms;
     }
+    */
+
+    private final StudyRoomService studyRoomService;
 
     @RequestMapping("/")
     public String root(){
@@ -28,7 +34,9 @@ public class MainController {
     }
 
     @GetMapping("/studyRoom_list")
-    public String studyRoomList(){
+    public String studyRoomList(Model model){
+        List<StudyRoom> studyRoomList = this.studyRoomService.getList();
+        model.addAttribute("studyRoomList",studyRoomList);
         return "studyRoom_list";
     }
 
@@ -36,6 +44,12 @@ public class MainController {
     public String studyRoomDetail(@PathVariable("id") int id){
         return "studyRoom_detail";
     }
+
+    /**
+     * 정리해야하는거
+     * repository , service, DTO
+     *
+     */
 
     /**
      * 구현해야하는거
