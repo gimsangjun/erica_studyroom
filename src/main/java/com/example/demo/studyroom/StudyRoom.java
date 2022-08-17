@@ -25,7 +25,7 @@ public class StudyRoom {
 
     // 예약자명
     // 계속 오류가 생겨서 나중에 다시
-//    @OneToOne(cascade = CascadeType.ALL)
-//    private StudyUser client;
-    private String client;
+    @OneToOne(cascade = CascadeType.ALL)
+    private StudyUser client;
+    //private String client;
 }
