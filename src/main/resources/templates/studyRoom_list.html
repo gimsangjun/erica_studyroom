@@ -3,14 +3,14 @@
     <tr>
         <th>이름</th>
         <th>수용인원</th>
+        <th>예약자명</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="studyRoom : ${studyRoomList}">
-        <td>
-            <a th:href="@{/studyRoom_list/detail/{id}(id=${studyRoomList.id})}" th:text="${studyRoom.name}"></a>
-        </td>
-        <td th:text="${studyRoom.capacity}"></td>
+        <td th:text="${studyRoom.name}">팀플실 명</td>
+        <td th:text="${studyRoom.capacity}">수용인원</td>
+        <td th:text="${studyRoom.client.name}">예약자명</td>
     </tr>
     </tbody>
 </table>

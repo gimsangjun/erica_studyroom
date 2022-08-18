@@ -21,11 +21,11 @@ public class StudyRoom {
     private String name;
 
     // 수용인원
+    @Column(columnDefinition = "integer default 0")
     private Integer capacity;
 
     // 예약자명
     // 계속 오류가 생겨서 나중에 다시
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.REMOVE)
     private StudyUser client;
-    //private String client;
 }

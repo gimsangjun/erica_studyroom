@@ -14,12 +14,15 @@ public class StudyUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(columnDefinition = "varchar(255) default '공백'")
     private String name;
 
     // 재학중
+    @Column(columnDefinition = "varchar(255) default '휴학중'")
     private String attending;
 
     // 학년
+    @Column(columnDefinition = "integer default 1")
     private Integer grade;
 
     // 예약정보

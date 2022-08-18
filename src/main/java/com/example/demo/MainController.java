@@ -1,8 +1,11 @@
 package com.example.demo;
 
 import com.example.demo.studyroom.StudyRoom;
+import com.example.demo.studyroom.StudyRoomRepository;
 import com.example.demo.studyroom.StudyRoomService;
+import com.example.demo.studyuser.StudyUser;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 
+@Slf4j
 @RequiredArgsConstructor
 @Controller
 public class MainController {
@@ -35,8 +39,23 @@ public class MainController {
 
     @GetMapping("/studyRoom_list")
     public String studyRoomList(Model model){
-        List<StudyRoom> studyRoomList = this.studyRoomService.getList();
-        model.addAttribute("studyRoomList",studyRoomList);
+        //List<StudyRoom> studyRoomList = this.studyRoomService.getList();
+
+        StudyUser user1 = new StudyUser();
+        user1.setAttending("재학중");
+        user1.setGrade(3);
+        user1.setName("김상준");
+
+
+        StudyRoom room1 = new StudyRoom();
+        room1.setName("팀플실이름1");
+        room1.setCapacity(10);
+        room1.setClient(user1);
+
+        model.addAttribute("studyRoomList",room1);
+
+        //log.info("studyRoom ={}", studyRoomList.get(0));
+        //model.addAttribute("studyRoomList",studyRoomList);
         return "studyRoom_list";
     }
 
