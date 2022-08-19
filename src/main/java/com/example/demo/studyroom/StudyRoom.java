@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 
 @Entity
@@ -17,6 +18,7 @@ public class StudyRoom {
     private Integer id;
 
     @Column(length = 200)
+    @NotNull
     // 팀플실이름
     private String name;
 

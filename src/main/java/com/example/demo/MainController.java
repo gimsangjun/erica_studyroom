@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -62,6 +63,11 @@ public class MainController {
     @GetMapping("/studyRoom_list/detail/{id}")
     public String studyRoomDetail(@PathVariable("id") int id){
         return "studyRoom_detail";
+    }
+
+    @GetMapping("/login")
+    public String loginForm(Model model){
+        return "login";
     }
 
     /**
