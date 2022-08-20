@@ -23,11 +23,15 @@ public class StudyRoom {
     private String name;
 
     // 수용인원
-    @Column(columnDefinition = "integer default 0")
+    @Column
+    @NotNull
     private Integer capacity;
 
     // 예약자명
-    // 계속 오류가 생겨서 나중에 다시
-    @OneToOne(cascade = CascadeType.REMOVE)
-    private StudyUser client;
+    @Column
+    @NotNull
+    private String client;
+    // 아직로그인기능을 만들지 않아서 나중에 다시
+//    @OneToOne(cascade = CascadeType.REMOVE)
+//    private StudyUser client;
 }

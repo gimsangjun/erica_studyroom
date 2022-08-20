@@ -15,5 +15,8 @@ public class StudyRoomService {
         return this.studyRoomRepository.findAll();
     }
 
+    public void create(StudyRoom studyRoom){
+        this.studyRoomRepository.save(studyRoom);
+    }
 
 }

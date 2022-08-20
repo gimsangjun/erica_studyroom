@@ -1,16 +1,21 @@
-<table>
-    <thead>
-    <tr>
-        <th>이름</th>
-        <th>수용인원</th>
-        <th>예약자명</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="studyRoom : ${studyRoomList}">
-        <td th:text="${studyRoom.name}">팀플실 명</td>
-        <td th:text="${studyRoom.capacity}">수용인원</td>
-        <td th:text="${studyRoom.client.name}">예약자명</td>
-    </tr>
-    </tbody>
-</table>
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+    <table class ="table">
+        <thead class="table-dark">
+        <tr>
+            <th>이름</th>
+            <th>수용인원</th>
+            <th>예약자명</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr th:each="studyRoom : ${studyRoomList}">
+                <td th:text="${studyRoom.name}">팀플실 이름</td>
+                <td th:text="${studyRoom.capacity}">수용인원</td>
+                <td th:text="${studyRoom.client}">예약자명</td>
+            </tr>
+        </tbody>
+    </table>
+    <a th:href="@{/studyRoom/create}" class="btn btn-primary">팀플실 만들기</a>
+</div>
+</html>

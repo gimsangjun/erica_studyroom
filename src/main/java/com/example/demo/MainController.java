@@ -8,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,46 +18,21 @@ import java.util.List;
 @Controller
 public class MainController {
 
-    /*
-    @ModelAttribute("studyRooms")
-    public List<StudyRoom> users(){
-        List<StudyRoom> studyRooms = new ArrayList<>();
-        studyRooms.add(new StudyRoom(1,"room1", 10));
-        studyRooms.add(new StudyRoom(2,"room2", 20));
-        return studyRooms;
-    }
-    */
-
     private final StudyRoomService studyRoomService;
 
     @RequestMapping("/")
     public String root(){
-        return "redirect:/studyRoom_list";
+        return "redirect:/studyRoom/list";
     }
 
-    @GetMapping("/studyRoom_list")
+    @GetMapping("/studyRoom/list")
     public String studyRoomList(Model model){
-        //List<StudyRoom> studyRoomList = this.studyRoomService.getList();
-
-        StudyUser user1 = new StudyUser();
-        user1.setAttending("재학중");
-        user1.setGrade(3);
-        user1.setName("김상준");
-
-
-        StudyRoom room1 = new StudyRoom();
-        room1.setName("팀플실이름1");
-        room1.setCapacity(10);
-        room1.setClient(user1);
-
-        model.addAttribute("studyRoomList",room1);
-
-        //log.info("studyRoom ={}", studyRoomList.get(0));
-        //model.addAttribute("studyRoomList",studyRoomList);
+        List<StudyRoom> studyRoomList = this.studyRoomService.getList();
+        model.addAttribute("studyRoomList",studyRoomList);
         return "studyRoom_list";
     }
 
-    @GetMapping("/studyRoom_list/detail/{id}")
+    @GetMapping("/studyRoom/detail/{id}")
     public String studyRoomDetail(@PathVariable("id") int id){
         return "studyRoom_detail";
     }
@@ -70,17 +42,29 @@ public class MainController {
         return "login";
     }
 
+    @GetMapping("/studyRoom/create")
+    public String studyRoomForm(){
+        return "studyRoom_form";
+    }
+
+    @PostMapping("/studyRoom/create")
+    public String studyRoomCreate(@ModelAttribute StudyRoom studyRoom){
+        this.studyRoomService.create(studyRoom);
+        return "redirect:/studyRoom/list";
+    }
+
+
     /**
      * 정리해야하는거
      * repository , service, DTO
-     *
+     * 타임리프기능다시
      */
 
     /**
      * 구현해야하는거
-     * 데이터 조금더 다채롭게
      * 로그인
      * 데이터베이스
+     * 삭제기능
      */
 
 }
