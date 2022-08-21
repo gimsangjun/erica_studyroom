@@ -10,7 +10,9 @@
         </thead>
         <tbody>
             <tr th:each="studyRoom : ${studyRoomList}">
-                <td th:text="${studyRoom.name}">팀플실 이름</td>
+                <td >
+                    <a th:href="@{|/studyRoom/detail/${studyRoom.id}|}" th:text="${studyRoom.name}">
+                </td>
                 <td th:text="${studyRoom.capacity}">수용인원</td>
                 <td th:text="${studyRoom.client}">예약자명</td>
             </tr>

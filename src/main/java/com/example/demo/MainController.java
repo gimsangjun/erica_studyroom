@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Slf4j
@@ -33,7 +34,9 @@ public class MainController {
     }
 
     @GetMapping("/studyRoom/detail/{id}")
-    public String studyRoomDetail(@PathVariable("id") int id){
+    public String studyRoomDetail(Model model,@PathVariable("id") int id){
+        StudyRoom studyRoom = this.studyRoomService.getStudyRoom(id);
+        model.addAttribute("studyRoom",studyRoom);
         return "studyRoom_detail";
     }
 
