@@ -56,6 +56,27 @@ public class MainController {
         return "redirect:/studyRoom/list";
     }
 
+    @GetMapping ("/studyRoom/modify/{id}")
+    public String studyRoomModifyForm(Model model, @PathVariable("id") Integer id){
+        StudyRoom studyRoom = this.studyRoomService.getStudyRoom(id);
+        model.addAttribute("studyRoom",studyRoom);
+        return "studyRoom_modify";
+    }
+
+    @PostMapping ("/studyRoom/modify/{id}")
+    public String studyRoomModify(@ModelAttribute StudyRoom studyRoom,@PathVariable("id") Integer id){
+        StudyRoom room = this.studyRoomService.getStudyRoom(id);
+        this.studyRoomService.modify(room,studyRoom.getName(),studyRoom.getCapacity(),studyRoom.getClient());
+        return String.format("redirect:/studyRoom/detail/%s", id);
+    }
+
+    @GetMapping("/studyRoom/delete/{id}")
+    public String studyRoomDelete(@PathVariable("id") Integer id){
+        StudyRoom studyRoom = this.studyRoomService.getStudyRoom(id);
+        this.studyRoomService.delete(studyRoom);
+        return "redirect:/";
+
+    }
 
     /**
      * 정리해야하는거

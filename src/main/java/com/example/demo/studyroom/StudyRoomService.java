@@ -31,5 +31,13 @@ public class StudyRoomService {
         this.studyRoomRepository.save(studyRoom);
     }
 
+    public void delete(StudyRoom studyRoom) {this.studyRoomRepository.delete(studyRoom);}
+
+    public void modify(StudyRoom studyRoom,String name, int capacity, String client) {
+        studyRoom.setName(name);
+        studyRoom.setCapacity(capacity);
+        studyRoom.setClient(client);
+        this.studyRoomRepository.save(studyRoom);
+    }
 
 }

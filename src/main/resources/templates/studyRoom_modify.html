@@ -1,0 +1,20 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container">
+    <h5 class="my-3 border-bottom pb-2">수정</h5>
+    <form th:action="@{|/studyRoom/modify/${studyRoom.id}|}" method="post">
+        <div class="mb-3">
+            <label for="name" class="form-label">팀플실 이름</label>
+            <input type="text" name="name" class="form-control" th:value="${studyRoom.name}">
+        </div>
+        <div class="mb-3">
+            <label for="capacity" class="form-label">수용인원</label>
+            <input type="text" name="capacity" class="form-control" th:value="${studyRoom.capacity}">
+        </div>
+        <div class="mb-3">
+            <label for="client" class="form-label">예약자명</label>
+            <input type="text" name="client" class="form-control" th:value="${studyRoom.client}">
+        </div>
+        <input type="submit" value="수정하기" class="btn btn-primary my-2">
+    </form>
+</div>
+</html>

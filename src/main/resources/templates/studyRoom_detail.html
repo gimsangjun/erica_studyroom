@@ -1,3 +1,15 @@
-<h1 th:text="${studyRoom.name}"></h1>
-<div th:text="${studyRoom.capacity}"></div>
-<div th:text="${studyRoom.client}"></div>
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container">
+    <h1 th:text="|팀플실 이름 : ${studyRoom.name}|"></h1>
+    <div th:text="|수용인원 : ${studyRoom.capacity}|"></div>
+    <div th:text="|예약자명 : ${studyRoom.client}|"></div>
+    <div class="my-3">
+        <a th:href="@{/studyRoom/list}" class="btn btn-sm btn-outline-secondary"
+           th:text="홈">홈</a>
+        <a th:href="@{|/studyRoom/modify/${studyRoom.id}|}" class="btn btn-sm btn-outline-secondary"
+           th:text="수정">수정</a>
+        <a th:href="@{|/studyRoom/delete/${studyRoom.id}|}" class="btn btn-sm btn-outline-secondary"
+           th:text="삭제">삭제</a>
+    </div>
+</div>
+</html>
