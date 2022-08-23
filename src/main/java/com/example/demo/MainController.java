@@ -56,6 +56,7 @@ public class MainController {
         return "redirect:/studyRoom/list";
     }
 
+    // detail기능과 합쳐보기. 점프트 스프링부트
     @GetMapping ("/studyRoom/modify/{id}")
     public String studyRoomModifyForm(Model model, @PathVariable("id") Integer id){
         StudyRoom studyRoom = this.studyRoomService.getStudyRoom(id);
@@ -81,14 +82,13 @@ public class MainController {
     /**
      * 정리해야하는거
      * repository , service, DTO
-     * 타임리프기능다시
+     * 타임리프기능다시 + 부트스트랩
      */
 
     /**
      * 구현해야하는거
      * 로그인
      * 데이터베이스
-     * 삭제기능
      */
 
 }
