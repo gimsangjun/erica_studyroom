@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,12 +48,17 @@ public class MainController {
     }
 
     @GetMapping("/studyRoom/create")
-    public String studyRoomForm(){
+    public String studyRoomForm(Model model){
+        model.addAttribute("studyRoom",new StudyRoom());
         return "studyRoom_form";
     }
 
     @PostMapping("/studyRoom/create")
-    public String studyRoomCreate(@ModelAttribute StudyRoom studyRoom){
+    public String studyRoomCreate(@Validated @ModelAttribute StudyRoom studyRoom, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            log.info("studyCreate Error={}",bindingResult);
+            return "studyRoom_form";
+        }
         this.studyRoomService.create(studyRoom);
         return "redirect:/studyRoom/list";
     }
@@ -65,7 +72,10 @@ public class MainController {
     }
 
     @PostMapping ("/studyRoom/modify/{id}")
-    public String studyRoomModify(@ModelAttribute StudyRoom studyRoom,@PathVariable("id") Integer id){
+    public String studyRoomModify(@Validated @ModelAttribute StudyRoom studyRoom,BindingResult bindingResult,@PathVariable("id") Integer id){
+        if(bindingResult.hasErrors()){
+            return String.format("/studyRoom/modify/%s",id);
+        }
         StudyRoom room = this.studyRoomService.getStudyRoom(id);
         this.studyRoomService.modify(room,studyRoom.getName(),studyRoom.getCapacity(),studyRoom.getClient());
         return String.format("redirect:/studyRoom/detail/%s", id);

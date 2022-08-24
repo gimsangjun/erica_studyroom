@@ -3,6 +3,7 @@ package com.example.demo.studyroom;
 import com.example.demo.studyuser.StudyUser;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -25,6 +26,7 @@ public class StudyRoom {
     // 수용인원
     @Column
     @NotNull
+    @Range(min = 1 , max = 20)
     private Integer capacity;
 
     // 예약자명
