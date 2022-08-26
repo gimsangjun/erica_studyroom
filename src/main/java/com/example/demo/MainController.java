@@ -44,7 +44,19 @@ public class MainController {
 
     @GetMapping("/login")
     public String loginForm(Model model){
+        model.addAttribute("studyUser",new StudyUser());
         return "login";
+    }
+
+    @PostMapping("/login")
+    public String loginSignUp(@Validated @ModelAttribute StudyUser studyUser,BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            log.info("studyCreate Error={}",bindingResult);
+            return "studyRoom_form";
+        }
+        log.info("UserID={}",studyUser.getUserId());
+        log.info("Password={}",studyUser.getPassword());
+        return "redirect:/studyRoom/list";
     }
 
     @GetMapping("/studyRoom/create")

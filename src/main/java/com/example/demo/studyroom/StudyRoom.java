@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 
@@ -18,9 +19,9 @@ public class StudyRoom {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(length = 200)
-    @NotNull
     // 팀플실이름
+    @Column(length = 200)
+    @NotBlank
     private String name;
 
     // 수용인원
@@ -31,7 +32,7 @@ public class StudyRoom {
 
     // 예약자명
     @Column
-    @NotNull
+    @NotBlank
     private String client;
     // 아직로그인기능을 만들지 않아서 나중에 다시
 //    @OneToOne(cascade = CascadeType.REMOVE)

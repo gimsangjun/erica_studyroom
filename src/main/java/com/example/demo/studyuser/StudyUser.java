@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Setter
@@ -14,16 +15,18 @@ public class StudyUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(columnDefinition = "varchar(255) default '공백'")
-    private String name;
+    @NotBlank
+    @Column
+    private String userId;
+
+    @NotBlank
+    @Column
+    private String password;
 
     // 재학중
-    @Column(columnDefinition = "varchar(255) default '휴학중'")
-    private String attending;
 
     // 학년
-    @Column(columnDefinition = "integer default 1")
-    private Integer grade;
+
 
     // 예약정보
 
