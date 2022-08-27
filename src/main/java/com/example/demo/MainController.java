@@ -43,13 +43,13 @@ public class MainController {
     }
 
     @GetMapping("/login")
-    public String loginForm(Model model){
+    public String loginGet(Model model){
         model.addAttribute("studyUser",new StudyUser());
-        return "login";
+        return "login_form";
     }
 
     @PostMapping("/login")
-    public String loginSignUp(@Validated @ModelAttribute StudyUser studyUser,BindingResult bindingResult){
+    public String loginPost(@Validated @ModelAttribute StudyUser studyUser,BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             log.info("studyCreate Error={}",bindingResult);
             return "studyRoom_form";
@@ -57,6 +57,18 @@ public class MainController {
         log.info("UserID={}",studyUser.getUserId());
         log.info("Password={}",studyUser.getPassword());
         return "redirect:/studyRoom/list";
+    }
+
+    @GetMapping("/signUp")
+    public String signUpGet(Model model){
+        model.addAttribute("studyUser",new StudyUser());
+        return "signUp_form";
+    }
+
+    @PostMapping("/signUp")
+    public String signUpPost(Model model){
+        model.addAttribute("studyUser",new StudyUser());
+        return "signUp_form";
     }
 
     @GetMapping("/studyRoom/create")
