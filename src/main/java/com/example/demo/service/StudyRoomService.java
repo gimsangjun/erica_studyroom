@@ -1,10 +1,11 @@
-package com.example.demo.studyroom;
+package com.example.demo.service;
 
 import com.example.demo.DataNotFoundException;
+import com.example.demo.dto.StudyRoom;
+import com.example.demo.repository.StudyRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 

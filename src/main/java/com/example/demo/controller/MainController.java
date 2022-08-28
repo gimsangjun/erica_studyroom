@@ -1,9 +1,8 @@
-package com.example.demo;
+package com.example.demo.controller;
 
-import com.example.demo.studyroom.StudyRoom;
-import com.example.demo.studyroom.StudyRoomRepository;
-import com.example.demo.studyroom.StudyRoomService;
-import com.example.demo.studyuser.StudyUser;
+import com.example.demo.dto.StudyRoom;
+import com.example.demo.service.StudyRoomService;
+import com.example.demo.dto.StudyUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -13,7 +12,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @Slf4j
@@ -42,34 +40,6 @@ public class MainController {
         return "studyRoom_detail";
     }
 
-    @GetMapping("/login")
-    public String loginGet(Model model){
-        model.addAttribute("studyUser",new StudyUser());
-        return "login_form";
-    }
-
-    @PostMapping("/login")
-    public String loginPost(@Validated @ModelAttribute StudyUser studyUser,BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
-            log.info("studyCreate Error={}",bindingResult);
-            return "studyRoom_form";
-        }
-        log.info("UserID={}",studyUser.getUserId());
-        log.info("Password={}",studyUser.getPassword());
-        return "redirect:/studyRoom/list";
-    }
-
-    @GetMapping("/signUp")
-    public String signUpGet(Model model){
-        model.addAttribute("studyUser",new StudyUser());
-        return "signUp_form";
-    }
-
-    @PostMapping("/signUp")
-    public String signUpPost(Model model){
-        model.addAttribute("studyUser",new StudyUser());
-        return "signUp_form";
-    }
 
     @GetMapping("/studyRoom/create")
     public String studyRoomForm(Model model){

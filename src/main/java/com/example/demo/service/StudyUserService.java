@@ -1,5 +1,7 @@
-package com.example.demo.studyuser;
+package com.example.demo.service;
 
+import com.example.demo.dto.StudyUser;
+import com.example.demo.repository.StudyUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

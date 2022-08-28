@@ -1,9 +1,8 @@
 package com.example.demo;
 
-import com.example.demo.studyroom.StudyRoom;
-import com.example.demo.studyroom.StudyRoomRepository;
-import com.example.demo.studyuser.StudyUser;
-import com.example.demo.studyuser.StudyUserRepository;
+import com.example.demo.dto.StudyRoom;
+import com.example.demo.repository.StudyRoomRepository;
+import com.example.demo.repository.StudyUserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
