@@ -16,10 +16,11 @@ public class LoginUserService {
     private final LoginUserRepository loginUserRepository;
 
     // BCrypt를 활용해서 암호화 해야함.
-    public LoginUser create(String id, String password){
+    public LoginUser create(String id, String password,String name){
         LoginUser user = new LoginUser();
         user.setLoginId(id);
         user.setPassword(password);
+        user.setName(name);
         this.loginUserRepository.save(user);
         log.info("회원가입 성공");
         return user;

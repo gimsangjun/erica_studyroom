@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.StudyRoom;
 import com.example.demo.service.StudyRoomService;
-import com.example.demo.dto.StudyUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -11,65 +10,46 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.List;
-
-
+@Controller
 @Slf4j
 @RequiredArgsConstructor
-@Controller
-public class MainController {
+@RequestMapping("/studyRoom")
+public class StudyRoomController {
 
     private final StudyRoomService studyRoomService;
 
-    @RequestMapping("/")
-    public String root(){
-        return "redirect:/studyRoom/list";
-    }
-
-    // 아직까지는 home역할중
-    @GetMapping("/studyRoom/list")
-    public String studyRoomList(HttpServletRequest request, Model model){
-
-        List<StudyRoom> studyRoomList = this.studyRoomService.getList();
-        model.addAttribute("studyRoomList",studyRoomList);
-        return "studyRoom_list";
-    }
-
-    @GetMapping("/studyRoom/detail/{id}")
-    public String studyRoomDetail(Model model,@PathVariable("id") int id){
+    @GetMapping("/detail/{id}")
+    public String studyRoomDetail(Model model, @PathVariable("id") int id){
         StudyRoom studyRoom = this.studyRoomService.getStudyRoom(id);
         model.addAttribute("studyRoom",studyRoom);
         return "studyRoom_detail";
     }
 
-
-    @GetMapping("/studyRoom/create")
+    @GetMapping("/create")
     public String studyRoomForm(Model model){
         model.addAttribute("studyRoom",new StudyRoom());
         return "studyRoom_form";
     }
 
-    @PostMapping("/studyRoom/create")
+    @PostMapping("/create")
     public String studyRoomCreate(@Validated @ModelAttribute StudyRoom studyRoom, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             log.info("studyRoomCreate Error={}",bindingResult);
             return "studyRoom_form";
         }
         this.studyRoomService.create(studyRoom);
-        return "redirect:/studyRoom/list";
+        return "redirect:/";
     }
 
     // detail기능과 합쳐보기. 점프트 스프링부트
-    @GetMapping ("/studyRoom/modify/{id}")
+    @GetMapping ("/modify/{id}")
     public String studyRoomModifyForm(Model model, @PathVariable("id") Integer id){
         StudyRoom studyRoom = this.studyRoomService.getStudyRoom(id);
         model.addAttribute("studyRoom",studyRoom);
         return "studyRoom_modify";
     }
 
-    @PostMapping ("/studyRoom/modify/{id}")
+    @PostMapping ("/modify/{id}")
     public String studyRoomModify(@Validated @ModelAttribute StudyRoom studyRoom,BindingResult bindingResult,@PathVariable("id") Integer id){
         if(bindingResult.hasErrors()){
             return String.format("/studyRoom/modify/%s",id);
@@ -79,24 +59,11 @@ public class MainController {
         return String.format("redirect:/studyRoom/detail/%s", id);
     }
 
-    @GetMapping("/studyRoom/delete/{id}")
+    @GetMapping("/delete/{id}")
     public String studyRoomDelete(@PathVariable("id") Integer id){
         StudyRoom studyRoom = this.studyRoomService.getStudyRoom(id);
         this.studyRoomService.delete(studyRoom);
         return "redirect:/";
 
     }
-
-    /**
-     * 정리해야하는거
-     * repository , service, DTO
-     * 타임리프기능다시 + 부트스트랩
-     */
-
-    /**
-     * 구현해야하는거
-     * 로그인
-     * 데이터베이스
-     */
-
 }

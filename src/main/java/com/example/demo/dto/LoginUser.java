@@ -17,7 +17,10 @@ public class LoginUser {
 
     @Column(unique = true)
     @NotNull
-    private String loginId;
+    private String loginId; // 로그인 ID
+
+    @NotNull
+    private String name; // 사용자 이름
 
     @NotNull
     private String password;
