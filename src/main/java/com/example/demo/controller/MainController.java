@@ -11,6 +11,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 
@@ -26,8 +28,10 @@ public class MainController {
         return "redirect:/studyRoom/list";
     }
 
+    // 아직까지는 home역할중
     @GetMapping("/studyRoom/list")
-    public String studyRoomList(Model model){
+    public String studyRoomList(HttpServletRequest request, Model model){
+
         List<StudyRoom> studyRoomList = this.studyRoomService.getList();
         model.addAttribute("studyRoomList",studyRoomList);
         return "studyRoom_list";
@@ -50,7 +54,7 @@ public class MainController {
     @PostMapping("/studyRoom/create")
     public String studyRoomCreate(@Validated @ModelAttribute StudyRoom studyRoom, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
-            log.info("studyCreate Error={}",bindingResult);
+            log.info("studyRoomCreate Error={}",bindingResult);
             return "studyRoom_form";
         }
         this.studyRoomService.create(studyRoom);

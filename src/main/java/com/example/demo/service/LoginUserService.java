@@ -25,18 +25,10 @@ public class LoginUserService {
         return user;
     }
 
-    public boolean loadUserByLoginId(String LoginId,String password){
-        Optional<LoginUser> loginUser = this.loginUserRepository.findByloginId(LoginId);
-        if (loginUser.isEmpty()){
-            log.info("사용자를 찾을수 없습니다.");
-            return false;
-        }
-        if (loginUser.get().getPassword() == password){
-            log.info("로그인 성공");
-            return true;
-        } else{
-            log.info("비밀번호 틀렸습니다.");
-            return false;
-        }
+    public LoginUser loadUserByLoginId(String loginId,String password){
+        // 람다식으로 작성하는것으 연습해야됨.
+        return loginUserRepository.findByloginId(loginId)
+                .filter(m -> m.getPassword().equals(password))
+                .orElse(null);
     }
 }

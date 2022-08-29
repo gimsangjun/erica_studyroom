@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.SessionConst;
 import com.example.demo.dto.LoginUser;
 import com.example.demo.service.LoginUserService;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +12,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -26,17 +29,37 @@ public class LoginUserController {
         return "login_form";
     }
 
-    // Form을 따로만들어야됨.
+    // Form을 따로만들어야됨.parameter LoginUser->LoginForm
     @PostMapping("/login")
-    public String loginPost(@Validated @ModelAttribute LoginUser loginUser, BindingResult bindingResult){
+    public String loginPost(@Validated @ModelAttribute LoginUser loginUser, BindingResult bindingResult, HttpServletRequest request){
         if(bindingResult.hasErrors()){
             log.info("LoginUser Create Error={}",bindingResult);
-            return "loginRoom_form";
+            return "login_form";
         }
-        log.info("LoginID={}",loginUser.getLoginId());
-        log.info("Password={}",loginUser.getPassword());
-        this.loginUserService.create(loginUser.getLoginId(),loginUser.getPassword());
-        return "redirect:/loginRoom/list";
+        // user -> loginUser
+        LoginUser user = this.loginUserService.create(loginUser.getLoginId(),loginUser.getPassword());
+        log.info("login? {}",user);
+        if (loginUser == null){
+            bindingResult.reject("loginFail","아이디 또는 비밀번호가 맞지 않습니다.");
+            return "login_form";
+        }
+
+        // 로그인 성공처리
+
+        HttpSession session = request.getSession();
+        // user -> loginUser
+        session.setAttribute(SessionConst.LOGIN_USER,user);
+        return "redirect:/";
+    }
+
+    @PostMapping("/logout")
+    public String logoutV3(HttpServletRequest request) {
+        //세션을 삭제한다.
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        return "redirect:/";
     }
 
     @GetMapping("/signUp")
@@ -54,7 +77,7 @@ public class LoginUserController {
         log.info("LoginID={}",loginUser.getLoginId());
         log.info("Password={}",loginUser.getPassword());
         this.loginUserService.create(loginUser.getLoginId(),loginUser.getPassword());
-        return "/studyRoom/list";
+        return "redirect:/studyRoom/list";
     }
 
     // userList보여주는 임시 사이트 나중에 개발.
