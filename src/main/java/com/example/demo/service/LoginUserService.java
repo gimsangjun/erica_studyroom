@@ -28,7 +28,7 @@ public class LoginUserService {
 
     public LoginUser loadUserByLoginId(String loginId,String password){
         // 람다식으로 작성하는것으 연습해야됨.
-        return loginUserRepository.findByloginId(loginId)
+        return loginUserRepository.findByLoginId(loginId)
                 .filter(m -> m.getPassword().equals(password))
                 .orElse(null);
     }

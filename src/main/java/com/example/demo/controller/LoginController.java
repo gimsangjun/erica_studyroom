@@ -33,7 +33,7 @@ public class LoginController {
     @PostMapping("/login")
     public String loginPost(@Validated @ModelAttribute LoginForm loginForm, BindingResult bindingResult, HttpServletRequest request){
         if(bindingResult.hasErrors()){
-            log.info("LoginUser Create Error={}",bindingResult);
+            log.info("Login Error={}",bindingResult);
             return "login_form";
         }
         LoginUser loginUser = this.loginUserService.loadUserByLoginId(loginForm.getLoginId(),loginForm.getPassword());
@@ -50,7 +50,7 @@ public class LoginController {
         return "redirect:/";
     }
 
-    @PostMapping("/logout")
+    @GetMapping("/logout")
     public String logout(HttpServletRequest request) {
         //세션을 삭제한다.
         HttpSession session = request.getSession(false);
