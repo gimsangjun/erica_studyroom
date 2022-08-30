@@ -1,0 +1,25 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+    <h4 class="mb-3" th:text="|로그인: ${login.name}|">로그인 사용자 이름</h4>
+    <table class ="table">
+        <thead class="table-dark">
+        <tr>
+            <th>이름</th>
+            <th>수용인원</th>
+            <th>예약자명</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="studyRoom : ${studyRoomList}">
+            <td >
+                <a th:href="@{|/studyRoom/detail/${studyRoom.id}|}" th:text="${studyRoom.name}">
+            </td>
+            <td th:text="${studyRoom.capacity}">수용인원</td>
+            <td th:text="${studyRoom.client}">예약자명</td>
+        </tr>
+        </tbody>
+    </table>
+    <a th:href="@{/studyRoom/create}" class="btn btn-primary">팀플실 만들기</a>
+    <a th:href="@{/logout}" class="btn btn-primary">로그아웃</a>
+</div>
+</html>

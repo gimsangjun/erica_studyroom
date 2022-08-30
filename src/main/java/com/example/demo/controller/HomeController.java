@@ -25,29 +25,22 @@ public class HomeController {
 
     private final StudyRoomService studyRoomService;
 
-    // @SessionAttribute를 쓰면 조금더 쉽게 처리할수있음.
     @RequestMapping("/")
-    public String root(HttpServletRequest request, Model model){
+    public String root(@SessionAttribute(name=SessionConst.LOGIN_USER, required = false) LoginUser loginUser, Model model){
 
         // 기본적으로 로그인 하든 안하든, 목록을 보여줌.
         List<StudyRoom> studyRoomList = this.studyRoomService.getList();
         model.addAttribute("studyRoomList",studyRoomList);
 
-        // 세션이 없으면 그냥 홈, 새로 만들지도 않음.
-        HttpSession session = request.getSession(false);
-        if (session == null){
-            return "home";
-        }
-
-        LoginUser loginUser = (LoginUser) session.getAttribute(SessionConst.LOGIN_USER);
-        // 세션에 회원 데이터가 없으면 그냥 홈. - 시간이 지나서 회원데이터가 서버측에서 사라졌을때
-        if (session == null) {
+        // 세션에 회원 데이터가 없으면 home
+        if (loginUser == null){
             return "home";
         }
 
         // 세션이 유지되면 model에 유저 데이터를 넣어줌.
         model.addAttribute("loginUser",loginUser);
-        return "home";
+        // home_login 로그인 사용자 전용
+        return "home_login";
     }
 
     /**

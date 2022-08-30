@@ -1,6 +1,5 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
-    <h4 class="mb-3" th:text="|로그인: ${login.name}|">로그인 사용자 이름</h4>
     <table class ="table">
         <thead class="table-dark">
         <tr>
@@ -19,7 +18,6 @@
             </tr>
         </tbody>
     </table>
-    <a th:href="@{/studyRoom/create}" class="btn btn-primary">팀플실 만들기</a>
     <a th:href="@{/login}" class="btn btn-primary">로그인</a>
     <a th:href="@{/signUp}" class="btn btn-primary">회원가입</a>
 </div>
