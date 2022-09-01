@@ -9,6 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+    // 스프링이 제공하는 addInterceptors
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // Log 인터셉터
@@ -23,7 +24,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 .excludePathPatterns(
                         "/","/login","/logout","/signUp",
-                        "/css/**", "/*.ico", "/error","/**.css"
+                        "/css/**", "/*.ico", "/error"
                 );
     }
 }
