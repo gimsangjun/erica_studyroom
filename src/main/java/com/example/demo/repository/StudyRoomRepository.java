@@ -1,7 +1,10 @@
 package com.example.demo.repository;
 
-import com.example.demo.dto.StudyRoom;
+import com.example.demo.domain.StudyRoom;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface StudyRoomRepository extends JpaRepository<StudyRoom, Integer> {
+import java.util.Optional;
+
+public interface StudyRoomRepository extends JpaRepository<StudyRoom, Long> {
+    Optional<StudyRoom> findById(Long id);
 }

@@ -1,15 +1,15 @@
-package com.example.demo.form;
+package com.example.demo.dto;
 
 import lombok.Data;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 @Data
 public class LoginForm {
 
-    @NotEmpty
+    @NotBlank
     private String loginId;
 
-    @NotEmpty
+    @NotBlank
     private String password;
 }

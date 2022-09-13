@@ -1,6 +1,6 @@
 package com.example.demo;
 
-import com.example.demo.dto.StudyRoom;
+import com.example.demo.domain.StudyRoom;
 import com.example.demo.repository.StudyRoomRepository;
 import com.example.demo.repository.StudyUserRepository;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ class DemoApplicationTests {
 		StudyRoom studyRoom1 = new StudyRoom();
 		studyRoom1.setName("팀플실명1");
 		studyRoom1.setCapacity(10);
-		studyRoom1.setClient("김상준1");
+		studyRoom1.setorder("김상준1");
 		this.studyRoomRepository.save(studyRoom1);
 
 
@@ -38,7 +38,7 @@ class DemoApplicationTests {
 //		StudyRoom room1 = new StudyRoom();
 //		room1.setName("팀플실이름1");
 //		room1.setCapacity(10);
-//		room1.setClient(user1);
+//		room1.setorder(user1);
 //		this.studyRoomRepository.save(room1);
 //
 //		// OneToOne이라 user2를 또 새로 만들어야됨.
@@ -51,7 +51,7 @@ class DemoApplicationTests {
 //		StudyRoom room2 = new StudyRoom();
 //		room2.setName("팀플실이름2");
 //		room2.setCapacity(20);
-//		room2.setClient(user2);
+//		room2.setorder(user2);
 //		this.studyRoomRepository.save(room2);
 	}
 

@@ -1,14 +1,13 @@
 package com.example.demo.controller;
 
 import com.example.demo.SessionConst;
-import com.example.demo.dto.LoginUser;
-import com.example.demo.form.LoginForm;
-import com.example.demo.form.SignUpForm;
-import com.example.demo.service.LoginUserService;
+import com.example.demo.domain.Member;
+import com.example.demo.dto.LoginForm;
+import com.example.demo.dto.SignUpForm;
+import com.example.demo.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +22,7 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class LoginController {
     
-    private final LoginUserService loginUserService;
+    private final MemberService memberService;
 
     @GetMapping("/login")
     public String loginGet(@ModelAttribute("loginForm") LoginForm form){
@@ -36,9 +35,9 @@ public class LoginController {
             log.info("Login Error={}",bindingResult);
             return "login_form";
         }
-        LoginUser loginUser = this.loginUserService.loadUserByLoginId(loginForm.getLoginId(),loginForm.getPassword());
-        log.info("login? {}",loginUser);
-        if (loginUser == null){
+        Member member = this.memberService.loadUserByLoginId(loginForm.getLoginId(),loginForm.getPassword());
+        log.info("login? {}",member);
+        if (member == null){
             bindingResult.reject("loginFail","아이디 또는 비밀번호가 맞지 않습니다.");
             return "login_form";
         }
@@ -46,7 +45,7 @@ public class LoginController {
         // 로그인 성공처리
         HttpSession session = request.getSession();
         // 세션에 저장.
-        session.setAttribute(SessionConst.LOGIN_USER,loginUser);
+        session.setAttribute(SessionConst.LOGIN_USER,member);
         return "redirect:/";
     }
 
@@ -73,7 +72,7 @@ public class LoginController {
             return "signUp_form";
         }
         log.info("signUp user={}",signUpForm);
-        this.loginUserService.create(signUpForm.getLoginId(),signUpForm.getPassword(), signUpForm.getName());
+        this.memberService.create(signUpForm.getLoginId(),signUpForm.getPassword(), signUpForm.getName());
         return "redirect:/";
     }
 

@@ -1,23 +1,23 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container">
     <h5 class="my-3 border-bottom pb-2">팀플실명 등록</h5>
-    <form action="#" th:action="@{/studyRoom/create}" th:object="${studyRoom}" method="post">
+    <form action="#" th:action="@{/studyRoom/create}" th:object="${studyRoomForm}" method="post">
         <div class="mb-3">
             <label for="name" class="form-label">팀플실 이름</label>
             <input type="text" th:field="*{name}" class="form-control">
             <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Incorrect data</p>
         </div>
         <div class="mb-3">
+            <label for="location" class="form-label">팀플실 위치</label>
+            <input type="text" th:field="*{location}" class="form-control">
+            <p th:if="${#fields.hasErrors('location')}" th:errors="*{location}">Incorrect data</p>
+        </div>
+        <div class="mb-3">
             <label for="capacity" class="form-label">수용인원</label>
             <input type="text" th:field="*{capacity}" class="form-control">
             <p th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}">Incorrect data</p>
         </div>
-        <div class="mb-3">
-            <label for="client" class="form-label">예약자명</label>
-            <input type="text" th:field="*{client}" class="form-control">
-            <p th:if="${#fields.hasErrors('client')}" th:errors="*{client}">Incorrect data</p>
-        </div>
-        <input type="submit" value="예약하기" class="btn btn-primary my-2">
+        <input type="submit" value="등록하기" class="btn btn-primary my-2">
     </form>
 </div>
 </html>

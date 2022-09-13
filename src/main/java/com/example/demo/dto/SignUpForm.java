@@ -1,17 +1,17 @@
-package com.example.demo.form;
+package com.example.demo.dto;
 
 import lombok.Data;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 @Data
 public class SignUpForm {
 
-    @NotEmpty
+    @NotBlank
     private String loginId; //로그인 ID
-    @NotEmpty
+    @NotBlank
     private String name; //사용자 이름
-    @NotEmpty
+    @NotBlank
     private String password;
 
 

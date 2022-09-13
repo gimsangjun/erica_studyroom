@@ -1,4 +1,4 @@
-package com.example.demo.dto;
+package com.example.demo.domain;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,24 +16,21 @@ public class StudyRoom {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @Column(name = "study_room_id")
+    private Long id;
 
     // 팀플실이름
-    @Column(length = 200)
-    @NotBlank
+    @Column(length = 200 , nullable = false)
     private String name;
 
-    // 수용인원
-    @Column
-    @NotNull
-    @Range(min = 1 , max = 20)
-    private Integer capacity;
+    private String location;
 
-    // 예약자명
-    @Column
-    @NotBlank
-    private String client;
-    // 아직로그인기능을 만들지 않아서 나중에 다시
-//    @OneToOne(cascade = CascadeType.REMOVE)
-//    private StudyUser client;
+    @OneToOne(mappedBy = "studyRoom", fetch = FetchType.LAZY)
+    private Order order;
+
+    // 수용인원
+    @Column(nullable = false)
+    @Range(min = 1 , max = 20)
+    private int capacity;
+
 }
