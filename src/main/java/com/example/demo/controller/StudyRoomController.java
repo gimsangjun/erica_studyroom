@@ -2,8 +2,10 @@ package com.example.demo.controller;
 
 import com.example.demo.SessionConst;
 import com.example.demo.domain.Member;
+import com.example.demo.domain.Order;
 import com.example.demo.domain.StudyRoom;
 import com.example.demo.dto.StudyRoomForm;
+import com.example.demo.service.OrderService;
 import com.example.demo.service.StudyRoomService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class StudyRoomController {
 
     private final StudyRoomService studyRoomService;
+    private final OrderService orderService;
 
     @GetMapping("/detail/{id}")
     public String studyRoomDetail(Model model, @PathVariable("id") Long id){
@@ -33,8 +36,13 @@ public class StudyRoomController {
 
         StudyRoom studyRoom = this.studyRoomService.getStudyRoom(id);
 
-        // home_login 로그인 사용자 전용
-        return "home_login";
+        // 예약 생성
+        Order order = new Order();
+        order.setMember(member);
+        order.setStudyRoom(studyRoom);
+        this.orderService.create(order);
+
+        return "redirect:/";
 
     }
 
@@ -47,6 +55,7 @@ public class StudyRoomController {
 
     @PostMapping("/create")
     public String studyRoomCreate(StudyRoomForm form){
+        // validation 나중에 적용.
 //        if(bindingResult.hasErrors()){
 //            log.info("studyRoomCreate Error={}",bindingResult);
 //            return "studyRoom_form";

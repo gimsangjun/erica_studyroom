@@ -5,6 +5,7 @@
         <tr>
             <th>이름</th>
             <th>수용인원</th>
+            <th>위치</th>
             <th>예약자명</th>
         </tr>
         </thead>
@@ -14,7 +15,8 @@
                     <a th:href="@{|/studyRoom/detail/${studyRoom.id}|}" th:text="${studyRoom.name}">
                 </td>
                 <td th:text="${studyRoom.capacity}">수용인원</td>
-                <td th:text="${studyRoom.order}">예약자명</td>
+                <td th:text="${studyRoom.location}">위치</td>
+                <td th:text="${studyRoom.order?.member?.name}">예약자명</td>
             </tr>
         </tbody>
     </table>

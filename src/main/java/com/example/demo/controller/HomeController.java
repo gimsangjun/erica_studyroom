@@ -34,6 +34,7 @@ public class HomeController {
 
         // 세션이 유지되면 model에 유저 데이터를 넣어줌.
         model.addAttribute("member",member);
+        log.info("HomeController member= {}",member);
         // home_login 로그인 사용자 전용
         return "home_login";
     }
