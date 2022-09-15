@@ -1,5 +1,7 @@
 package com.example.demo.restcontroller;
 
+import com.example.demo.dto.StudyRoomAPI;
+import com.example.demo.dto.UserAPI;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +26,17 @@ public class UserController {
      * 	"university" : "소프트웨어융합대학",
      * 	"department" : "소프트웨어학부"
      */
-    @GetMapping("/{userId}")
-    public ResponseEntity<Object> read(@PathVariable("userId") String id){
-        //TODO: 해당유저의 인포 리턴
-        return ResponseEntity.ok("test");
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> read(@PathVariable("id") String id){
+        UserAPI user = new UserAPI();
+        user.setUser_id(id);
+        user.setUser_name("홍길동");
+        user.setAge(15);
+        user.setGrade(3);
+        user.setEmail("ddee@gmail.com");
+        user.setUniversity("소프트웨어융합대학");
+        user.setDepartment("소프트웨어학부");
+        return ResponseEntity.ok(user);
     }
 
 }

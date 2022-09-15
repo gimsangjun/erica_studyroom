@@ -18,13 +18,13 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 .excludePathPatterns("/**.css","/css/**","/*.ico","/error");*/
 
-        // 로그인 인터셉터
-        registry.addInterceptor(new LogInCheckInterceptor())
+        // 로그인 인터셉터 - API테스트를 위해 닫아둠. 나중에 어떻게 손볼지 생각.
+/*        registry.addInterceptor(new LogInCheckInterceptor())
                 .order(2)
                 .addPathPatterns("/**")
                 .excludePathPatterns(
                         "/","/login","/logout","/signUp",
                         "/css","/**.css","/*.ico", "/error"
-                );
+                );*/
     }
 }
