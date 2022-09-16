@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.SessionConst;
-import com.example.demo.domain.Member;
+import com.example.demo.domain.User;
 import com.example.demo.domain.Order;
 import com.example.demo.domain.StudyRoom;
 import com.example.demo.dto.StudyRoomForm;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-//@Controller
+@Controller
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/studyRoom")
@@ -31,14 +31,14 @@ public class StudyRoomController {
 
     // 예약 기능 아직안됨.연관관계매핑 관련해서 order로 처리해야되서 다음에 하자.
     @GetMapping("/reserve/{id}")
-    public String reserve(@SessionAttribute(name= SessionConst.LOGIN_USER, required = false) Member member,
+    public String reserve(@SessionAttribute(name= SessionConst.LOGIN_USER, required = false) User user,
                         Model model, @PathVariable("id") Long id){
 
         StudyRoom studyRoom = this.studyRoomService.getStudyRoom(id);
 
         // 예약 생성
         Order order = new Order();
-        order.setMember(member);
+        order.setUser(user);
         order.setStudyRoom(studyRoom);
         this.orderService.create(order);
 

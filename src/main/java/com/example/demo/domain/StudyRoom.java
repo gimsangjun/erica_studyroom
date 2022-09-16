@@ -23,6 +23,7 @@ public class StudyRoom {
     @Column(length = 200 , nullable = false)
     private String name;
 
+    @NotBlank
     private String location;
 
     @OneToOne(mappedBy = "studyRoom", fetch = FetchType.LAZY)

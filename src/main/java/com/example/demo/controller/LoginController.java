@@ -1,10 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.SessionConst;
-import com.example.demo.domain.Member;
+import com.example.demo.domain.User;
 import com.example.demo.dto.LoginForm;
 import com.example.demo.dto.SignUpForm;
-import com.example.demo.service.MemberService;
+import com.example.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -22,7 +22,7 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class LoginController {
     
-    private final MemberService memberService;
+    private final UserService userService;
 
     @GetMapping("/login")
     public String loginGet(@ModelAttribute("loginForm") LoginForm form){
@@ -35,9 +35,9 @@ public class LoginController {
             log.info("Login Error={}",bindingResult);
             return "login_form";
         }
-        Member member = this.memberService.loadUserByLoginId(loginForm.getLoginId(),loginForm.getPassword());
-        log.info("login? {}",member);
-        if (member == null){
+        User user = this.userService.loadUserByLoginId(loginForm.getLoginId(),loginForm.getPassword());
+        log.info("login? {}", user);
+        if (user == null){
             bindingResult.reject("loginFail","아이디 또는 비밀번호가 맞지 않습니다.");
             return "login_form";
         }
@@ -45,7 +45,7 @@ public class LoginController {
         // 로그인 성공처리
         HttpSession session = request.getSession();
         // 세션에 저장.
-        session.setAttribute(SessionConst.LOGIN_USER,member);
+        session.setAttribute(SessionConst.LOGIN_USER, user);
         return "redirect:/";
     }
 
@@ -72,7 +72,7 @@ public class LoginController {
             return "signUp_form";
         }
         log.info("signUp user={}",signUpForm);
-        this.memberService.create(signUpForm.getLoginId(),signUpForm.getPassword(), signUpForm.getName());
+        this.userService.create(signUpForm.getLoginId(),signUpForm.getPassword(), signUpForm.getName());
         return "redirect:/";
     }
 

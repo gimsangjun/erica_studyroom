@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.SessionConst;
-import com.example.demo.domain.Member;
+import com.example.demo.domain.User;
 import com.example.demo.domain.StudyRoom;
 import com.example.demo.service.StudyRoomService;
 import lombok.RequiredArgsConstructor;
@@ -21,20 +21,20 @@ public class HomeController {
     private final StudyRoomService studyRoomService;
 
     @RequestMapping("/")
-    public String root(@SessionAttribute(name=SessionConst.LOGIN_USER, required = false) Member member, Model model){
+    public String root(@SessionAttribute(name=SessionConst.LOGIN_USER, required = false) User user, Model model){
 
         // 기본적으로 로그인 하든 안하든, 목록을 보여줌.
         List<StudyRoom> studyRoomList = this.studyRoomService.getList();
         model.addAttribute("studyRoomList",studyRoomList);
 
         // 세션에 회원 데이터가 없으면 home
-        if (member == null){
+        if (user == null){
             return "home";
         }
 
         // 세션이 유지되면 model에 유저 데이터를 넣어줌.
-        model.addAttribute("member",member);
-        log.info("HomeController member= {}",member);
+        model.addAttribute("user", user);
+        log.info("HomeController user= {}", user);
         // home_login 로그인 사용자 전용
         return "home_login";
     }

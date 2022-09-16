@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController // restcontroller에 대해서
+//@RestController // restcontroller에 대해서
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/user")

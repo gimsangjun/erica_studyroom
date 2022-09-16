@@ -1,6 +1,6 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
-    <h4 class="mb-3" th:text="|로그인: ${member.name}|">로그인 사용자 이름</h4>
+    <h4 class="mb-3" th:text="|로그인: ${user.name}|">로그인 사용자 이름</h4>
     <table class ="table">
         <thead class="table-dark">
         <tr>
@@ -17,7 +17,7 @@
                 </td>
                 <td th:text="${studyRoom.capacity}">수용인원</td>
                 <td th:text="${studyRoom.location}">위치</td>
-                <td th:text="${studyRoom.order?.member?.name}">예약자명</td>
+                <td th:text="${studyRoom.order?.user?.name}">예약자명</td>
             </tr>
         </tbody>
     </table>
