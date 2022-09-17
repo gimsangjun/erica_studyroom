@@ -17,6 +17,19 @@
             <input type="text" th:field="*{name}" class="form-control">
             <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}">이름</p>
         </div>
+        <div class="mb-3">
+            <label for="age" class="form-label">나이</label>
+            <input type="text" th:field="*{age}" class="form-control">
+            <p th:if="${#fields.hasErrors('age')}" th:errors="*{age}">나이</p>
+        </div>
+        <select id="university" name = "university">
+            <option value="소프트웨어융합대학">소프트웨어융합대학</option>
+            <option value="공과대학">공과대학</option>
+        </select>
+        <select id="department" name = "department">
+            <option value="소프트웨어">소프트웨어</option>
+            <option value="ICT">ITC</option>
+        </select>
         <input type="submit" value="가입하기" class="btn btn-primary my-2">
     </form>
 </div>
