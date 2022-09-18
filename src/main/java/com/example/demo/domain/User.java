@@ -1,7 +1,9 @@
 package com.example.demo.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -12,6 +14,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "USERS")
+@ToString
 public class User {
 
     @Id
@@ -40,4 +43,17 @@ public class User {
 
     @NotBlank
     private String password;
+
+    @Builder
+    public User(String name, int age, int grade,String email,String university,String department,String loginId,String password){
+        this.name =name;
+        this.age = age;
+        this.grade = grade;
+        this.email = email;
+        this.university = university;
+        this.department = department;
+        this.loginId = loginId;
+        this.password = password
+    }
+
 }

@@ -7,6 +7,7 @@ import com.example.demo.dto.SignUpForm;
 import com.example.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -23,6 +24,7 @@ import javax.servlet.http.HttpSession;
 public class LoginController {
     
     private final UserService userService;
+    private final ModelMapper modelMapper;
 
     @GetMapping("/login")
     public String loginGet(@ModelAttribute("loginForm") LoginForm form){
@@ -72,7 +74,11 @@ public class LoginController {
             return "signUp_form";
         }
         log.info("signUp user={}",signUpForm);
-        this.userService.create(signUpForm.getLoginId(),signUpForm.getPassword(), signUpForm.getName());
+
+//        User user = new User();
+//        user = modelMapper.map(signUpForm,SignUpForm.class);
+//        log.info("DTO -> User = {}",user);
+
         return "redirect:/";
     }
 
