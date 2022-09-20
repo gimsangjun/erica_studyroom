@@ -25,17 +25,17 @@ public class MapperTest {
 
     @Autowired ModelMapper modelMapper;
 
-    @Test
-    public void modelMapper1() { // 연관관계가 없는 경우
-        Team team = new Team();
-        team.setName("team1");
-        team.setValue(15);
-
-        TeamDto teamDto = modelMapper.map(team,TeamDto.class);
-        log.info("team ={}",team.toString());
-        log.info("teamDto ={}",teamDto.toString());
-
-    }
+//    @Test
+//    public void modelMapper1() { // 연관관계가 없는 경우
+//        Team team = new Team();
+//        team.setName("team1");
+//        team.setValue(15);
+//
+//        TeamDto teamDto = modelMapper.map(team,TeamDto.class);
+//        log.info("team ={}",team.toString());
+//        log.info("teamDto ={}",teamDto.toString());
+//
+//    }
 
     @Test
     public void user_to_signUpForm(){

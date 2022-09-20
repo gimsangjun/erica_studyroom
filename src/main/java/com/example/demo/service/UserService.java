@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -25,5 +27,10 @@ public class UserService {
         return userRepository.findByLoginId(loginId)
                 .filter(m -> m.getPassword().equals(password))
                 .orElse(null);
+    }
+
+    public User getUserByLoginId(String id){
+        // null처리 => Option<> 이부분 다시정리.
+        return userRepository.findByLoginId(id).orElse(null);
     }
 }

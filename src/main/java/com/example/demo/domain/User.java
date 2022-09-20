@@ -44,16 +44,5 @@ public class User {
     @NotBlank
     private String password;
 
-//    @Builder
-//    public User(String name, int age, int grade,String email,String university,String department,String loginId,String password){
-//        this.name =name;
-//        this.age = age;
-//        this.grade = grade;
-//        this.email = email;
-//        this.university = university;
-//        this.department = department;
-//        this.loginId = loginId;
-//        this.password = password
-//    }
 
 }
