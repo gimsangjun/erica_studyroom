@@ -1,12 +1,11 @@
 package com.example.demo;
 
+import com.example.demo.domain.StudyRoom;
 import com.example.demo.domain.User;
+import com.example.demo.dto.StudyRoomAPI;
 import com.example.demo.dto.UserAPI;
-import org.modelmapper.Condition;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
 import org.modelmapper.convention.MatchingStrategies;
-import org.modelmapper.spi.MappingContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,6 +18,11 @@ public class AppConfig {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration()
                 .setMatchingStrategy(MatchingStrategies.STRICT);
+        modelMapper.createTypeMap(User.class,UserAPI.class).addMappings(mapper -> {
+            mapper.map(src-> src.getLoginId(), UserAPI::setUser_id);
+            mapper.map(src-> src.getName(),UserAPI::setUser_name);
+        });
+        modelMapper.createTypeMap(StudyRoom.class, StudyRoomAPI.class).addMapping(StudyRoom::getName,StudyRoomAPI::setStudyroom_name);
         return modelMapper;
     }
 

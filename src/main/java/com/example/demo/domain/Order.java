@@ -25,5 +25,6 @@ public class Order {
     @JoinColumn(name = "study_room_id")
     private StudyRoom studyRoom;
 
+    // 예약시간.
     private LocalDateTime orderDate;
 }

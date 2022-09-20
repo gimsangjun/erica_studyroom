@@ -23,6 +23,9 @@ public class StudyRoom {
     @Column(length = 200 , nullable = false)
     private String name;
 
+    private String university ; // 소프트웨어융합대학
+    private String department ; // 소프트웨어학부
+
     @NotBlank
     private String location;
 

@@ -30,6 +30,8 @@ class StudyRoomTests {
 		userRepository.deleteAll();
 
 		StudyRoom room1 = new StudyRoom();
+		room1.setUniversity("소프트웨어융합대학");
+		room1.setDepartment("소프트웨어학부");
 		room1.setName("큐브0");
 		room1.setLocation("제5학관");
 		room1.setCapacity(10);
@@ -37,16 +39,20 @@ class StudyRoomTests {
 		//studyRoomService.create(room1);
 
 		StudyRoom room2 = new StudyRoom();
+		room2.setUniversity("소프트웨어융합대학");
+		room2.setDepartment("소프트웨어학부");
 		room2.setName("큐브1");
 		room2.setLocation("제5학관");
-		room2.setCapacity(10);
+		room2.setCapacity(20);
 		studyRoomRepository.save(room2);
 		//studyRoomService.create(room2);
 
 		StudyRoom room3 = new StudyRoom();
+		room3.setUniversity("소프트웨어융합대학");
+		room3.setDepartment("소프트웨어학부");
 		room3.setName("큐브2");
 		room3.setLocation("제5학관");
-		room3.setCapacity(10);
+		room3.setCapacity(5);
 		studyRoomRepository.save(room3);
 		//studyRoomService.create(room3);
 

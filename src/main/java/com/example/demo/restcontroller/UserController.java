@@ -40,11 +40,8 @@ public class UserController {
         if (user == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        log.info("user ={}",user.toString());
         UserAPI userAPI = new UserAPI();
         userAPI = modelMapper.map(user,UserAPI.class);
-        log.info("userAPI ={}",userAPI.toString());
-
         return new ResponseEntity<UserAPI>(userAPI, HttpStatus.OK);
     }
 

@@ -6,6 +6,9 @@ import com.example.demo.repository.StudyRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +29,13 @@ public class StudyRoomService {
         }else {
             throw new DataNotFoundException("StudyRoom not found");
         }
+    }
+
+    public ArrayList<StudyRoom> getAllStudyRoom(){
+        List<StudyRoom> temps = this.studyRoomRepository.findAll();
+        ArrayList<StudyRoom> studyRooms = new ArrayList<StudyRoom>();
+        studyRooms.addAll(temps);
+        return studyRooms;
     }
 
     public void create(StudyRoom studyRoom){
