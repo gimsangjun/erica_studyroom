@@ -36,6 +36,9 @@ dependencies {
 	//테스트에서 lombok 사용
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
+
+	// ngrok
+	compileOnly('io.github.kilmajster:ngrok-spring-boot-starter:0.6.0')
 }
 
 tasks.named('test') {

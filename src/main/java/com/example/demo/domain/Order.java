@@ -2,6 +2,7 @@ package com.example.demo.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -21,10 +22,12 @@ public class Order {
     @JoinColumn(name="user_id")
     private User user;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_room_id")
     private StudyRoom studyRoom;
 
     // 예약시간.
-    private LocalDateTime orderDate;
+//    private LocalDateTime orderDate;
+    private int startTime;
+    private int endTime;
 }

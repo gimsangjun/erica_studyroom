@@ -1,0 +1,16 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container">
+    <h5 class="my-3 border-bottom pb-2">시간선택</h5>
+    <form action="#" th:action="@{|/studyRoom/reserve/${reserveTime.id}|}" th:object="${reserveTime}" method="post">
+        <select id="startTime" name = "startTime">
+            <option value="1500">15시</option>
+            <option value="1600">16시</option>
+        </select>
+        <select id="endTime" name = "endTime">
+            <option value="1700">17시</option>
+            <option value="1800">18시</option>
+        </select>
+        <input type="submit" value="등록하기" class="btn btn-primary my-2">
+    </form>
+</div>
+</html>

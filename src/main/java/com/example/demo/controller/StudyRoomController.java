@@ -5,6 +5,7 @@ import com.example.demo.domain.User;
 import com.example.demo.domain.Order;
 import com.example.demo.domain.StudyRoom;
 import com.example.demo.dto.StudyRoomForm;
+import com.example.demo.dto.ReserveTime;
 import com.example.demo.service.OrderService;
 import com.example.demo.service.StudyRoomService;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-//@Controller
+@Controller
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/studyRoom")
@@ -26,6 +27,8 @@ public class StudyRoomController {
     public String studyRoomDetail(Model model, @PathVariable("id") Long id){
         StudyRoom studyRoom = this.studyRoomService.getStudyRoom(id);
         model.addAttribute("studyRoom",studyRoom);
+        // log.info("studyRoom ={}",studyRoom);
+        // studyRoom =StudyRoom(..., order=com.example.demo.domain.Order@4d1a6c7b, capacity=10)
         return "studyRoom_detail";
     }
 
@@ -33,14 +36,27 @@ public class StudyRoomController {
     @GetMapping("/reserve/{id}")
     public String reserve(@SessionAttribute(name= SessionConst.LOGIN_USER, required = false) User user,
                         Model model, @PathVariable("id") Long id){
+        ReserveTime reserveTime = new ReserveTime();
+        reserveTime.setId(id);
+        model.addAttribute("reserveTime",reserveTime);
+        return "studyRoom_reserve";
 
-        StudyRoom studyRoom = this.studyRoomService.getStudyRoom(id);
+    }
 
-        // 예약 생성
-        Order order = new Order();
+    @PostMapping("/reserve/{id}")
+    public String reservePost(@SessionAttribute(name= SessionConst.LOGIN_USER, required = false) User user,
+                              @PathVariable("id") Long id, ReserveTime time){
+
+        StudyRoom studyRoom = studyRoomService.getStudyRoom(id);
+
+        Order order =new Order();
         order.setUser(user);
         order.setStudyRoom(studyRoom);
-        this.orderService.create(order);
+        order.setStartTime(time.getStartTime());
+        order.setEndTime(time.getEndTime());
+        orderService.create(order);
+
+        log.info("order ={}",order);
 
         return "redirect:/";
 

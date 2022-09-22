@@ -2,7 +2,7 @@
 <div layout:fragment="content" class="container">
     <h1 th:text="|팀플실 이름 : ${studyRoom.name}|"></h1>
     <div th:text="|수용인원 : ${studyRoom.capacity}|"></div>
-    <div th:text="|예약자명 : ${studyRoom.order.user.name}|"></div>
+    <div th:text="|예약자명 : ${studyRoom.order?.user?.name}|"></div>
     <div class="my-3">
         <a th:href="@{/studyRoom/list}" class="btn btn-sm btn-outline-secondary"
            th:text="홈">홈</a>

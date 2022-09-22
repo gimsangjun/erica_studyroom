@@ -2,16 +2,19 @@ package com.example.demo.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 
 @Entity
 @Setter
 @Getter
+@ToString
 public class StudyRoom {
 
     @Id
@@ -29,8 +32,8 @@ public class StudyRoom {
     @NotBlank
     private String location;
 
-    @OneToOne(mappedBy = "studyRoom", fetch = FetchType.LAZY)
-    private Order order;
+    @OneToMany(mappedBy = "studyRoom", fetch = FetchType.LAZY , cascade = CascadeType.REMOVE)
+    private List<Order> order;
 
     // 수용인원
     @Column(nullable = false)

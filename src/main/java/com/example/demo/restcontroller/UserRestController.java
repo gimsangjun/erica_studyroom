@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController // restcontroller에 대해서
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/user")
-public class UserController {
+@RequestMapping("/api/user")
+public class UserRestController {
 
     private final UserService userService ;
     private final ModelMapper modelMapper;

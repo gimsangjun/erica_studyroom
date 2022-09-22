@@ -34,21 +34,9 @@ public class HomeController {
 
         // 세션이 유지되면 model에 유저 데이터를 넣어줌.
         model.addAttribute("user", user);
-        log.info("HomeController user= {}", user);
+        //log.info("HomeController user= {}", user);
         // home_login 로그인 사용자 전용
         return "home_login";
     }
-
-    /**
-     * 정리해야하는거
-     * repository , service, DTO
-     * 타임리프기능다시 + 부트스트랩
-     */
-
-    /**
-     * 구현해야하는거
-     * 로그인
-     * 데이터베이스
-     */
 
 }

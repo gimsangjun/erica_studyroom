@@ -6,7 +6,6 @@
             <th>이름</th>
             <th>수용인원</th>
             <th>위치</th>
-            <th>예약자명</th>
         </tr>
         </thead>
         <tbody>
@@ -16,7 +15,6 @@
                 </td>
                 <td th:text="${studyRoom.capacity}">수용인원</td>
                 <td th:text="${studyRoom.location}">위치</td>
-                <td th:text="${studyRoom.order?.user?.name}">예약자명</td>
             </tr>
         </tbody>
     </table>
