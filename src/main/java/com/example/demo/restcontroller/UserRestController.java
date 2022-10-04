@@ -1,6 +1,7 @@
 package com.example.demo.restcontroller;
 
 import com.example.demo.domain.User;
+import com.example.demo.dto.SignUpForm;
 import com.example.demo.dto.StudyRoomAPI;
 import com.example.demo.dto.UserAPI;
 import com.example.demo.service.UserService;
@@ -9,10 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController // restcontroller에 대해서
 @Slf4j
@@ -43,6 +41,12 @@ public class UserRestController {
         UserAPI userAPI = new UserAPI();
         userAPI = modelMapper.map(user,UserAPI.class);
         return new ResponseEntity<UserAPI>(userAPI, HttpStatus.OK);
+    }
+
+    @PostMapping("/signUp")
+    public String signUp(@RequestBody SignUpForm signUpForm){
+        log.info("signUpForm = {}",signUpForm);
+        return "Sucess";
     }
 
 }
