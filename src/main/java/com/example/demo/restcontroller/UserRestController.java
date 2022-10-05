@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController // restcontroller에 대해서
 @Slf4j
 @RequiredArgsConstructor
@@ -43,9 +45,29 @@ public class UserRestController {
         return new ResponseEntity<UserAPI>(userAPI, HttpStatus.OK);
     }
 
+    /**
+     * {
+     *     "name" : "김상준",
+     *     "age" : 24,
+     *     "grade" : 3,
+     *     "email" : "test@email.com",
+     *     "university" : "소프트웨어융합대학",
+     *     "department" : "소프트웨어전공",
+     *     "loginId" : "test123",
+     *     "password" : "password"
+     * }
+     * @param signUpForm
+     * @return
+     */
     @PostMapping("/signUp")
-    public String signUp(@RequestBody SignUpForm signUpForm){
+    public String signUp(@Valid @RequestBody SignUpForm signUpForm){
         log.info("signUpForm = {}",signUpForm);
+        User user = new User();
+        user = modelMapper.map(signUpForm,User.class);
+        log.info("DTO -> User = {}",user);
+        //TODO 이미존재할경우 예외처리를 해야됨.
+        this.userService.create(user);
+
         return "Sucess";
     }
 

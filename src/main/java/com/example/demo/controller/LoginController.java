@@ -75,9 +75,9 @@ public class LoginController {
         }
         log.info("signUp user={}",signUpForm);
 
-//        User user = new User();
-//        user = modelMapper.map(signUpForm,SignUpForm.class);
-//        log.info("DTO -> User = {}",user);
+        User user = new User();
+        user = modelMapper.map(signUpForm,User.class);
+        log.info("DTO -> User = {}",user);
 
         return "redirect:/";
     }

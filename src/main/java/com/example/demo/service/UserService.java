@@ -17,6 +17,10 @@ public class UserService {
 
     // BCrypt를 활용해서 암호화 해야함.
     public User create(User user){
+        // TODO: 이미존재하는 아이디일 경우 예외처리 해야됨.
+        if( userRepository.findByLoginId(user.getLoginId()).isPresent() ){ // 존재하면
+
+        }
         this.userRepository.save(user);
         log.info("회원가입 성공");
         return user;

@@ -4,24 +4,30 @@ import com.example.demo.domain.User;
 import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
+import org.hibernate.validator.constraints.Range;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.*;
 
 @Data
 @ToString
 public class SignUpForm {
 
-    @NotBlank
+    @NotBlank // String 형태에만 사용,
     private String name; //사용자 이름
 
-    private int age;
+    @NotNull
+    private Integer age;
 
-    private int grade;
+    @NotNull
+    @Range(min=1, max=10)
+    private Integer grade;
 
+    @NotBlank
     @Email
     private String email;
+    @NotBlank
     private String university;
+    @NotBlank
     private String department;
 
     @NotBlank
@@ -29,6 +35,5 @@ public class SignUpForm {
 
     @NotBlank
     private String password;
-
 
 }
