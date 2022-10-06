@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface StudyRoomRepository extends JpaRepository<StudyRoom, Long> {
     Optional<StudyRoom> findById(Long id);
+    Optional<StudyRoom> findByName(String name);
 }

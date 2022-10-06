@@ -38,8 +38,13 @@ public class StudyRoomService {
         return studyRooms;
     }
 
-    public void create(StudyRoom studyRoom){
-        this.studyRoomRepository.save(studyRoom);
+    public void create(StudyRoom room){
+        Optional<StudyRoom> studyRoom = studyRoomRepository.findByName(room.getName());
+        if(studyRoom.isPresent()){
+            // TODO: 똑같은 이름을 가진 스터디룸이 존재. 예외처리
+        } else{
+            this.studyRoomRepository.save(room);
+        }
     }
 
     public void delete(StudyRoom studyRoom) {this.studyRoomRepository.delete(studyRoom);}
