@@ -21,7 +21,9 @@ public class AppConfig {
             mapper.map(src-> src.getLoginId(), UserAPI::setUser_id);
             mapper.map(src-> src.getName(),UserAPI::setUser_name);
         });
+        // TODO: addMappings? 사용법
         modelMapper.createTypeMap(StudyRoom.class, StudyRoomAPI.class).addMapping(StudyRoom::getName,StudyRoomAPI::setStudyroom_name);
+        modelMapper.createTypeMap(StudyRoomAPI.class, StudyRoom.class).addMapping(StudyRoomAPI::getStudyroom_name,StudyRoom::setName);
         return modelMapper;
     }
 

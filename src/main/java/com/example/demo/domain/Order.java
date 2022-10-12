@@ -28,6 +28,7 @@ public class Order {
 
     // 예약시간.
 //    private LocalDateTime orderDate;
+    // 예약날짜
     private int startTime;
     private int endTime;
 }

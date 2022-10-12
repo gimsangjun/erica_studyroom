@@ -79,20 +79,44 @@ public class StudyRoomRestController {
             list.add(reservation);
         }
 
-
         LinkedHashMap map = new LinkedHashMap();
         map.put("info",studyRoomAPI);
         map.put("reservation",list);
         return ResponseEntity.ok(map);
     }
 
+    /*
+    * 리소스 등록
+     */
     @PostMapping
-    public String createStudyRoom(@Valid @RequestBody StudyRoomAPI studyRoomAPIapi){
+    public ResponseEntity<Object> createStudyRoom(@Valid @RequestBody StudyRoomAPI studyRoomAPI){
         StudyRoom studyRoom = new StudyRoom();
-        studyRoom = modelMapper.map(studyRoomAPIapi,StudyRoom.class);
+        log.info("studyRoomAPI={}",studyRoomAPI);
+        studyRoom = modelMapper.map(studyRoomAPI,StudyRoom.class);
+        log.info("studyRoom={}",studyRoom);
         this.studyRoomService.create(studyRoom);
-        return "Sucess";
+        studyRoomAPI.setId(studyRoom.getId());
+        return ResponseEntity.ok(studyRoomAPI);
     }
 
-
+    /*
+    * resource를 수정
+     */
+    @PutMapping ("/{id}")
+    public ResponseEntity modify(@RequestBody StudyRoomAPI studyRoomAPI, @PathVariable("id") Long id){
+        // TODO : validation 처리, studyRoom이 있는지 없는지
+        StudyRoom studyRoom = studyRoomService.getStudyRoom(id);
+        this.studyRoomService.modify(studyRoom,studyRoomAPI);
+        return ResponseEntity.ok("수정성공");
+    }
+    /*
+    * resource를 삭제.
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable("id") Long id){
+        // TODO: validation 처리, 있는지 없는지
+        StudyRoom studyRoom = studyRoomService.getStudyRoom(id);
+        this.studyRoomService.delete(studyRoom);
+        return ResponseEntity.ok("삭제성공");
+    }
 }

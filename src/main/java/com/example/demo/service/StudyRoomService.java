@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.DataNotFoundException;
 import com.example.demo.domain.StudyRoom;
+import com.example.demo.dto.StudyRoomAPI;
 import com.example.demo.repository.StudyRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -40,20 +41,18 @@ public class StudyRoomService {
 
     public void create(StudyRoom room){
         Optional<StudyRoom> studyRoom = studyRoomRepository.findByName(room.getName());
-        if(studyRoom.isPresent()){
-            // TODO: 똑같은 이름을 가진 스터디룸이 존재. 예외처리
-        } else{
-            this.studyRoomRepository.save(room);
-        }
+        this.studyRoomRepository.save(room);
     }
 
     public void delete(StudyRoom studyRoom) {this.studyRoomRepository.delete(studyRoom);}
 
-//    public void modify(StudyRoom studyRoom,String name, int capacity, Order order) {
-//        studyRoom.setName(name);
-//        studyRoom.setCapacity(capacity);
-//        studyRoom.setorder(order);
-//        this.studyRoomRepository.save(studyRoom);
-//    }
+    public void modify(StudyRoom studyRoom, StudyRoomAPI studyRoomAPI) {
+        studyRoom.setUniversity(studyRoomAPI.getUniversity());
+        studyRoom.setDepartment(studyRoomAPI.getDepartment());
+        studyRoom.setLocation(studyRoomAPI.getLocation());
+        studyRoom.setName(studyRoomAPI.getStudyroom_name());
+        studyRoom.setCapacity(studyRoomAPI.getCapacity());
+        this.studyRoomRepository.save(studyRoom);
+    }
 
 }
