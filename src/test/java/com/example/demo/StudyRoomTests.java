@@ -15,6 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 @RunWith(SpringRunner.class) // Junit4를 쓰는듯, 5에서는 어떻게?
 @SpringBootTest
 @Slf4j
@@ -39,7 +43,26 @@ class StudyRoomTests {
 		room1.setName("큐브0");
 		room1.setLocation("제5공학관");
 		room1.setCapacity(10);
+
+		room1.setDescriptions(new HashSet<String>(Collections.singleton("투명한 벽으로 구분된 팀플실")));
+
+		Set<String> caution = new HashSet<>();
+		caution.add("음식물 반입금지");
+		caution.add("시끄럽게 떠드는 행위 금지");
+		room1.setCautions(caution);
+
+		Set<String> drinks = new HashSet<>();
+		drinks.add("커피");
+		drinks.add("물");
+		room1.setDrinks(drinks);
+
+		Set<String> tags = new HashSet<>();
+		tags.add("태그1");
+		tags.add("태그2");
+		room1.setTags(tags);
 		studyRoomRepository.save(room1);
+		log.info("room1 ={}",room1);
+
 		//studyRoomService.create(room1);
 
 		StudyRoom room2 = new StudyRoom();

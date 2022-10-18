@@ -8,8 +8,7 @@ import org.hibernate.validator.constraints.Range;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 @Entity
@@ -43,20 +42,23 @@ public class StudyRoom {
 
     // 설명
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "descrption", joinColumns = @JoinColumn(name = "study_room_id"))
-    private ArrayList<String> description; // ex. 투명한 벽으로 구분된 경상대학 팀플실
+    @CollectionTable(name = "study_room_descrptions", joinColumns = @JoinColumn(name = "study_room_id"))
+    private Set<String> descriptions = new HashSet<>(); // ex. 투명한 벽으로 구분된 경상대학 팀플실
 
     // 주의사항 , 리스트 여야됨.
     @ElementCollection(fetch = FetchType.EAGER)
-    private ArrayList<String> caution; // ex. 음식물 반입금지, 시끄럽게 떠드는 행위 금지
+    @CollectionTable(name = "study_room_caution", joinColumns = @JoinColumn(name = "study_room_id"))
+    private Set<String> cautions = new HashSet<>(); // ex. 음식물 반입금지, 시끄럽게 떠드는 행위 금지
 
     // 허용음료
     @ElementCollection(fetch = FetchType.EAGER)
-    private ArrayList<String> drinks;
+    @CollectionTable(name = "study_room_drinks", joinColumns = @JoinColumn(name = "study_room_id"))
+    private Set<String> drinks = new HashSet<>(); // ex. 커피, 물
 
     // 태그
     @ElementCollection(fetch = FetchType.EAGER)
-    private ArrayList<String> tag;
+    @CollectionTable(name = "study_room_tags", joinColumns = @JoinColumn(name = "study_room_id"))
+    private Set<String> tags = new HashSet<>();
 
 }
 

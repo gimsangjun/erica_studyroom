@@ -93,9 +93,9 @@ public class StudyRoomRestController {
         StudyRoom studyRoom = new StudyRoom();
         log.info("studyRoomAPI={}",studyRoomAPI);
         studyRoom = modelMapper.map(studyRoomAPI,StudyRoom.class);
-        log.info("studyRoom={}",studyRoom);
         this.studyRoomService.create(studyRoom);
         studyRoomAPI.setId(studyRoom.getId());
+        log.info("studyRoom={}",studyRoom);
         return ResponseEntity.ok(studyRoomAPI);
     }
 
