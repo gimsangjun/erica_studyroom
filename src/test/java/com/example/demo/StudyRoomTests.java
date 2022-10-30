@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -60,9 +61,12 @@ class StudyRoomTests {
 		tags.add("태그1");
 		tags.add("태그2");
 		room1.setTags(tags);
+
+		// @ColumnDefault("0") 이게 먹히지 않는듯.
+		room1.setCount(0);
+
 		studyRoomRepository.save(room1);
 		log.info("room1 ={}",room1);
-
 		//studyRoomService.create(room1);
 
 		StudyRoom room2 = new StudyRoom();
@@ -71,6 +75,7 @@ class StudyRoomTests {
 		room2.setName("큐브1");
 		room2.setLocation("제5공학관");
 		room2.setCapacity(20);
+		room2.setCount(0);
 		studyRoomRepository.save(room2);
 		//studyRoomService.create(room2);
 
@@ -80,6 +85,7 @@ class StudyRoomTests {
 		room3.setName("큐브2");
 		room3.setLocation("제5공학관");
 		room3.setCapacity(5);
+		room3.setCount(0);
 		studyRoomRepository.save(room3);
 		//studyRoomService.create(room3);
 
@@ -107,19 +113,33 @@ class StudyRoomTests {
 
 		//userService.create(user);
 
-		Order order =new Order();
+		LocalDate now = LocalDate.now();
+		log.info("출력 year ={} month={} date={}",now.getYear(),now.getMonthValue(),now.getDayOfMonth());
+
+		Order order = new Order();
 		order.setUser(user);
 		order.setStudyRoom(room1);
-		order.setStartTime(1500);
-		order.setEndTime(1700);
+		order.setStartTime(15);
+		order.setEndTime(17);
+
+		order.setYear(now.getYear());
+		order.setMonth(now.getMonthValue());
+		order.setDate(now.getDayOfMonth());
 		orderRepsitory.save(order);
 
-		Order order1 =new Order();
+
+		Order order1 = new Order();
 		order1.setUser(user1);
 		order1.setStudyRoom(room1);
-		order1.setStartTime(1700);
-		order1.setEndTime(1900);
+		order1.setStartTime(17);
+		order1.setEndTime(19);
+		order1.setYear(now.getYear());
+		order1.setMonth(now.getMonthValue());
+		order1.setDate(now.getDayOfMonth());
 		orderRepsitory.save(order1);
+
+		studyRoomRepository.save(room1);
+		//log.info("order ={}",order1);
 
 	}
 

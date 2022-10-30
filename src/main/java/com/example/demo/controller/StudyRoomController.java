@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/studyRoom")
+//@RequestMapping("/studyRoom")
 public class StudyRoomController {
 
     private final StudyRoomService studyRoomService;

@@ -1,8 +1,10 @@
 package com.example.demo.domain;
 
+import com.example.demo.dto.StudyRoomAPI;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
@@ -40,6 +42,10 @@ public class StudyRoom {
     @Range(min = 1, max = 20)
     private int capacity;
 
+    // 예약된 횟수
+    @ColumnDefault("0")
+    private Integer count ;
+
     // 설명
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "study_room_descrptions", joinColumns = @JoinColumn(name = "study_room_id"))
@@ -59,6 +65,23 @@ public class StudyRoom {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "study_room_tags", joinColumns = @JoinColumn(name = "study_room_id"))
     private Set<String> tags = new HashSet<>();
+
+    public void update(StudyRoomAPI studyRoomAPI){
+        this.name = studyRoomAPI.getStudyroom_name();
+        this.university = studyRoomAPI.getUniversity();
+        this.department = studyRoomAPI.getDepartment();
+        this.location = studyRoomAPI.getLocation();
+        this.capacity = studyRoomAPI.getCapacity();
+        this.descriptions = studyRoomAPI.getDescriptions();
+        this.cautions = studyRoomAPI.getCautions();
+        this.drinks = studyRoomAPI.getDrinks();
+        this.tags = studyRoomAPI.getTags();
+
+    }
+
+    public Integer countUp(){
+        return this.count++;
+    }
 
 }
 

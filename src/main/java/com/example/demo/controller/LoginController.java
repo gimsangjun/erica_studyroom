@@ -20,7 +20,7 @@ import javax.servlet.http.HttpSession;
 
 @Slf4j
 @RequiredArgsConstructor
-@Controller
+//@Controller
 public class LoginController {
     
     private final UserService userService;
