@@ -3,6 +3,7 @@ package com.example.demo.restcontroller;
 import com.example.demo.domain.Order;
 import com.example.demo.domain.StudyRoom;
 import com.example.demo.dto.OrderAPI;
+import com.example.demo.dto.RerserveDate;
 import com.example.demo.dto.StudyRoomAPI;
 import com.example.demo.service.OrderService;
 import com.example.demo.service.StudyRoomService;
@@ -13,13 +14,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-@RestController // restcontroller에 대해서
+@RestController
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api/studyRoom")
@@ -49,11 +49,14 @@ public class StudyRoomRestController {
      * @return 해당 팀플실 detail
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Object> detail(@PathVariable("id") Long id){
+    public ResponseEntity<Object> detail(@PathVariable("id") Long id , @RequestBody RerserveDate day){
         // 대부분의 로직 나중에 Service부분으로 옮겨야됨.
         StudyRoom studyRoom = studyRoomService.getStudyRoom(id);
         StudyRoomAPI studyRoomAPI = modelMapper.map(studyRoom,StudyRoomAPI.class);
         List<Order> orders = studyRoom.getOrder();
+
+        // 생각해보니 이렇게 filter하는 기능은 나중에 넣는게 좋을듯.
+        // log.info("Day ={}",day);
 
         // 예약내용 추가 - reservation
         ArrayList<LinkedHashMap> list = new ArrayList<>();
@@ -117,4 +120,5 @@ public class StudyRoomRestController {
         orderService.reserve(studyRoom,orderAPI);
         return ResponseEntity.ok("테스트");
     }
+
 }

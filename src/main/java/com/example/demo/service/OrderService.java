@@ -7,8 +7,10 @@ import com.example.demo.dto.OrderAPI;
 import com.example.demo.repository.OrderRepsitory;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -22,12 +24,17 @@ public class OrderService {
         this.orderRepsitory.save(order);
     }
 
+    public Optional<Order> getOrder(Long id){return this.orderRepsitory.findById(id);}
+
+    public List<Order> getAllList() {
+        return this.orderRepsitory.findAll();
+    }
+
     public void delete(Order order){
         this.orderRepsitory.delete(order);
     }
 
     public StudyRoom reserve(StudyRoom studyRoom, OrderAPI orderAPI){
-
 
         //임시로 유저 이름만  만듬.
         User user = new User();
