@@ -3,7 +3,6 @@ package com.example.demo.restcontroller;
 import com.example.demo.domain.Order;
 import com.example.demo.domain.StudyRoom;
 import com.example.demo.dto.OrderAPI;
-import com.example.demo.dto.RerserveDate;
 import com.example.demo.dto.StudyRoomAPI;
 import com.example.demo.service.OrderService;
 import com.example.demo.service.StudyRoomService;
@@ -18,6 +17,7 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @Slf4j
@@ -46,29 +46,49 @@ public class StudyRoomRestController {
     }
     /**
      *
-     * @return 해당 팀플실 detail
+     * @return 해당 팀플실 detail, 날짜만 넘어오면 해당 날짜의 에약현황 리턴
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Object> detail(@PathVariable("id") Long id , @RequestBody RerserveDate day){
+    public ResponseEntity<Object> detail(@PathVariable("id") Long id , @RequestParam Optional<Integer> year,
+                                         @RequestParam Optional<Integer> month, @RequestParam Optional<Integer> date){
+
         // 대부분의 로직 나중에 Service부분으로 옮겨야됨.
         StudyRoom studyRoom = studyRoomService.getStudyRoom(id);
         StudyRoomAPI studyRoomAPI = modelMapper.map(studyRoom,StudyRoomAPI.class);
         List<Order> orders = studyRoom.getOrder();
 
-        // 생각해보니 이렇게 filter하는 기능은 나중에 넣는게 좋을듯.
-        // log.info("Day ={}",day);
-
         // 예약내용 추가 - reservation
         ArrayList<LinkedHashMap> list = new ArrayList<>();
-        for(Order order : orders){
-            LinkedHashMap reservation = new LinkedHashMap<>();
-            reservation.put("year",order.getYear());
-            reservation.put("month",order.getMonth());
-            reservation.put("date",order.getDate());
-            reservation.put("name",order.getUser().getName());
-            reservation.put("startTime",order.getStartTime());
-            reservation.put("endTime",order.getEndTime());
-            list.add(reservation);
+        
+        if (year.isPresent() && month.isPresent() && date.isPresent()){
+            // log.info("query test year={} month={} date={}",year.get(),month.get(),date.get());
+
+            for(Order order : orders){
+                LinkedHashMap reservation = new LinkedHashMap<>();
+                //TODO: 지금 if문으로 하나씩 체크하고있는데, 나중에 쿼리문을 공부해서 그것으로 바꿔야할듯
+                if (year.get() == order.getYear() && month.get() == order.getMonth() && date.get() == order.getDate()){
+                    reservation.put("year",order.getYear());
+                    reservation.put("month",order.getMonth());
+                    reservation.put("date",order.getDate());
+                    reservation.put("name",order.getUser().getName());
+                    reservation.put("startTime",order.getStartTime());
+                    reservation.put("endTime",order.getEndTime());
+                    list.add(reservation);
+                }
+            }
+
+        } else {
+            // log.info("Null query");
+            for(Order order : orders){
+                LinkedHashMap reservation = new LinkedHashMap<>();
+                reservation.put("year",order.getYear());
+                reservation.put("month",order.getMonth());
+                reservation.put("date",order.getDate());
+                reservation.put("name",order.getUser().getName());
+                reservation.put("startTime",order.getStartTime());
+                reservation.put("endTime",order.getEndTime());
+                list.add(reservation);
+            }
         }
 
         LinkedHashMap map = new LinkedHashMap();
