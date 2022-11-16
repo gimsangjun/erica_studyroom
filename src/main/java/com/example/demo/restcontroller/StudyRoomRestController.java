@@ -1,5 +1,6 @@
 package com.example.demo.restcontroller;
 
+import com.example.demo.DataNotFoundException;
 import com.example.demo.domain.Order;
 import com.example.demo.domain.StudyRoom;
 import com.example.demo.dto.OrderAPI;
@@ -9,6 +10,7 @@ import com.example.demo.service.StudyRoomService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -65,8 +67,10 @@ public class StudyRoomRestController {
 
             for(Order order : orders){
                 LinkedHashMap reservation = new LinkedHashMap<>();
-                //TODO: 지금 if문으로 하나씩 체크하고있는데, 나중에 쿼리문을 공부해서 그것으로 바꿔야할듯
+                // TODO: 지금 if문으로 하나씩 체크하고있는데, 나중에 쿼리문을 공부해서 그것으로 바꿔야할듯
+                // TODO: 시간대 별로 정렬을 해야하는데 정렬이 아직 안됨.
                 if (year.get() == order.getYear() && month.get() == order.getMonth() && date.get() == order.getDate()){
+                    reservation.put("orderId",order.getId());
                     reservation.put("year",order.getYear());
                     reservation.put("month",order.getMonth());
                     reservation.put("date",order.getDate());
@@ -81,6 +85,7 @@ public class StudyRoomRestController {
             // log.info("Null query");
             for(Order order : orders){
                 LinkedHashMap reservation = new LinkedHashMap<>();
+                reservation.put("orderId",order.getId());
                 reservation.put("year",order.getYear());
                 reservation.put("month",order.getMonth());
                 reservation.put("date",order.getDate());
@@ -114,20 +119,31 @@ public class StudyRoomRestController {
      */
     @PutMapping ("/{id}")
     public ResponseEntity modify(@RequestBody StudyRoomAPI studyRoomAPI, @PathVariable("id") Long id){
-        // TODO : validation 처리, studyRoom이 있는지 없는지
-        StudyRoom studyRoom = studyRoomService.getStudyRoom(id);
-        this.studyRoomService.modify(studyRoom,studyRoomAPI);
-        return ResponseEntity.ok("수정성공");
+        // TODO: 조금더 고급적인 방법이 있는지
+        try{
+            StudyRoom studyRoom = studyRoomService.getStudyRoom(id);
+            this.studyRoomService.modify(studyRoom,studyRoomAPI);
+            // TODO: studyRoom을 return 하고싶은데 stackoverflow생겨서 이 문제 쉽게 해결하는 방법알면 다시 수정
+            return ResponseEntity.ok("수정성공");
+        } catch (DataNotFoundException e){ // 다른예외는 어떻게 처리해야하는지 잘모루
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 팀플실입니다.");
+        }
+
     }
     /**
      * 팀플실 삭제.
      */
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable("id") Long id){
-        // TODO: validation 처리: 있는지 없는지
-        StudyRoom studyRoom = studyRoomService.getStudyRoom(id);
-        this.studyRoomService.delete(studyRoom);
-        return ResponseEntity.ok("삭제성공");
+        // TODO: 조금더 고급적인 방법이 있는지
+        try{
+            StudyRoom studyRoom = studyRoomService.getStudyRoom(id);
+            this.studyRoomService.delete(studyRoom);
+            return ResponseEntity.ok("삭제성공");
+        } catch (DataNotFoundException e){ // 다른예외는 어떻게 처리해야하는지 잘모루
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 팀플실입니다.");
+        }
+
     }
 
     /**
@@ -135,10 +151,21 @@ public class StudyRoomRestController {
      */
     @PostMapping("/{id}")
     public ResponseEntity reserve(@RequestBody OrderAPI orderAPI, @PathVariable("id") Long id){
-        // TODO: validation 처리 : 팀플실이 있는지 없는지, 해당시간이 이미 예약이 되있는지.
-        StudyRoom studyRoom = studyRoomService.getStudyRoom(id);
-        orderService.reserve(studyRoom,orderAPI);
-        return ResponseEntity.ok("테스트");
+        // TODO: 조금더 고급적인 방법이 있는지
+        try{ // TODO : 김영한님 예외 처리 강의 다시 잘 들어야할듯.
+            StudyRoom studyRoom = studyRoomService.getStudyRoom(id);
+
+            // 해당 날짜의 예약이 이미 차있는지 확인
+            if(!studyRoomService.check(studyRoom,orderAPI)){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 예약되어 있습니다.");
+            }
+
+            orderService.reserve(studyRoom,orderAPI);
+            // TODO: studyRoom을 return 하고싶은데 stackoverflow생겨서 이 문제 쉽게 해결하는 방법알면 다시 수정
+            return ResponseEntity.ok("예약완료");
+        } catch (DataNotFoundException e){ // 다른예외는 어떻게 처리해야하는지 잘모루
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 팀플실입니다.");
+        }
     }
 
 }

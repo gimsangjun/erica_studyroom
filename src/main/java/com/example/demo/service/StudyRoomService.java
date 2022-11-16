@@ -1,21 +1,21 @@
 package com.example.demo.service;
 
 import com.example.demo.DataNotFoundException;
+import com.example.demo.domain.Order;
 import com.example.demo.domain.StudyRoom;
+import com.example.demo.dto.OrderAPI;
 import com.example.demo.dto.StudyRoomAPI;
 import com.example.demo.repository.StudyRoomRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class StudyRoomService {
 
     private final StudyRoomRepository studyRoomRepository;
@@ -55,6 +55,40 @@ public class StudyRoomService {
     public void modify(StudyRoom studyRoom, StudyRoomAPI studyRoomAPI) {
         studyRoom.update(studyRoomAPI);
         this.studyRoomRepository.save(studyRoom);
+    }
+
+    /**
+     * 이미 해당 날짜의 그 시간에, 예약이 차있는 지 확인
+     * 해당 함수는
+     * StudyRoomRestController - reserve()
+     * OrderRestController - delete(), modify() 에서사용
+     * @param
+     * @param api , 대부분 요청은 API형태로 받을거니까
+     */
+    public boolean check(StudyRoom studyRoom, OrderAPI api){
+        // TODO: 사실 @query문, JPQL로 해결하고 싶은데, 그건 나중에 알아봐야할듯.
+        List<Order> orders = studyRoom.getOrder();
+
+        // 24시간이다, 그시간이 이미 사용중이면 1로 표시가 되어있다.
+        int[] timeCheck = new int[24]; // 0으로 초기화 되어있다.
+
+        for(Order order : orders){
+            //TODO: studyRoomRestController-detail()에서도 똑같이 이런방식으로 했는데, 쿼리문으로 바꿔야함.
+            if (api.getYear() == order.getYear() && api.getMonth() == order.getMonth() && api.getDate() == order.getDate()){
+                // TODO: 이런식으로 하면 24시에서 날짜가 넘어갈때 오류가 생길듯 하지만, 그건 나중에 생각하자.
+                for ( int i = order.getStartTime() ; i < order.getEndTime() ; i++){
+                    timeCheck[i] = 1; // 이미 예약중인 것 체크
+                }
+            }
+        }
+
+        for ( int i = api.getStartTime() ; i < api.getEndTime() ; i++){
+            // 이미 사용중이다.
+            if (timeCheck[i] == 1) return false;
+        }
+        // 테스트
+        // log.info("timeCheck={}", timeCheck);
+        return true;
     }
 
 }

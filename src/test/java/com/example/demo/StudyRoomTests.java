@@ -3,7 +3,7 @@ package com.example.demo;
 import com.example.demo.domain.Order;
 import com.example.demo.domain.StudyRoom;
 import com.example.demo.domain.User;
-import com.example.demo.repository.OrderRepsitory;
+import com.example.demo.repository.OrderRepository;
 import com.example.demo.repository.StudyRoomRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.StudyRoomService;
@@ -29,14 +29,14 @@ class StudyRoomTests {
 	@Autowired StudyRoomRepository studyRoomRepository;
 	@Autowired UserService userService;
 	@Autowired UserRepository userRepository;
-	@Autowired OrderRepsitory orderRepsitory;
+	@Autowired OrderRepository orderRepository;
 
 	@Test
 	void testJpa() {
 
 		studyRoomRepository.deleteAll();
 		userRepository.deleteAll();
-		orderRepsitory.deleteAll();
+		orderRepository.deleteAll();
 
 		StudyRoom room1 = new StudyRoom();
 		room1.setUniversity("소프트웨어융합대학");
@@ -125,7 +125,7 @@ class StudyRoomTests {
 		order.setYear(now.getYear());
 		order.setMonth(now.getMonthValue());
 		order.setDate(now.getDayOfMonth());
-		orderRepsitory.save(order);
+		orderRepository.save(order);
 
 
 		Order order1 = new Order();
@@ -136,7 +136,7 @@ class StudyRoomTests {
 		order1.setYear(now.getYear());
 		order1.setMonth(now.getMonthValue());
 		order1.setDate(now.getDayOfMonth());
-		orderRepsitory.save(order1);
+		orderRepository.save(order1);
 
 		studyRoomRepository.save(room1);
 		//log.info("order ={}",order1);

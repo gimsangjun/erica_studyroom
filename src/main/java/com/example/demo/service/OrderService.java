@@ -4,7 +4,7 @@ import com.example.demo.domain.Order;
 import com.example.demo.domain.StudyRoom;
 import com.example.demo.domain.User;
 import com.example.demo.dto.OrderAPI;
-import com.example.demo.repository.OrderRepsitory;
+import com.example.demo.repository.OrderRepository;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,22 +16,22 @@ import java.util.Optional;
 @Service
 public class OrderService {
 
-    private final OrderRepsitory orderRepsitory;
+    private final OrderRepository orderRepository;
     private final UserRepository userRepository;
 
     public void create(Order order){
 
-        this.orderRepsitory.save(order);
+        this.orderRepository.save(order);
     }
 
-    public Optional<Order> getOrder(Long id){return this.orderRepsitory.findById(id);}
+    public Optional<Order> getOrder(Long id){return this.orderRepository.findById(id);}
 
     public List<Order> getAllList() {
-        return this.orderRepsitory.findAll();
+        return this.orderRepository.findAll();
     }
 
     public void delete(Order order){
-        this.orderRepsitory.delete(order);
+        this.orderRepository.delete(order);
     }
 
     public StudyRoom reserve(StudyRoom studyRoom, OrderAPI orderAPI){
@@ -51,8 +51,18 @@ public class OrderService {
         order.setDate(orderAPI.getDate());
         order.setStartTime(orderAPI.getStartTime());
         order.setEndTime(orderAPI.getEndTime());
-        this.orderRepsitory.save(order);
+        this.orderRepository.save(order);
         return studyRoom;
+    }
+
+    public Order modify(Order order, OrderAPI api){
+        order.setReserveYear(api.getYear());
+        order.setReserveMonth(api.getMonth());
+        order.setReserveDate(api.getDate());
+        order.setStartTime(api.getStartTime());
+        order.setEndTime(api.getEndTime());
+        this.orderRepository.save(order);
+        return order;
     }
 
 }
