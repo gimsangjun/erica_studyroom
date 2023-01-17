@@ -1,29 +1,38 @@
 package com.example.demo.domain;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import com.example.demo.domain.common.Common;
+import com.example.demo.enums.role.UserRole;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.util.List;
 
+
+@Entity
 @Getter
 @Setter
-@Entity
+@Builder
 @Table(name = "USERS")
-@ToString
-public class User {
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+// @ToString // TODO: override하는걸로 바꿔야할듯.
+public class User extends Common implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    private Long id;
+    @Column(unique = true,nullable = false , length = 50)
+    private String username; // 로그인 ID
+
+    @Column(nullable = false)
+    private String password;
 
     @NotBlank
-    private String name; // 사용자 이름
+    private String nickname; // 사용자 이름
+
+    @Column(nullable = false, length = 50)
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
     private int age;
 
@@ -36,13 +45,5 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Order> orders;
-
-    @Column(unique = true)
-    @NotBlank
-    private String loginId; // 로그인 ID
-
-    @NotBlank
-    private String password;
-
 
 }

@@ -1,6 +1,6 @@
 package com.example.demo.domain;
 
-import com.example.demo.dto.StudyRoomAPI;
+import com.example.demo.dto.request.StudyRoomDTO;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -9,14 +9,13 @@ import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.*;
 
 
 @Entity
 @Setter
 @Getter
-@ToString
+//@ToString
 public class StudyRoom {
 
     @Id
@@ -42,10 +41,6 @@ public class StudyRoom {
     @Range(min = 1, max = 20)
     private int capacity;
 
-    // 예약된 횟수
-    @ColumnDefault("0")
-    private Integer count ;
-
     // 설명
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "study_room_descrptions", joinColumns = @JoinColumn(name = "study_room_id"))
@@ -66,22 +61,18 @@ public class StudyRoom {
     @CollectionTable(name = "study_room_tags", joinColumns = @JoinColumn(name = "study_room_id"))
     private Set<String> tags = new HashSet<>();
 
-    public void update(StudyRoomAPI studyRoomAPI){
-        this.name = studyRoomAPI.getStudyroom_name();
-        this.university = studyRoomAPI.getUniversity();
-        this.department = studyRoomAPI.getDepartment();
-        this.location = studyRoomAPI.getLocation();
-        this.capacity = studyRoomAPI.getCapacity();
-        this.descriptions = studyRoomAPI.getDescriptions();
-        this.cautions = studyRoomAPI.getCautions();
-        this.drinks = studyRoomAPI.getDrinks();
-        this.tags = studyRoomAPI.getTags();
-
+    public void update(StudyRoomDTO studyRoomDTO){
+        this.name = studyRoomDTO.getName();
+        this.university = studyRoomDTO.getUniversity();
+        this.department = studyRoomDTO.getDepartment();
+        this.location = studyRoomDTO.getLocation();
+        this.capacity = studyRoomDTO.getCapacity();
+        this.descriptions = studyRoomDTO.getDescriptions();
+        this.cautions = studyRoomDTO.getCautions();
+        this.drinks = studyRoomDTO.getDrinks();
+        this.tags = studyRoomDTO.getTags();
     }
 
-    public Integer countUp(){
-        return this.count++;
-    }
 
 }
 

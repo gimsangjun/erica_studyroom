@@ -1,11 +1,16 @@
 package com.example.demo.service;
 
 import com.example.demo.domain.User;
+import com.example.demo.dto.request.SignUpDTO;
+import com.example.demo.enums.role.UserRole;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -14,27 +19,36 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    // BCrypt를 활용해서 암호화 해야함.
-    public User create(User user){
-        // TODO: 이미존재하는 아이디일 경우 예외처리 해야됨.
-        if( userRepository.findByLoginId(user.getLoginId()).isPresent() ){ // 존재하면
-
-        }
-        this.userRepository.save(user);
-        log.info("회원가입 성공");
-        return user;
+    // 회원가입
+    public User signUp(final SignUpDTO signUpDTO){
+        final User user = modelMapper.map(signUpDTO,User.class);
+        user.setPassword(passwordEncoder.encode(signUpDTO.getPassword()));
+        user.setRole(UserRole.ROLE_USER);
+        return userRepository.save(user);
     }
 
-    public User loadUserByLoginId(String loginId, String password){
+    // 이미 그 유저 네임이 존재하는지
+    public boolean isUsernameDuplicated(final String username){
+        return userRepository.existsByUsername(username);
+    }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+
+    public User loadUserByUsername(String username, String password){
         // 람다식으로 작성하는것도 연습해야됨.
-        return userRepository.findByLoginId(loginId)
+        return userRepository.findByUsername(username)
                 .filter(m -> m.getPassword().equals(password))
                 .orElse(null);
     }
 
-    public User getUserByLoginId(String id){
+    public User getUserByUsername(String id){
         // null처리 => Option<> 이부분 다시정리.
-        return userRepository.findByLoginId(id).orElse(null);
+        return userRepository.findByUsername(id).orElse(null);
     }
 }

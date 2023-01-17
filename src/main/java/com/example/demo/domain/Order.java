@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Setter
 @Entity
 @Table(name = "ORDERS")
-@ToString
+//@ToString
 public class Order {
 
     @Id
@@ -49,7 +49,6 @@ public class Order {
     private int endTime;
 
     public void setStudyRoom(StudyRoom room){
-        room.countUp();
         this.studyRoom = room;
     }
 
