@@ -4,6 +4,7 @@ import com.example.demo.constants.AuthConstants;
 import com.example.demo.domain.MyUserDetails;
 import com.example.demo.service.JwtUserDetailsService;
 import com.example.demo.util.JwtTokenUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -18,6 +20,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Component
@@ -28,6 +31,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     private final JwtTokenUtils jwtTokenUtils;
 
+    // TODO: CORS필터 적용해야함.
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         // Postman에서는 Key: "Authorization" , Value : "Bearer 토큰값" 임.
@@ -35,10 +39,16 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         String username = null;
         String jwtToken = null;
+        ////////////////////////////
+        log.info("request URL={}",request.getRequestURL());
+//        // TODO: 누가 요청했는지 origin도 있으면 좋을듯.
+//        byte[] body = StreamUtils.copyToByteArray(request.getInputStream());
+//        Map<String, Object> jsonRequest = new ObjectMapper().readValue(body, Map.class);
+//        log.info("header origin={}",request.getHeader("origin"));
+//        log.info("body={}",jsonRequest);
+        ////////////////////////////
 
-        log.info("요청 URL={}",request.getRequestURL());
-
-        // "Authorization" 헤더가 있고, 헤더 Value가 Bearer로 시작하면
+        // "Authorization" 헤더가 있고, 헤더 Value가 Bearer 시작하면
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")){
             // Value : "Bearer 토큰값"에서 Bearer를 자르고 토큰값만
             jwtToken = JwtTokenUtils.getTokenFromHeader(requestTokenHeader);
@@ -51,7 +61,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 log.info("JWT Token has expired");
             }
         } else{
-            log.error("JWT Token does not begin with Bearer String");
+//            log.error("JWT Token does not begin with Bearer String");
         }
 
         // 토큰을 받으면 유효성 확인

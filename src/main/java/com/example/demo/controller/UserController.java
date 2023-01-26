@@ -25,7 +25,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Slf4j
@@ -53,13 +55,27 @@ public class UserController {
                 : ResponseEntity.ok(new JwtResponse(jwtTokenUtils.generateToken(userService.signUp(signUpDTO))));
     }
 
+    @GetMapping("/header")
+    public ResponseEntity<String> header(@RequestHeader Map<String, String> headers) {
+        headers.forEach((key, value) -> {
+            log.info(String.format("Header '%s' = %s", key, value));
+        });
+        return  ResponseEntity.ok("hello");
+    }
+
     /**
      * 로그인을 하면 JWT토큰발행
      *
      * @return
      */
+    @CrossOrigin(origins = "*" , allowedHeaders = {"authorization", "content-type", "x-auth-token"} , methods = RequestMethod.POST, exposedHeaders = "x-auth-token")
     @PostMapping("/login")
-    public ResponseEntity<?> createAuthenticationToken(@Valid @RequestBody JwtRequest authenticationRequest) throws Exception{
+    public ResponseEntity<?> createAuthenticationToken(@Valid @RequestBody JwtRequest authenticationRequest,
+                                /* header 테스트용 */                       @RequestHeader Map<String, String> headers) throws Exception{
+        /* header 테스트용 */
+        headers.forEach((key, value) -> {
+            log.info(String.format("Header '%s' = %s", key, value));
+        });
 
         // 비밀번호 등이 틀렸는지 검증.
         authenticate(authenticationRequest.getUsername(),authenticationRequest.getPassword());
@@ -93,8 +109,16 @@ public class UserController {
     /**
      * @return 유저정보
      */
+    @CrossOrigin(origins = "http://localhost:3000", methods = RequestMethod.GET, allowedHeaders = "authorization,content-type,x-auth-token",allowCredentials = "true")
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> read(@PathVariable("id") String id){
+    public ResponseEntity<UserDTO> read(@PathVariable("id") String id,
+            /* header 테스트용 */                   @RequestHeader Map<String, String> headers){
+
+        /* header 테스트용 */
+        headers.forEach((key, value) -> {
+            log.info(String.format("Header '%s' = %s", key, value));
+        });
+
         User user = userService.getUserByUsername(id);
         // API validation부분 다시 정리.
         if (user == null){

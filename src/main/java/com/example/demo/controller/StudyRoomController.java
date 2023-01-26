@@ -32,7 +32,7 @@ public class StudyRoomController {
     private final OrderService orderService;
     private final ModelMapper modelMapper;
     /**
-     *
+     * TODO: 오류발생
      * @return 모든 팀플실을 리스트형태로 반환
      */
     @GetMapping()
