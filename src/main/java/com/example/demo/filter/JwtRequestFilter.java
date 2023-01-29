@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.connector.Request;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -20,7 +21,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
@@ -31,21 +33,27 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     private final JwtTokenUtils jwtTokenUtils;
 
-    // TODO: CORS필터 적용해야함.
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         // Postman에서는 Key: "Authorization" , Value : "Bearer 토큰값" 임.
         final String requestTokenHeader = request.getHeader(AuthConstants.AUTH_HEADER);
 
+        log.info("{} request URL={}",request.getMethod(),request.getRequestURL());
+        log.info("인증헤더={}", requestTokenHeader);
+
         String username = null;
         String jwtToken = null;
         ////////////////////////////
-        log.info("request URL={}",request.getRequestURL());
-//        // TODO: 누가 요청했는지 origin도 있으면 좋을듯.
-//        byte[] body = StreamUtils.copyToByteArray(request.getInputStream());
-//        Map<String, Object> jsonRequest = new ObjectMapper().readValue(body, Map.class);
-//        log.info("header origin={}",request.getHeader("origin"));
-//        log.info("body={}",jsonRequest);
+//        Map<String, String> headers = Collections.list(request.getHeaderNames())
+//                .stream()
+//                .collect(Collectors.toMap(h -> h, request::getHeader));
+//        Iterator<String> iter = headers.keySet().iterator();
+//
+//        while(iter.hasNext()) {
+//            String key = iter.next();
+//            String value = (String) headers.get(key);
+//            log.info("{} = {}",key,value);
+//        }
         ////////////////////////////
 
         // "Authorization" 헤더가 있고, 헤더 Value가 Bearer 시작하면
