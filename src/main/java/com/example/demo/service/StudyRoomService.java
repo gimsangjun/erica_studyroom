@@ -34,7 +34,7 @@ public class StudyRoomService {
         }
     }
 
-    public ArrayList<StudyRoom> getAllStudyRoom(){
+    public ArrayList<StudyRoom> findAll(){
         List<StudyRoom> temps = this.studyRoomRepository.findAll();
         ArrayList<StudyRoom> studyRooms = new ArrayList<StudyRoom>();
         studyRooms.addAll(temps);

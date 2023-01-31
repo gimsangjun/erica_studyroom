@@ -17,8 +17,8 @@ import java.util.List;
 @Builder
 @Table(name = "USERS")
 @AllArgsConstructor
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-// @ToString // TODO: override하는걸로 바꿔야할듯.
 public class User extends Common implements Serializable {
 
     @Column(unique = true,nullable = false , length = 50)
@@ -44,6 +44,9 @@ public class User extends Common implements Serializable {
     private String department;
 
     @OneToMany(mappedBy = "user")
+    @ToString.Exclude
     private List<Order> orders;
+
+
 
 }

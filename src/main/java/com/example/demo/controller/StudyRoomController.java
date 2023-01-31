@@ -5,7 +5,7 @@ import com.example.demo.domain.Order;
 import com.example.demo.domain.StudyRoom;
 import com.example.demo.dto.request.OrderDTO;
 import com.example.demo.dto.request.StudyRoomDTO;
-import com.example.demo.dto.response.StduyRoomListResponseDTO;
+import com.example.demo.dto.response.StudyRoomResponseDTO;
 import com.example.demo.service.OrderService;
 import com.example.demo.service.StudyRoomService;
 import lombok.RequiredArgsConstructor;
@@ -37,9 +37,20 @@ public class StudyRoomController {
      */
     @GetMapping()
     public ResponseEntity<Object> read(){
-        final StduyRoomListResponseDTO stduyRoomListResponseDTO = StduyRoomListResponseDTO.builder()
-                .studyRoomList(studyRoomService.getAllStudyRoom()).build();
-        return ResponseEntity.ok(stduyRoomListResponseDTO);
+        // 아래와 같이 쉽게 처리하고싶은데 쉽지가 않음.
+//        final StduyRoomListResponseDTO stduyRoomListResponseDTO = StduyRoomListResponseDTO.builder()
+//                .studyRoomList(studyRoomService.getAllStudyRoom()).build();
+        List<StudyRoom> studyRoomList = studyRoomService.findAll();
+        ArrayList<StudyRoomResponseDTO> list = new ArrayList<>();
+
+        // Todo : 조금더 효율적인 방법은?
+        for (StudyRoom studyRoom : studyRoomList){
+            LinkedHashMap map = new LinkedHashMap();
+            StudyRoomResponseDTO studyRoomResponseDTO = modelMapper.map(studyRoom, StudyRoomResponseDTO.class);
+            list.add(studyRoomResponseDTO);
+        }
+
+        return ResponseEntity.ok(list);
     }
     /**
      *
@@ -64,6 +75,7 @@ public class StudyRoomController {
                 LinkedHashMap reservation = new LinkedHashMap<>();
                 // TODO: 지금 if문으로 하나씩 체크하고있는데, 나중에 쿼리문을 공부해서 그것으로 바꿔야할듯
                 // TODO: 시간대 별로 정렬을 해야하는데 정렬이 아직 안됨.
+                // TODO: 존재하지않으면 오류를 리턴해야함.
                 if (year.get() == order.getYear() && month.get() == order.getMonth() && date.get() == order.getDate()){
                     reservation.put("orderId",order.getId());
                     reservation.put("year",order.getYear());

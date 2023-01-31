@@ -12,20 +12,22 @@ import java.time.LocalDate;
 @Setter
 @Entity
 @Table(name = "ORDERS")
-//@ToString
+@ToString
 public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
     private Long id;
-    // 나중에 User만들면 다시 수정
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
+    @ToString.Exclude
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_room_id")
+    @ToString.Exclude
     private StudyRoom studyRoom;
 
     // 이렇게 해달라고 요청

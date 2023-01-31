@@ -15,7 +15,7 @@ import java.util.*;
 @Entity
 @Setter
 @Getter
-//@ToString
+@ToString
 public class StudyRoom {
 
     @Id

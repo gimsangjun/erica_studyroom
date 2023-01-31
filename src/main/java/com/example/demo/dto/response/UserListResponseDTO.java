@@ -1,6 +1,5 @@
 package com.example.demo.dto.response;
 
-import com.example.demo.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +11,8 @@ import java.util.List;
 @Builder
 @RequiredArgsConstructor
 @NoArgsConstructor(force = true) // TODO : 무슨뜻일까?
+// 아직 toString떄문에 오류가 나서 제대로 활용못함.
 public class UserListResponseDTO {
 
-    private final List<User> userList;
+    private final List<UserDTO> userList;
 }

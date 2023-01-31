@@ -35,6 +35,7 @@ public class OrderController {
         List<Order> orders = orderService.getAllList();
 
         // 예약내용 추가 - reservation
+        // TODO: 조금더 효율적인 방법은 없을까?
         ArrayList<LinkedHashMap> list = new ArrayList<>();
         for(Order order : orders){
             LinkedHashMap reservation = new LinkedHashMap<>();
@@ -67,7 +68,7 @@ public class OrderController {
         }
 
         // TODO: stackoverflow문제 때문에 이렇게 했는데 나중에 어떻게 해결할것인지
-        ArrayList<LinkedHashMap> list = new ArrayList<>();
+        // TODO: 더 효율적인 방법으로
         LinkedHashMap reservation = new LinkedHashMap<>();
         reservation.put("orderId",order.get().getId());
         reservation.put("studyRoomId",order.get().getStudyRoom().getId());
@@ -79,9 +80,8 @@ public class OrderController {
         reservation.put("date",order.get().getDate());
         reservation.put("startTime",order.get().getStartTime());
         reservation.put("endTime",order.get().getEndTime());
-        list.add(reservation);
 
-        return ResponseEntity.ok(list);
+        return ResponseEntity.ok(reservation);
     }
 
     /**
@@ -120,17 +120,18 @@ public class OrderController {
         Order modify = this.orderService.modify(order.get(), orderDTO);
 
         // TODO: stackoverflow문제 때문에 이렇게 했는데 나중에 어떻게 해결할것인지
-        LinkedHashMap response = new LinkedHashMap<>();
-        response.put("orderId",modify.getId());
-        response.put("studyRoomId",modify.getStudyRoom().getId());
-        response.put("id",order.get().getUser().getUsername()); // ID
-        response.put("name",order.get().getUser().getNickname()); // 이름
-        response.put("year",modify.getYear());
-        response.put("month",modify.getMonth());
-        response.put("date",modify.getDate());
-        response.put("startTime",modify.getStartTime());
-        response.put("endTime",modify.getEndTime());
+        // TODO: 더 효율적인 방법으로
+        LinkedHashMap reservation = new LinkedHashMap<>();
+        reservation.put("orderId",modify.getId());
+        reservation.put("studyRoomId",modify.getStudyRoom().getId());
+        reservation.put("id",order.get().getUser().getUsername()); // ID
+        reservation.put("name",order.get().getUser().getNickname()); // 이름
+        reservation.put("year",modify.getYear());
+        reservation.put("month",modify.getMonth());
+        reservation.put("date",modify.getDate());
+        reservation.put("startTime",modify.getStartTime());
+        reservation.put("endTime",modify.getEndTime());
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(reservation);
     }
 }
