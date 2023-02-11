@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +31,20 @@ public class OrderService {
 
     public Optional<Order> getOrder(Long id){return this.orderRepository.findById(id);}
 
+    // 특정 팀플실의 특정날짜의 order를 리턴
+    public List<Order> getByStudyRoomAndDate(StudyRoom studyRoom, LocalDate date){
+        List<Order> orders = orderRepository.findByStudyRoomAndDate(studyRoom,date);
+        // TODO : startTime으로 sort필요
+        return orders;
+    }
+
+    public List<Order> getByStudyRoom(StudyRoom studyRoom){
+        List<Order> orders = orderRepository.findByStudyRoom(studyRoom);
+        // TODO : startTime으로 sort필요
+        return orders;
+    }
+
+
     public List<Order> getAllList() {
         return this.orderRepository.findAll();
     }
@@ -38,17 +53,10 @@ public class OrderService {
         this.orderRepository.delete(order);
     }
 
-    public StudyRoom reserve(StudyRoom studyRoom, OrderDTO orderDTO){
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) ((MyUserDetails) authentication.getPrincipal()).getUser(); // MyUserDetails
-        // log.info("인증객체에서 유저가 꺼내와지나? Principal={}",user.getUsername());
-
+    public StudyRoom reserve(StudyRoom studyRoom, OrderDTO orderDTO, User user){
         Order order = new Order();
         order.setUser(user);
         order.setStudyRoom(studyRoom);
-        order.setYear(orderDTO.getYear());
-        order.setMonth(orderDTO.getMonth());
         order.setDate(orderDTO.getDate());
         order.setStartTime(orderDTO.getStartTime());
         order.setEndTime(orderDTO.getEndTime());
@@ -57,9 +65,7 @@ public class OrderService {
     }
 
     public Order modify(Order order, OrderDTO orderDTO){
-        order.setReserveYear(orderDTO.getYear());
-        order.setReserveMonth(orderDTO.getMonth());
-        order.setReserveDate(orderDTO.getDate());
+        order.setDate(orderDTO.getDate());
         order.setStartTime(orderDTO.getStartTime());
         order.setEndTime(orderDTO.getEndTime());
         this.orderRepository.save(order);

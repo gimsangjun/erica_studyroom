@@ -16,7 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 
-
+@CrossOrigin(origins = {"http://localhost:3000"}, methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT}, allowedHeaders = {"authorization", "content-type","ngrok-skip-browser-warning"},exposedHeaders = "authorization",allowCredentials = "true", maxAge = 3000)
 @RestController
 @Slf4j
 @RequiredArgsConstructor
@@ -44,8 +44,6 @@ public class OrderController {
             reservation.put("studyRoomName",order.getStudyRoom().getName());
             reservation.put("id",order.getUser().getUsername());
             reservation.put("name",order.getUser().getNickname());
-            reservation.put("year",order.getYear());
-            reservation.put("month",order.getMonth());
             reservation.put("date",order.getDate());
             reservation.put("startTime",order.getStartTime());
             reservation.put("endTime",order.getEndTime());
@@ -75,8 +73,6 @@ public class OrderController {
         reservation.put("studyRoomName",order.get().getStudyRoom().getName());
         reservation.put("id",order.get().getUser().getUsername()); // ID
         reservation.put("name",order.get().getUser().getNickname()); // 이름
-        reservation.put("year",order.get().getYear());
-        reservation.put("month",order.get().getMonth());
         reservation.put("date",order.get().getDate());
         reservation.put("startTime",order.get().getStartTime());
         reservation.put("endTime",order.get().getEndTime());
@@ -126,8 +122,6 @@ public class OrderController {
         reservation.put("studyRoomId",modify.getStudyRoom().getId());
         reservation.put("id",order.get().getUser().getUsername()); // ID
         reservation.put("name",order.get().getUser().getNickname()); // 이름
-        reservation.put("year",modify.getYear());
-        reservation.put("month",modify.getMonth());
         reservation.put("date",modify.getDate());
         reservation.put("startTime",modify.getStartTime());
         reservation.put("endTime",modify.getEndTime());

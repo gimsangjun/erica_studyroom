@@ -5,6 +5,7 @@ import com.example.demo.domain.Order;
 import com.example.demo.domain.StudyRoom;
 import com.example.demo.dto.request.OrderDTO;
 import com.example.demo.dto.request.StudyRoomDTO;
+import com.example.demo.repository.OrderRepository;
 import com.example.demo.repository.StudyRoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ import java.util.*;
 public class StudyRoomService {
 
     private final StudyRoomRepository studyRoomRepository;
+    private final OrderRepository orderRepository;
     private final ModelMapper modelMapper;
 
     public List<StudyRoom> getList() {
@@ -59,35 +61,29 @@ public class StudyRoomService {
 
     /**
      * 이미 해당 날짜의 그 시간에, 예약이 차있는 지 확인
-     * 해당 함수는
-     * StudyRoomRestController - reserve()
-     * OrderRestController - delete(), modify() 에서사용
-     * @param
-     * @param orderDTO
+     * @param studyRoom : 예약할 팀플실
+     * @param orderDTO : 예약할 시간
      */
     public boolean check(StudyRoom studyRoom, OrderDTO orderDTO){
-        // TODO: 사실 @query문, JPQL로 해결하고 싶은데, 그건 나중에 알아봐야할듯.
-        List<Order> orders = studyRoom.getOrder();
-
-        // 24시간이다, 그시간이 이미 사용중이면 1로 표시가 되어있다.
-        int[] timeCheck = new int[24]; // 0으로 초기화 되어있다.
-
+        // TODO: 쿼리문이 어떻게 나가는지 체크
+        // 해당 스터디룸의 그 날짜의 예약내용을 가져옴.
+        List<Order> orders = orderRepository.findByStudyRoomAndDate(studyRoom, orderDTO.getDate());
+        int[] timeCheck = new int[48];
         for(Order order : orders){
-            //TODO: studyRoomRestController-detail()에서도 똑같이 이런방식으로 했는데, 쿼리문으로 바꿔야함.
-            if (orderDTO.getYear() == order.getYear() && orderDTO.getMonth() == order.getMonth() && orderDTO.getDate() == order.getDate()){
-                // TODO: 이런식으로 하면 24시에서 날짜가 넘어갈때 오류가 생길듯 하지만, 그건 나중에 생각하자.
-                for ( int i = order.getStartTime() ; i < order.getEndTime() ; i++){
-                    timeCheck[i] = 1; // 이미 예약중인 것 체크
-                }
+            for( float i = order.getStartTime() ; i < order.getEndTime() ; i = (float) (i + 0.5)){
+                // TODO: 정리 ,실수형을 정수형으로 바꿀때 조심. 어떤것이 먼저 연산되는지
+                int index = (int) (i * 2);
+                timeCheck[index] = 1;
             }
         }
 
-        for ( int i = orderDTO.getStartTime() ; i < orderDTO.getEndTime() ; i++){
-            // 이미 사용중이다.
-            if (timeCheck[i] == 1) return false;
+        // 이미 그시간이 예약이 되어있으면 false을 리턴.
+        for( float i = orderDTO.getStartTime() ; i < orderDTO.getEndTime(); i = (float) (i+ 0.5)){
+            int index = (int) (i * 2);
+            if (timeCheck[index] == 1) {
+                return false;
+            }
         }
-        // 테스트
-        // log.info("timeCheck={}", timeCheck);
         return true;
     }
 

@@ -1,6 +1,5 @@
 package com.example.demo.domain;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -40,42 +39,14 @@ public class Order {
 //        "endTime": 17
 //    }
     // 예약날짜 ex: 2022-10-19
-    // private LocalDate orderDate;
-
-    private int reserveYear ;
-    private int reserveMonth;
-    private int reserveDate;
+    private LocalDate date;
 
     // 예약시간.
-    private int startTime;
-    private int endTime;
+    private float startTime;
+    private float endTime;
 
     public void setStudyRoom(StudyRoom room){
         this.studyRoom = room;
-    }
-
-    public void setYear(int year){
-        this.reserveYear = year;
-    }
-
-    public void setMonth(int month){
-        this.reserveMonth = month;
-    }
-
-    public void setDate(int date){
-        this.reserveDate = date;
-    }
-
-    public int getYear(){
-        return reserveYear;
-    }
-
-    public int getMonth(){
-        return reserveMonth;
-    }
-
-    public int getDate(){
-        return reserveDate;
     }
 
 }

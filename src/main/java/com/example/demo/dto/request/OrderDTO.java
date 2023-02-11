@@ -4,16 +4,16 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Data
 @Getter
 @Setter
 public class OrderDTO {
 
-    private int year ;
-    private int month;
-    private int date;
+    private LocalDate date;
     // 예약시간.
-    private int startTime;
-    private int endTime;
+    private float startTime;
+    private float endTime;
 
 }

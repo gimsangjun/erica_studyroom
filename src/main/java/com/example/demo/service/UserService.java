@@ -39,14 +39,6 @@ public class UserService {
         return userRepository.findAll();
     }
 
-
-    public User loadUserByUsername(String username, String password){
-        // 람다식으로 작성하는것도 연습해야됨.
-        return userRepository.findByUsername(username)
-                .filter(m -> m.getPassword().equals(password))
-                .orElse(null);
-    }
-
     public User getUserByUsername(String id){
         // null처리 => Option<> 이부분 다시정리.
         return userRepository.findByUsername(id).orElse(null);
