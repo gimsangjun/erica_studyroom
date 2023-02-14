@@ -44,8 +44,6 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<Object> findAll() {
-//        final UserListResponseDTO userListResponseDTO = UserListResponseDTO.builder()
-//                .userList(userService.findAll()).build();
 
         List<User> users = userService.findAll();
         ArrayList<UserResponseDTO> list = new ArrayList<>();

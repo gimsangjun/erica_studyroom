@@ -29,15 +29,6 @@ public class Order {
     @ToString.Exclude
     private StudyRoom studyRoom;
 
-    // 이렇게 해달라고 요청
-//    {
-//        "year" : "2022",
-//        "month": "10",
-//        "date" : "19",
-//        "name": "홍길동",
-//        "startTime": 15,
-//        "endTime": 17
-//    }
     // 예약날짜 ex: 2022-10-19
     private LocalDate date;
 

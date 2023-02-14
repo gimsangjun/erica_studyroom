@@ -38,16 +38,7 @@ public class OrderController {
         // TODO: 조금더 효율적인 방법은 없을까?
         ArrayList<LinkedHashMap> list = new ArrayList<>();
         for(Order order : orders){
-            LinkedHashMap reservation = new LinkedHashMap<>();
-            reservation.put("orderId",order.getId());
-            reservation.put("studyRoomId",order.getStudyRoom().getId());
-            reservation.put("studyRoomName",order.getStudyRoom().getName());
-            reservation.put("id",order.getUser().getUsername());
-            reservation.put("name",order.getUser().getNickname());
-            reservation.put("date",order.getDate());
-            reservation.put("startTime",order.getStartTime());
-            reservation.put("endTime",order.getEndTime());
-            list.add(reservation);
+            list.add(orderToResponse(order));
         }
 
         return ResponseEntity.ok(list);
@@ -64,20 +55,7 @@ public class OrderController {
             // TODO: 조금더 고급적으로 바꿀수 있나 확인
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 예약입니다.");
         }
-
-        // TODO: stackoverflow문제 때문에 이렇게 했는데 나중에 어떻게 해결할것인지
-        // TODO: 더 효율적인 방법으로
-        LinkedHashMap reservation = new LinkedHashMap<>();
-        reservation.put("orderId",order.get().getId());
-        reservation.put("studyRoomId",order.get().getStudyRoom().getId());
-        reservation.put("studyRoomName",order.get().getStudyRoom().getName());
-        reservation.put("id",order.get().getUser().getUsername()); // ID
-        reservation.put("name",order.get().getUser().getNickname()); // 이름
-        reservation.put("date",order.get().getDate());
-        reservation.put("startTime",order.get().getStartTime());
-        reservation.put("endTime",order.get().getEndTime());
-
-        return ResponseEntity.ok(reservation);
+        return ResponseEntity.ok(orderToResponse(order.get()));
     }
 
     /**
@@ -115,17 +93,20 @@ public class OrderController {
 
         Order modify = this.orderService.modify(order.get(), orderDTO);
 
-        // TODO: stackoverflow문제 때문에 이렇게 했는데 나중에 어떻게 해결할것인지
-        // TODO: 더 효율적인 방법으로
-        LinkedHashMap reservation = new LinkedHashMap<>();
-        reservation.put("orderId",modify.getId());
-        reservation.put("studyRoomId",modify.getStudyRoom().getId());
-        reservation.put("id",order.get().getUser().getUsername()); // ID
-        reservation.put("name",order.get().getUser().getNickname()); // 이름
-        reservation.put("date",modify.getDate());
-        reservation.put("startTime",modify.getStartTime());
-        reservation.put("endTime",modify.getEndTime());
+        return ResponseEntity.ok(orderToResponse(modify));
+    }
 
-        return ResponseEntity.ok(reservation);
+    // order를 리턴할수있게 변경.
+    public LinkedHashMap<String, String> orderToResponse(Order order){
+        LinkedHashMap reservation = new LinkedHashMap<>();
+        reservation.put("orderId",order.getId());
+        reservation.put("studyRoomId",order.getStudyRoom().getId());
+        reservation.put("studyRoomName",order.getStudyRoom().getName());
+        reservation.put("id",order.getUser().getUsername());
+        reservation.put("name",order.getUser().getNickname());
+        reservation.put("date",order.getDate());
+        reservation.put("startTime",order.getStartTime());
+        reservation.put("endTime",order.getEndTime());
+        return reservation;
     }
 }

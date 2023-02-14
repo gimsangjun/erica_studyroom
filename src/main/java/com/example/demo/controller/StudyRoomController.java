@@ -77,17 +77,8 @@ public class StudyRoomController {
         if (date.isPresent()){
             // 해당 팀플실의 특정날짜의 orders 가져오기
             orders = orderService.getByStudyRoomAndDate(studyRoom, date.get());
-
             for(Order order : orders){
-                LinkedHashMap reservation = new LinkedHashMap<>();
-                // TODO: 시간대 별로 정렬을 해야하는데 정렬이 아직 안됨.
-                reservation.put("orderId",order.getId());
-                reservation.put("date",order.getDate());
-                reservation.put("name",order.getUser().getNickname());
-                reservation.put("startTime",order.getStartTime());
-                reservation.put("endTime",order.getEndTime());
-                list.add(reservation);
-
+                list.add(orderToResponse(order));
             }
 
         } else { // Parameter가 넘어오지 않았을 때
@@ -95,13 +86,7 @@ public class StudyRoomController {
             orders = orderService.getByStudyRoom(studyRoom);
            // TODO: date가 파라미터형태로 넘어올떄와 다르게 order를 가져옴. 그래서 다르게 정렬해야됨.
             for(Order order : orders){
-                LinkedHashMap reservation = new LinkedHashMap<>();
-                reservation.put("orderId",order.getId());
-                reservation.put("date",order.getDate());
-                reservation.put("name",order.getUser().getNickname());
-                reservation.put("startTime",order.getStartTime());
-                reservation.put("endTime",order.getEndTime());
-                list.add(reservation);
+                list.add(orderToResponse(order));
             }
         }
 
@@ -174,6 +159,18 @@ public class StudyRoomController {
         } catch (DataNotFoundException e){ // 다른예외는 어떻게 처리해야하는지 잘모루
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 팀플실입니다.");
         }
+    }
+
+    // order를 리턴할수있게 변경.
+    // TODO: 시간대 별로 정렬을 해야하는데 정렬이 아직 안됨.
+    public LinkedHashMap<String,String> orderToResponse(Order order){
+        LinkedHashMap reservation = new LinkedHashMap<>();
+        reservation.put("orderId",order.getId());
+        reservation.put("date",order.getDate());
+        reservation.put("name",order.getUser().getNickname());
+        reservation.put("startTime",order.getStartTime());
+        reservation.put("endTime",order.getEndTime());
+        return reservation;
     }
 
 
