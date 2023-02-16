@@ -54,9 +54,9 @@ public class StudyRoomService {
         this.studyRoomRepository.delete(studyRoom);
     }
 
-    public void modify(StudyRoom studyRoom, StudyRoomDTO studyRoomDTO) {
+    public StudyRoom modify(StudyRoom studyRoom, StudyRoomDTO studyRoomDTO) {
         studyRoom.update(studyRoomDTO);
-        this.studyRoomRepository.save(studyRoom);
+        return this.studyRoomRepository.save(studyRoom);
     }
 
     /**

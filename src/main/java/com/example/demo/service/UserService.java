@@ -2,14 +2,18 @@ package com.example.demo.service;
 
 import com.example.demo.domain.User;
 import com.example.demo.dto.request.SignUpDTO;
+import com.example.demo.dto.request.UserModifyDTO;
 import com.example.demo.enums.role.UserRole;
 import com.example.demo.repository.UserRepository;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,5 +46,11 @@ public class UserService {
     public User getUserByUsername(String id){
         // null처리 => Option<> 이부분 다시정리.
         return userRepository.findByUsername(id).orElse(null);
+    }
+
+    public User modify(User user, UserModifyDTO dto){
+        user.update(dto);
+        user.setUpdateAt(LocalDateTime.now());
+        return this.userRepository.save(user);
     }
 }

@@ -1,6 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.domain.MyUserDetails;
 import com.example.demo.domain.User;
+import com.example.demo.dto.request.SignUpDTO;
+import com.example.demo.dto.request.UserModifyDTO;
 import com.example.demo.dto.response.UserDTO;
 import com.example.demo.dto.response.UserResponseDTO;
 import com.example.demo.service.UserService;
@@ -9,14 +12,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 // allowedHeaders의 "ngrok-skip-browser-warning"는 ngrok의 "warn page"로 인한 오류 땜에 추가
-@CrossOrigin(origins = {"http://localhost:3000"}, methods = RequestMethod.GET, allowedHeaders = {"authorization", "content-type","ngrok-skip-browser-warning"},exposedHeaders = "authorization",allowCredentials = "true", maxAge = 3000)
+@CrossOrigin(origins = {"http://localhost:3000"}, methods = {RequestMethod.GET, RequestMethod.PUT}, allowedHeaders = {"authorization", "content-type","ngrok-skip-browser-warning"},exposedHeaders = "authorization",allowCredentials = "true", maxAge = 3000)
 @RestController
 @Slf4j
 @RequiredArgsConstructor
@@ -26,10 +31,8 @@ public class UserController {
     private final UserService userService ;
     private final ModelMapper modelMapper;
 
-    /**
-     * @return 유저정보
-     */
 
+    // 특정 유저의 정보 출력
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> read(@PathVariable("id") String id){
         User user = userService.getUserByUsername(id);
@@ -42,6 +45,7 @@ public class UserController {
         return new ResponseEntity<UserDTO>(userDTO, HttpStatus.OK);
     }
 
+    // 모든 유저리스트 리턴
     @GetMapping
     public ResponseEntity<Object> findAll() {
 
@@ -55,5 +59,21 @@ public class UserController {
         }
 
         return ResponseEntity.ok(list);
+    }
+
+    // 유저의 본인 정보 수정
+    @PutMapping("/modify")
+    public ResponseEntity<Object> modify(Authentication authentication, @RequestBody final UserModifyDTO dto){
+
+        // 현재 로그인한 유저객체를 가져옴
+        User user = ((MyUserDetails) authentication.getPrincipal()).getUser();
+
+        // 현재 로그인한 유저와 요청을 온 body의 user가 같은지 체크
+        if (user.getUsername().equals(dto.getUsername())){
+            userService.modify(user, dto);
+            return ResponseEntity.ok("수정완료");
+        } else{
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("권한이 없습니다.");
+        }
     }
 }

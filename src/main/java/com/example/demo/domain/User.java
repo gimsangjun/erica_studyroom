@@ -1,6 +1,8 @@
 package com.example.demo.domain;
 
 import com.example.demo.domain.common.Common;
+import com.example.demo.dto.request.SignUpDTO;
+import com.example.demo.dto.request.UserModifyDTO;
 import com.example.demo.enums.role.UserRole;
 import lombok.*;
 
@@ -47,6 +49,13 @@ public class User extends Common implements Serializable {
     @ToString.Exclude
     private List<Order> orders;
 
-
+    public void update(UserModifyDTO dto){
+        this.nickname = dto.getNickname();
+        this.age = dto.getAge();
+        this.grade = dto.getGrade();
+        this.email = dto.getEmail();
+        this.university = dto.getUniversity();
+        this.department = dto.getDepartment();
+    }
 
 }

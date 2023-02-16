@@ -33,4 +33,7 @@ public abstract class Common implements Serializable {
     @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT true")
     private Boolean isEnable = true;                // 사용 여부
 
+    public void setUpdateAt(LocalDateTime updateAt) {
+        this.updateAt = updateAt;
+    }
 }
