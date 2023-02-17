@@ -38,7 +38,7 @@ public class OrderController {
         // TODO: 조금더 효율적인 방법은 없을까?
         ArrayList<LinkedHashMap> list = new ArrayList<>();
         for(Order order : orders){
-            list.add(orderToResponse(order));
+            list.add(order.getResponse());
         }
 
         return ResponseEntity.ok(list);
@@ -55,7 +55,7 @@ public class OrderController {
             // TODO: 조금더 고급적으로 바꿀수 있나 확인
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 예약입니다.");
         }
-        return ResponseEntity.ok(orderToResponse(order.get()));
+        return ResponseEntity.ok(order.get().getResponse());
     }
 
     /**
@@ -93,20 +93,7 @@ public class OrderController {
 
         Order modify = this.orderService.modify(order.get(), orderDTO);
 
-        return ResponseEntity.ok(orderToResponse(modify));
+        return ResponseEntity.ok(modify.getResponse());
     }
 
-    // order를 리턴할수있게 변경.
-    public LinkedHashMap<String, String> orderToResponse(Order order){
-        LinkedHashMap reservation = new LinkedHashMap<>();
-        reservation.put("orderId",order.getId());
-        reservation.put("studyRoomId",order.getStudyRoom().getId());
-        reservation.put("studyRoomName",order.getStudyRoom().getName());
-        reservation.put("id",order.getUser().getUsername());
-        reservation.put("name",order.getUser().getNickname());
-        reservation.put("date",order.getDate());
-        reservation.put("startTime",order.getStartTime());
-        reservation.put("endTime",order.getEndTime());
-        return reservation;
-    }
 }

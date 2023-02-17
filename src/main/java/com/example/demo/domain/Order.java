@@ -6,6 +6,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.LinkedHashMap;
 
 @Getter
 @Setter
@@ -38,6 +39,19 @@ public class Order {
 
     public void setStudyRoom(StudyRoom room){
         this.studyRoom = room;
+    }
+
+    public LinkedHashMap<String, String> getResponse(){
+        LinkedHashMap reservation = new LinkedHashMap<>();
+        reservation.put("orderId",id);
+        reservation.put("studyRoomId",studyRoom.getId());
+        reservation.put("studyRoomName",studyRoom.getName());
+        reservation.put("id",user.getUsername());
+        reservation.put("name",user.getNickname());
+        reservation.put("date",date);
+        reservation.put("startTime",startTime);
+        reservation.put("endTime",endTime);
+        return reservation;
     }
 
 }

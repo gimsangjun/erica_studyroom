@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 
@@ -56,6 +57,18 @@ public class User extends Common implements Serializable {
         this.email = dto.getEmail();
         this.university = dto.getUniversity();
         this.department = dto.getDepartment();
+    }
+
+    public LinkedHashMap<String , String> info(){
+        LinkedHashMap info = new LinkedHashMap();
+        info.put("username", username);
+        info.put("nickname", nickname);
+        info.put("age", age);
+        info.put("grade", grade);
+        info.put("email", email);
+        info.put("university", university);
+        info.put("department", department);
+        return info;
     }
 
 }

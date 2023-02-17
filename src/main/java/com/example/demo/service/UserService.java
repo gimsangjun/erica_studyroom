@@ -1,9 +1,11 @@
 package com.example.demo.service;
 
+import com.example.demo.domain.Order;
 import com.example.demo.domain.User;
 import com.example.demo.dto.request.SignUpDTO;
 import com.example.demo.dto.request.UserModifyDTO;
 import com.example.demo.enums.role.UserRole;
+import com.example.demo.repository.OrderRepository;
 import com.example.demo.repository.UserRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final OrderRepository orderRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
 
@@ -48,9 +51,17 @@ public class UserService {
         return userRepository.findByUsername(id).orElse(null);
     }
 
+    // 유저 정보 수정
     public User modify(User user, UserModifyDTO dto){
         user.update(dto);
         user.setUpdateAt(LocalDateTime.now());
         return this.userRepository.save(user);
     }
+
+    // 유저의 예약내용 리턴
+    public List<Order> gerOrder(User user){
+        return this.orderRepository.findByUser(user);
+    }
+
+
 }

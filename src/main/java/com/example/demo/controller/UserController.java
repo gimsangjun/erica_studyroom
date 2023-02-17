@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.domain.MyUserDetails;
+import com.example.demo.domain.Order;
 import com.example.demo.domain.User;
 import com.example.demo.dto.request.SignUpDTO;
 import com.example.demo.dto.request.UserModifyDTO;
@@ -76,4 +77,32 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("권한이 없습니다.");
         }
     }
+
+    // 자기자신의 유저정보 리턴
+    @GetMapping("/info")
+    public ResponseEntity info(Authentication authentication){
+
+        // 현재 로그인한 유저 객체를 가져옴
+        User user = ((MyUserDetails) authentication.getPrincipal()).getUser();
+        return ResponseEntity.ok(user.info());
+
+    }
+
+    // 자기자신의 예약내용 리턴턴
+   @GetMapping("/order")
+    public ResponseEntity order(Authentication authentication){
+       // 현재 로그인한 유저 객체를 가져옴
+       User user = ((MyUserDetails) authentication.getPrincipal()).getUser();
+       List<Order> orders = this.userService.gerOrder(user);
+       if (orders.size() == 0){
+           return ResponseEntity.status(HttpStatus.NO_CONTENT).body("유저의 예약 내용은 없습니다.");
+       }else {
+           ArrayList<LinkedHashMap> list = new ArrayList<>();
+           for(Order order : orders){
+               list.add(order.getResponse());
+           }
+           return ResponseEntity.ok(list);
+       }
+
+   }
 }

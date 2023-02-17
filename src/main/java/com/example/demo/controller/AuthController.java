@@ -11,6 +11,7 @@ import com.example.demo.service.UserService;
 import com.example.demo.util.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -40,14 +41,10 @@ public class AuthController {
      * @return JWT토큰
      */
     @PostMapping("/signUp")
-    public ResponseEntity<JwtResponse> signUp(@RequestBody final SignUpDTO signUpDTO){
-        log.info("계정정보 ={}",signUpDTO);
-        if(userService.isUsernameDuplicated(signUpDTO.getUsername())){
-            log.info("유저 중복에러={}",signUpDTO);
-        }
+    public ResponseEntity signUp(@RequestBody final SignUpDTO signUpDTO){
         return userService.isUsernameDuplicated(signUpDTO.getUsername())
-                ? ResponseEntity.badRequest().build()
-                : ResponseEntity.ok(new JwtResponse(jwtTokenUtils.generateToken(userService.signUp(signUpDTO))));
+                ? ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 존재하는 유저입니다.")
+                : ResponseEntity.status(HttpStatus.CREATED).body(new JwtResponse(jwtTokenUtils.generateToken(userService.signUp(signUpDTO))));
     }
 
     /**
