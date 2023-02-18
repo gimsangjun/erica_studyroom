@@ -34,6 +34,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // user for matching credentials
         // Use BCryptPasswordEncoder
         auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
+
+        // inMemory기반의 admin 계정 생성
+        auth.inMemoryAuthentication()
+                .withUser("admin")
+                .password(passwordEncoder().encode("admin")).roles("ADMIN");
     }
 
     @Bean
@@ -41,9 +46,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+    // 아래의 요청들은 Spring security 로직을 수행하지 않도록 모두 무시하도록 설정.
     @Override
     public void configure(WebSecurity web) throws Exception {
-        // 아래의 요청들은 Spring security 로직을 수행하지 않도록 모두 무시하도록 설정.
+
         web
                 .ignoring()
                 .antMatchers(
@@ -81,7 +87,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .disable()
                 // 모든 리퀘스트마다 토큰을 유효성 검사하기위해 필터 추가.
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class) // TODO : CORS 적용안됨.
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 ;
     }
 
