@@ -26,6 +26,4 @@ Spring Security
     - CORS 문제 : 노션링크필요
       - ngrok을 사용하던 도중 만난 문제
   
-
-추가하고싶은것
-.. JUnit 5 테스트케이스 작성,CI/CD, 쿠버네티스, slack 웹훅을 이용한 모니터링 문제
+    

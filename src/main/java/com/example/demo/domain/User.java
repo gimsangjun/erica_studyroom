@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -20,7 +21,6 @@ import java.util.List;
 @Builder
 @Table(name = "USERS")
 @AllArgsConstructor
-@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends Common implements Serializable {
 
@@ -46,9 +46,9 @@ public class User extends Common implements Serializable {
     private String university;
     private String department;
 
-    @OneToMany(mappedBy = "user")
-    @ToString.Exclude
-    private List<Order> orders;
+    // 주인: 외래키값이 있는곳, 여기에는 꼭 값을 넣어줘야한다.
+    @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL)
+    private List<Order> orders = new ArrayList<>();
 
     public void update(UserModifyDTO dto){
         this.nickname = dto.getNickname();
@@ -59,7 +59,8 @@ public class User extends Common implements Serializable {
         this.department = dto.getDepartment();
     }
 
-    public LinkedHashMap<String , String> info(){
+    // DTO 출력용용
+   public LinkedHashMap<String , String> info(){
         LinkedHashMap info = new LinkedHashMap();
         info.put("username", username);
         info.put("nickname", nickname);
@@ -70,5 +71,6 @@ public class User extends Common implements Serializable {
         info.put("department", department);
         return info;
     }
+
 
 }

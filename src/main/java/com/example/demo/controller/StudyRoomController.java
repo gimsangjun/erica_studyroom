@@ -10,6 +10,7 @@ import com.example.demo.dto.request.StudyRoomDTO;
 import com.example.demo.dto.response.StudyRoomResponseDTO;
 import com.example.demo.service.OrderService;
 import com.example.demo.service.StudyRoomService;
+import com.example.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -17,6 +18,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -142,6 +144,7 @@ public class StudyRoomController {
     /**
      * 팀플실예약
      */
+    @Transactional
     @PostMapping("/{id}")
     public ResponseEntity reserve(Authentication authentication, @RequestBody OrderDTO orderDTO, @PathVariable("id") Long id){
         // TODO: 조금더 고급적인 방법이 있는지
@@ -153,8 +156,7 @@ public class StudyRoomController {
             }
             // 현재 접근한 사용자의 정보를 가져옴.
             User user = (User) ((MyUserDetails) authentication.getPrincipal()).getUser();
-            orderService.reserve(studyRoom,orderDTO,user);
-            // TODO: studyRoom을 return 하고싶은데 stackoverflow생겨서 이 문제 쉽게 해결하는 방법알면 다시 수정
+            orderService.reserve(studyRoom,orderDTO,user.getUsername());
             return ResponseEntity.ok("예약완료");
         } catch (DataNotFoundException e){ // 다른예외는 어떻게 처리해야하는지 잘모루
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 팀플실입니다.");

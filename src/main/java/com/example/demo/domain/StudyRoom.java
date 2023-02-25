@@ -34,7 +34,7 @@ public class StudyRoom {
     private String location;
 
     @OneToMany(mappedBy = "studyRoom", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<Order> order;
+    private List<Order> orders = new ArrayList<>();
 
     // 수용인원
     @Column(nullable = false)
@@ -72,7 +72,6 @@ public class StudyRoom {
         this.drinks = studyRoomDTO.getDrinks();
         this.tags = studyRoomDTO.getTags();
     }
-
 
 }
 

@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import com.example.demo.domain.MyUserDetails;
 import com.example.demo.domain.Order;
 import com.example.demo.domain.StudyRoom;
 import com.example.demo.domain.User;
@@ -9,9 +8,8 @@ import com.example.demo.repository.OrderRepository;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -53,10 +51,11 @@ public class OrderService {
         this.orderRepository.delete(order);
     }
 
-    public StudyRoom reserve(StudyRoom studyRoom, OrderDTO orderDTO, User user){
+    public StudyRoom reserve(StudyRoom studyRoom, OrderDTO orderDTO, String username){
+        User user = this.userRepository.findByUsername(username).get();
         Order order = new Order();
-        order.setUser(user);
-        order.setStudyRoom(studyRoom);
+        order.changeUser(user);
+        order.changeStudyRoom(studyRoom);
         order.setDate(orderDTO.getDate());
         order.setStartTime(orderDTO.getStartTime());
         order.setEndTime(orderDTO.getEndTime());

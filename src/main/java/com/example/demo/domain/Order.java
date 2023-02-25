@@ -22,12 +22,11 @@ public class Order {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
-    @ToString.Exclude
     private User user;
 
+    // 주인: 외래키값이 있는곳, 여기에는 꼭 값을 넣어줘야한다.
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_room_id")
-    @ToString.Exclude
     private StudyRoom studyRoom;
 
     // 예약날짜 ex: 2022-10-19
@@ -52,6 +51,18 @@ public class Order {
         reservation.put("startTime",startTime);
         reservation.put("endTime",endTime);
         return reservation;
+    }
+
+    // 연관관계 편의 메서드
+    public void changeUser(User user){
+        this.user = user;
+        user.getOrders().add(this);
+    }
+
+    // 연관관계 편의 메서드
+    public void changeStudyRoom(StudyRoom studyRoom){
+        this.studyRoom = studyRoom;
+        studyRoom.getOrders().add(this);
     }
 
 }
