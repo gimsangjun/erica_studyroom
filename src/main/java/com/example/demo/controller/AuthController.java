@@ -72,9 +72,9 @@ public class AuthController {
 
     }
 
-    private void authenticate(String email, String password) throws Exception {
+    private void authenticate(String username, String password) throws Exception {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
             throw new Exception("USER_DISABLED", e);
         } catch (BadCredentialsException e) { // 비밀번호 안맞음.

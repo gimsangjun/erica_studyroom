@@ -39,7 +39,6 @@ public class OrderController {
         List<Order> orders = orderService.getAllList();
 
         // 예약내용 추가 - reservation
-        // TODO: 조금더 효율적인 방법은 없을까?
         ArrayList<LinkedHashMap> list = new ArrayList<>();
         for(Order order : orders){
             list.add(order.getResponse());

@@ -1,5 +1,6 @@
 package com.example.demo.config.security;
 
+import com.example.demo.enums.role.UserRole;
 import com.example.demo.filter.JwtRequestFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -12,9 +13,12 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
@@ -38,8 +42,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // inMemory기반의 admin 계정 생성
         auth.inMemoryAuthentication()
                 .withUser("admin")
-                .password(passwordEncoder().encode("admin")).roles("ADMIN");
+                .password("admin")
+                .roles("USER")
+                .roles("ADMIN");
     }
+
+//    @Bean
+//    public UserDetailsService users() {
+//        UserDetails admin = User.builder()
+//                .username("admin")
+//                .password("admin")
+//                .roles("USER", "ADMIN")
+//                .build();
+//        return new InMemoryUserDetailsManager(admin);
+//    }
+
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -73,7 +90,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     // CORS options 허용
                     .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                     .antMatchers(HttpMethod.GET,"/api/studyRoom/**").permitAll()
-                    .antMatchers("/test").permitAll()
                     // 위를 제외한 다른 요청들은 인증이 필요
                     .anyRequest().authenticated()
                 .and()

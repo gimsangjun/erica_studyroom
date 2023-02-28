@@ -144,7 +144,6 @@ public class StudyRoomController {
     /**
      * 팀플실예약
      */
-    @Transactional
     @PostMapping("/{id}")
     public ResponseEntity reserve(Authentication authentication, @RequestBody OrderDTO orderDTO, @PathVariable("id") Long id){
         // TODO: 조금더 고급적인 방법이 있는지
