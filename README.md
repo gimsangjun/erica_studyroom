@@ -16,6 +16,7 @@ Spring Data JPA
 - 구현중 마주친 문제나 궁금한점
   - 연관관계 매핑 이해 부족
   - transaction 이해부족
+  - [초기데이터 data.sql로 삽입시 에러](https://www.notion.so/data-sql-17c6cdd81b9f47f7bf3ec579f0c3c575?pvs=4)
       
 
 Spring Security

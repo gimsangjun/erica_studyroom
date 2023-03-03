@@ -36,9 +36,7 @@ public class User extends Common implements Serializable {
     @Column(nullable = false, length = 50)
     @Enumerated(EnumType.STRING)
     private UserRole role;
-
     private int age;
-
     private int grade;
 
     @Email
