@@ -2,18 +2,17 @@ package com.example.demo.filter;
 
 import com.example.demo.constants.AuthConstants;
 import com.example.demo.domain.MyUserDetails;
+import com.example.demo.enums.exception.JwtException;
 import com.example.demo.service.JwtUserDetailsService;
 import com.example.demo.util.JwtTokenUtils;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.SignatureException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.connector.Request;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -21,8 +20,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
@@ -43,37 +40,33 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         String username = null;
         String jwtToken = null;
-        ////////////////////////////
-//        Map<String, String> headers = Collections.list(request.getHeaderNames())
-//                .stream()
-//                .collect(Collectors.toMap(h -> h, request::getHeader));
-//        Iterator<String> iter = headers.keySet().iterator();
-//
-//        while(iter.hasNext()) {
-//            String key = iter.next();
-//            String value = (String) headers.get(key);
-//            log.info("{} = {}",key,value);
-//        }
-        ////////////////////////////
 
-        // "Authorization" 헤더가 있고, 헤더 Value가 Bearer 시작하면
+        // JWT Token is in the form "Bearer token". Remove Bearer word and get
+        // only the Token
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")){
             // Value : "Bearer 토큰값"에서 Bearer를 자르고 토큰값만
             jwtToken = JwtTokenUtils.getTokenFromHeader(requestTokenHeader);
-            // TODO : throw가 없는데 error가 발생하는가? -> 원래 참고했던 사이트는 어떻게? https://mangkyu.tistory.com/55
-            try{
+            try{ // 예외는 JwtTokenUtils::getAllClaimsFromToken 에서 던져줌.
                 username = jwtTokenUtils.getUsernameFromToken(jwtToken);
-            } catch (IllegalArgumentException e){
-                log.info("Unable to get JWT Token");
-            } catch (ExpiredJwtException e){
-                log.info("JWT Token has expired");
-            }
+            } catch (IllegalArgumentException e) {
+                // 정확히 어떤 상횡일때 에러가 생기는지 모르겠음.
+                log.error("an error occured during getting username from token", e);
+                request.setAttribute("exception", JwtException.WRONG_TOKEN.getCode());
+            } catch (ExpiredJwtException e) {
+                log.warn("the token is expired and not valid anymore", e);
+                request.setAttribute("exception", JwtException.EXPIRED_TOKEN.getCode());
+            } catch (SignatureException e){
+                // JWT토큰값이 이상함.
+                log.error("JWT signature does not match locally computed signature.");
+                request.setAttribute("exception", JwtException.SIGNATURE_ERROR.getCode());
+            } // MalformedJwtException도 넣어야할듯 .JWT앞부분쪽 건드리면 발생
+            // 비밀번호 틀렸는지 체크하는것은 AuthController에서 exception을 따로 던진다.
         } else{
-//            log.error("JWT Token does not begin with Bearer String");
+            log.warn("couldn't find bearer string, will ignore the header");
         }
 
         // 토큰을 받으면 유효성 확인
-        if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){ // email이 있고, SecurityContextHolder에 인증객체가 없을 때
+        if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
             MyUserDetails userDetails = (MyUserDetails) this.jwtUserDetailsService.loadUserByUsername(username);
 
             if (jwtTokenUtils.validateToken(jwtToken,userDetails)){

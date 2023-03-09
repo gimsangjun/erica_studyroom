@@ -44,9 +44,6 @@ public class StudyRoomController {
      */
     @GetMapping()
     public ResponseEntity<Object> read(){
-        // 아래와 같이 쉽게 처리하고싶은데 쉽지가 않음.
-//        final StduyRoomListResponseDTO stduyRoomListResponseDTO = StduyRoomListResponseDTO.builder()
-//                .studyRoomList(studyRoomService.getAllStudyRoom()).build();
         List<StudyRoom> studyRoomList = studyRoomService.findAll();
         ArrayList<StudyRoomResponseDTO> list = new ArrayList<>();
 
@@ -65,7 +62,7 @@ public class StudyRoomController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<Object> detail(@PathVariable("id") Long id ,
-                                         @RequestParam()
+                                         @RequestParam(name = "date")
                                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Optional<LocalDate> date){
         // TODO: 대부분의 로직 나중에 Service부분으로 옮겨야됨
         StudyRoom studyRoom = studyRoomService.getStudyRoom(id);
@@ -103,10 +100,7 @@ public class StudyRoomController {
      */
     @PostMapping
     public ResponseEntity<Object> createStudyRoom(@Valid @RequestBody StudyRoomDTO studyRoomDTO){
-        StudyRoom studyRoom = new StudyRoom();
-        studyRoom = modelMapper.map(studyRoomDTO,StudyRoom.class);
-        this.studyRoomService.create(studyRoom);
-        return ResponseEntity.ok(studyRoom);
+        return ResponseEntity.ok(this.studyRoomService.create(studyRoomDTO));
     }
 
     /**
@@ -118,7 +112,6 @@ public class StudyRoomController {
         try{
             StudyRoom studyRoom = studyRoomService.getStudyRoom(id);
             this.studyRoomService.modify(studyRoom,studyRoomDTO);
-            // TODO: studyRoom을 return 하고싶은데 stackoverflow생겨서 이 문제 쉽게 해결하는 방법알면 다시 수정
             return ResponseEntity.ok("수정성공");
         } catch (DataNotFoundException e){ // 다른예외는 어떻게 처리해야하는지 잘모루
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 팀플실입니다.");
@@ -162,7 +155,6 @@ public class StudyRoomController {
         }
     }
 
-    // order를 리턴할수있게 변경.
     // TODO: 시간대 별로 정렬을 해야하는데 정렬이 아직 안됨.
     public LinkedHashMap<String,String> orderToResponse(Order order){
         LinkedHashMap reservation = new LinkedHashMap<>();
@@ -173,7 +165,4 @@ public class StudyRoomController {
         reservation.put("endTime",order.getEndTime());
         return reservation;
     }
-
-
-
 }

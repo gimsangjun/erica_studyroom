@@ -4,26 +4,24 @@
 - [DB 구조](https://whimsical-dugout-2c6.notion.site/DB-9237c01b7b7f4424b74db5c4c440f281)
 - [기능 목록](https://whimsical-dugout-2c6.notion.site/82941877021e4ea6b930a755309cfe74)
 
-Spring Frame work
+Spring Framework
 ---
-- 구현중 마주친 문제나 궁금한점
-
-
+- 이슈
 
 Spring Data JPA
 ---
 - DB : h2 DB 사용중(test용도)
-- 구현중 마주친 문제나 궁금한점
-  - 연관관계 매핑 이해 부족
-  - transaction 이해부족
-  - [초기데이터 data.sql로 삽입시 에러](https://www.notion.so/data-sql-17c6cdd81b9f47f7bf3ec579f0c3c575?pvs=4)
-      
+- JPQL : 노션링크
+- 연관관계 매핑 : 노션링크
+- 이슈
+  
+
 
 Spring Security
 ----
   - 보안
       - JWT 인증방식 : 노션링크필요
-  - 구현중 마주친 문제나 궁금한점
+  - 이슈
     - CORS 문제 : 노션링크필요
       - ngrok을 사용하던 도중 만난 문제
   

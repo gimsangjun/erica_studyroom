@@ -53,6 +53,7 @@ public class JwtTokenUtils {
         return claimsResolver.apply(claims);
     }
 
+    // 여기에서부터 토큰만료 예외등을 던진다.
     private Claims getAllClaimsFromToken(String token) {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }

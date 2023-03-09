@@ -32,13 +32,11 @@ public class OrderService {
     // 특정 팀플실의 특정날짜의 order를 리턴
     public List<Order> getByStudyRoomAndDate(StudyRoom studyRoom, LocalDate date){
         List<Order> orders = orderRepository.findByStudyRoomAndDate(studyRoom,date);
-        // TODO : startTime으로 sort필요
         return orders;
     }
 
     public List<Order> getByStudyRoom(StudyRoom studyRoom){
         List<Order> orders = orderRepository.findByStudyRoom(studyRoom);
-        // TODO : startTime으로 sort필요
         return orders;
     }
 

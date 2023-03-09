@@ -1,5 +1,6 @@
 package com.example.demo.config.security;
 
+import com.example.demo.enums.exception.JwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,12 +21,24 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        log.error("UnAuthorized!! meessage: " + authException.getMessage());
-        // 헤더를 수정하라고 나옴
+        Integer exception = (Integer) request.getAttribute("exception");
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         PrintWriter writer = response.getWriter();
-        writer.println("HTTP Status 401 - " + authException.getMessage());
-
+        if(exception == null){
+            writer.println("HTTP Status 401 UNAUTHORIZED - " + authException.getMessage());
+        }
+        else if(exception == JwtException.WRONG_TOKEN.getCode()){
+            writer.println("HTTP Status 401 UNAUTHORIZED - " + JwtException.WRONG_TOKEN.getMessage());
+        }
+        else if(exception == JwtException.EXPIRED_TOKEN.getCode()){
+            writer.println("HTTP Status 401 UNAUTHORIZED - " + JwtException.EXPIRED_TOKEN.getMessage());
+        }
+        else if(exception == JwtException.SIGNATURE_ERROR.getCode()){
+            writer.println("HTTP Status 401 UNAUTHORIZED - " + JwtException.SIGNATURE_ERROR.getMessage());
+        }
+        else {
+            log.warn("Nothing catching");
+        }
     }
 }

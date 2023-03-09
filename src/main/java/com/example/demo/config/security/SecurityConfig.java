@@ -38,25 +38,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // user for matching credentials
         // Use BCryptPasswordEncoder
         auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
-
-        // inMemory기반의 admin 계정 생성
-        auth.inMemoryAuthentication()
-                .withUser("admin")
-                .password("admin")
-                .roles("USER")
-                .roles("ADMIN");
+        
     }
-
-//    @Bean
-//    public UserDetailsService users() {
-//        UserDetails admin = User.builder()
-//                .username("admin")
-//                .password("admin")
-//                .roles("USER", "ADMIN")
-//                .build();
-//        return new InMemoryUserDetailsManager(admin);
-//    }
-
 
     @Bean
     public PasswordEncoder passwordEncoder(){

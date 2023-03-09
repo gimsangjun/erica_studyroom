@@ -5,15 +5,18 @@ import com.example.demo.domain.StudyRoom;
 import com.example.demo.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
-    // TODO: 쿼리문이 어떻게 나가는지 체크
-    List<Order> findByStudyRoomAndDate(StudyRoom studyRoom, LocalDate date);
-    List<Order> findByStudyRoom(StudyRoom studyRoom);
+    @Query("SELECT o From Order o WHERE o.studyRoom = :studyRoom AND o.date = :date ORDER BY o.startTime ASC")
+    List<Order> findByStudyRoomAndDate(@Param("studyRoom") StudyRoom studyRoom, @Param("date") LocalDate date);
+
+    @Query("SELECT o From Order o WHERE o.studyRoom = :studyRoom ORDER BY o.startTime ASC")
+    List<Order> findByStudyRoom(@Param("studyRoom") StudyRoom studyRoom);
     List<Order> findByUser(User user);
 
 }
