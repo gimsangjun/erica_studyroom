@@ -41,6 +41,17 @@ public class StudyRoomService {
         return studyRooms;
     }
 
+    public ArrayList<StudyRoom> findByUniversity(String university){
+        return this.studyRoomRepository.findStudyRoomsByUniversity(university);
+    }
+    public ArrayList<StudyRoom> findByBuilding(String building){
+        return this.studyRoomRepository.findStudyRoomsByBuilding(building);
+    }
+
+    public ArrayList<StudyRoom> findByUniversityandBuilding(String university, String building){
+        return this.studyRoomRepository.findStudyRoomsByUniversityAndBuilding(university, building);
+    }
+
     // 스터디룸 생성
     public StudyRoom create(StudyRoomDTO studyRoomDTO){
         StudyRoom studyRoom = new StudyRoom();

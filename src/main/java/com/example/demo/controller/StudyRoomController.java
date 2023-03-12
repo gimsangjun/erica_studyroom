@@ -40,12 +40,25 @@ public class StudyRoomController {
     private final OrderService orderService;
     private final ModelMapper modelMapper;
     /**
-     * @return 모든 팀플실을 리스트형태로 반환
+     * @return 팀플실을 리스트형태로 반환
      */
     @GetMapping()
-    public ResponseEntity<Object> read(){
-        List<StudyRoom> studyRoomList = studyRoomService.findAll();
+    public ResponseEntity<Object> read(@RequestParam(name = "university") Optional<String> university,
+                                       @RequestParam(name = "building") Optional<String> building){
+
         ArrayList<StudyRoomResponseDTO> list = new ArrayList<>();
+        ArrayList<StudyRoom> studyRoomList = new ArrayList<>();
+
+        // 이렇게 하는게 맞나? 더 효율적인 방법은 없나?
+        if(university.isPresent() && building.isPresent()){
+            studyRoomList = studyRoomService.findByUniversityandBuilding(university.get(), building.get());
+        } else if(university.isPresent()){
+            studyRoomList = studyRoomService.findByUniversity(university.get());
+        } else if(building.isPresent()){
+            studyRoomList = studyRoomService.findByBuilding(building.get());
+        } else {
+            studyRoomList = studyRoomService.findAll();
+        }
 
         // Todo : 조금더 효율적인 방법은?
         for (StudyRoom studyRoom : studyRoomList){
