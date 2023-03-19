@@ -18,5 +18,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("SELECT o From Order o WHERE o.studyRoom = :studyRoom ORDER BY o.startTime ASC")
     List<Order> findByStudyRoom(@Param("studyRoom") StudyRoom studyRoom);
     List<Order> findByUser(User user);
+    List<Order> findByUserAndDate(User user, LocalDate date);
 
 }

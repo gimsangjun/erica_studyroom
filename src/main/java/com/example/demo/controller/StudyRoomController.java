@@ -168,12 +168,11 @@ public class StudyRoomController {
         }
     }
 
-    // TODO: 시간대 별로 정렬을 해야하는데 정렬이 아직 안됨.
     public LinkedHashMap<String,String> orderToResponse(Order order){
         LinkedHashMap reservation = new LinkedHashMap<>();
         reservation.put("orderId",order.getId());
         reservation.put("date",order.getDate());
-        reservation.put("name",order.getUser().getNickname());
+        reservation.put("name",order.getUser().getName());
         reservation.put("startTime",order.getStartTime());
         reservation.put("endTime",order.getEndTime());
         return reservation;

@@ -24,14 +24,20 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends Common implements Serializable {
 
-    @Column(unique = true,nullable = false , length = 50)
+    @Column(unique = true, nullable = false , length = 50)
     private String username; // 로그인 ID
 
     @Column(nullable = false)
     private String password;
 
-    @NotBlank
-    private String nickname; // 사용자 이름
+    @Column(nullable = false)
+    private String name; // 사용자 이름
+
+    @Column(name = "student_number", nullable = false, unique = true)
+    private int studentNumber ; // 학번
+
+    @Column(name = "img_url")
+    private String imgUrl;
 
     @Column(nullable = false, length = 50)
     @Enumerated(EnumType.STRING)
@@ -46,10 +52,10 @@ public class User extends Common implements Serializable {
 
     // 주인: 외래키값이 있는곳, 여기에는 꼭 값을 넣어줘야한다.
     @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL)
-    private List<Order> orders = new ArrayList<>();
+    private List<Order> orders ;
 
     public void update(UserModifyDTO dto){
-        this.nickname = dto.getNickname();
+        this.name = dto.getName();
         this.age = dto.getAge();
         this.grade = dto.getGrade();
         this.email = dto.getEmail();
@@ -61,8 +67,9 @@ public class User extends Common implements Serializable {
    public LinkedHashMap<String , String> info(){
         LinkedHashMap info = new LinkedHashMap();
         info.put("username", username);
-        info.put("nickname", nickname);
-        info.put("age", age);
+        info.put("imgUrl", imgUrl);
+        info.put("name", name);
+        info.put("studentNumber", studentNumber);
         info.put("grade", grade);
         info.put("email", email);
         info.put("university", university);

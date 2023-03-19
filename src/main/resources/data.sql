@@ -1,6 +1,6 @@
 -- 유저
-INSERT INTO users(username, password, nickname, created_at, role, age, grade, email, university, department, is_enable, update_at)
-VALUES ('test','$2a$10$dM/GwObkJcqYlGPAVMGEiuUYXq.aAh1XBeYr4QXOpuPBr1PiH4Sdm', '홍길동', '2023-03-03 22:11:52.583876', 'ROLE_USER', 25, 4, '홍길동@naver.com', '소프트웨어융합대학', '소프트웨어전공', true, '2023-03-03 22:11:52.583876');
+INSERT INTO users(username, password, name, student_number, img_url, created_at, role, age, grade, email, university, department, is_enable, update_at)
+VALUES ('test','$2a$10$dM/GwObkJcqYlGPAVMGEiuUYXq.aAh1XBeYr4QXOpuPBr1PiH4Sdm', '홍길동', 2018123123, '/user_profile_img/img1.png' ,'2023-03-03 22:11:52.583876', 'ROLE_USER', 25, 4, '홍길동@naver.com', '소프트웨어융합대학', '컴퓨터학부', true, '2023-03-03 22:11:52.583876');
 
 -- 팀플실 : 소프트웨어융합대학
 INSERT INTO study_room(name, university, building, location, capacity)

@@ -38,7 +38,7 @@ public class OrderController {
         // 대부분의 로직 나중에 Service부분으로 옮겨야됨.
         List<Order> orders = orderService.getAllList();
 
-        // 예약내용 추가 - reservation
+        // 예약내용 추가 - reservation우
         ArrayList<LinkedHashMap> list = new ArrayList<>();
         for(Order order : orders){
             list.add(order.getResponse());

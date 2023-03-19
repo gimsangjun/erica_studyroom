@@ -77,7 +77,7 @@ public class StudyRoomService {
      * @param orderDTO : 예약할 시간
      */
     public boolean check(StudyRoom studyRoom, OrderDTO orderDTO){
-        List<Order> orders = this.studyRoomRepository.findByDateBetween(studyRoom, orderDTO.getStartTime(), orderDTO.getEndTime());
+        List<Order> orders = this.studyRoomRepository.findByDateBetweenTime(studyRoom, orderDTO.getDate(), orderDTO.getStartTime(), orderDTO.getEndTime());
         if (orders.size() > 0) return false;
         else return true;
     }

@@ -31,11 +31,9 @@ public class Order {
 
     // 예약날짜 ex: 2022-10-19
     private LocalDate date;
-
     // 예약시간.
     private float startTime;
     private float endTime;
-
     public void setStudyRoom(StudyRoom room){
         this.studyRoom = room;
     }
@@ -45,8 +43,8 @@ public class Order {
         reservation.put("orderId",id);
         reservation.put("studyRoomId",studyRoom.getId());
         reservation.put("studyRoomName",studyRoom.getName());
-        reservation.put("id",user.getUsername());
-        reservation.put("name",user.getNickname());
+        reservation.put("location",studyRoom.getBuilding() +" "+ studyRoom.getLocation());
+        reservation.put("name",user.getName());
         reservation.put("date",date);
         reservation.put("startTime",startTime);
         reservation.put("endTime",endTime);

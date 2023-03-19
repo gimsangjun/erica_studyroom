@@ -3,7 +3,6 @@ package com.example.demo.controller;
 import com.example.demo.domain.MyUserDetails;
 import com.example.demo.domain.Order;
 import com.example.demo.domain.User;
-import com.example.demo.dto.request.SignUpDTO;
 import com.example.demo.dto.request.UserModifyDTO;
 import com.example.demo.dto.response.UserDTO;
 import com.example.demo.dto.response.UserResponseDTO;
@@ -11,15 +10,17 @@ import com.example.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Optional;
 
 // allowedHeaders의 "ngrok-skip-browser-warning"는 ngrok의 "warn page"로 인한 오류 땜에 추가
 @CrossOrigin(origins = {"http://localhost:3000"}, methods = {RequestMethod.GET, RequestMethod.PUT}, allowedHeaders = {"authorization", "content-type","ngrok-skip-browser-warning"},exposedHeaders = "authorization",allowCredentials = "true", maxAge = 3000)
@@ -89,20 +90,28 @@ public class UserController {
     }
 
     // 자기자신의 예약내용 리턴턴
-   @GetMapping("/order")
-    public ResponseEntity order(Authentication authentication){
-       // 현재 로그인한 유저 객체를 가져옴
-       User user = ((MyUserDetails) authentication.getPrincipal()).getUser();
-       List<Order> orders = this.userService.gerOrder(user);
-       if (orders.size() == 0){
-           return ResponseEntity.status(HttpStatus.NO_CONTENT).body("유저의 예약 내용은 없습니다.");
-       }else {
-           ArrayList<LinkedHashMap> list = new ArrayList<>();
-           for(Order order : orders){
-               list.add(order.getResponse());
-           }
-           return ResponseEntity.ok(list);
-       }
-
+    @GetMapping("/order")
+    public ResponseEntity order(Authentication authentication,
+                                @RequestParam(name = "date")
+                                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                Optional<LocalDate> date){
+        // 현재 로그인한 유저 객체를 가져옴
+        User user = ((MyUserDetails) authentication.getPrincipal()).getUser();
+        List<Order> orders ;
+        // date가 param형태로 넘어왔다면
+        if(date.isPresent()){
+           orders = this.userService.getOrderByDate(user, date.get());
+        } else {
+            orders = this.userService.gerOrder(user);
+        }
+        if (orders.size() == 0){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("유저의 예약 내용은 없습니다.");
+        }else {
+            ArrayList<LinkedHashMap> list = new ArrayList<>();
+            for(Order order : orders){
+                list.add(order.getResponse());
+            }
+            return ResponseEntity.ok(list);
+        }
    }
 }

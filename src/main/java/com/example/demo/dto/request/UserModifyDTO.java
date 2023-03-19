@@ -18,7 +18,7 @@ public class UserModifyDTO {
 //    private String password;
 
     @NotBlank
-    private String nickname; // 사용자이름
+    private String name; // 사용자이름
 
     @NotNull
     private Integer age;

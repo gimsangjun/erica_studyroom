@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -62,6 +63,11 @@ public class UserService {
     // 유저의 예약내용 리턴
     public List<Order> gerOrder(User user){
         return this.orderRepository.findByUser(user);
+    }
+
+    public List<Order> getOrderByDate(User user, LocalDate date){
+        return this.orderRepository.findByUserAndDate(user, date);
+
     }
 
 

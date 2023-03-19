@@ -12,10 +12,4 @@ public class DemoApplication {
 		SpringApplication.run(DemoApplication.class, args);
 	}
 
-	// BCryptPasswordEncoder는 간단하게 main 클래스에서 빈으로 등록
-	@Bean
-	public BCryptPasswordEncoder bCryptPasswordEncoder(){
-		return new BCryptPasswordEncoder();
-	}
-
 }
