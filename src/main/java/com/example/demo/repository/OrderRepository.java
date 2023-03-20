@@ -12,10 +12,10 @@ import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
-    @Query("SELECT o From Order o WHERE o.studyRoom = :studyRoom AND o.date = :date ORDER BY o.startTime ASC")
+    @Query("SELECT o From Order o WHERE o.studyRoom = :studyRoom AND o.date = :date AND o.state != '반납' AND o.state != '취소' ORDER BY o.startTime ASC")
     List<Order> findByStudyRoomAndDate(@Param("studyRoom") StudyRoom studyRoom, @Param("date") LocalDate date);
 
-    @Query("SELECT o From Order o WHERE o.studyRoom = :studyRoom ORDER BY o.startTime ASC")
+    @Query("SELECT o From Order o WHERE o.studyRoom = :studyRoom AND o.state != '반납' AND o.state != '취소' ORDER BY o.startTime ASC")
     List<Order> findByStudyRoom(@Param("studyRoom") StudyRoom studyRoom);
     List<Order> findByUser(User user);
     List<Order> findByUserAndDate(User user, LocalDate date);

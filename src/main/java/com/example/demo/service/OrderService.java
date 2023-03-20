@@ -4,6 +4,7 @@ import com.example.demo.domain.Order;
 import com.example.demo.domain.StudyRoom;
 import com.example.demo.domain.User;
 import com.example.demo.dto.request.OrderDTO;
+import com.example.demo.enums.OrderState;
 import com.example.demo.repository.OrderRepository;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -46,9 +47,12 @@ public class OrderService {
     }
 
     public void delete(Order order){
-        this.orderRepository.delete(order);
+        // this.orderRepository.delete(order);
+        order.setState(OrderState.CANCEL.getState());
+        this.orderRepository.save(order);
     }
 
+    // 예약
     public StudyRoom reserve(StudyRoom studyRoom, OrderDTO orderDTO, String username){
         User user = this.userRepository.findByUsername(username).get();
         Order order = new Order();
@@ -61,6 +65,7 @@ public class OrderService {
         return studyRoom;
     }
 
+    // 수정
     public Order modify(Order order, OrderDTO orderDTO){
         order.setDate(orderDTO.getDate());
         order.setStartTime(orderDTO.getStartTime());
@@ -69,4 +74,9 @@ public class OrderService {
         return order;
     }
 
+    // 예약 반납
+    public void return_(Order order) {
+        order.setState(OrderState.RETURN.getState());
+        this.orderRepository.save(order);
+    }
 }

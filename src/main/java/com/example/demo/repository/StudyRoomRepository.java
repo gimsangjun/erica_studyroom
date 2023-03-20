@@ -18,6 +18,6 @@ public interface StudyRoomRepository extends JpaRepository<StudyRoom, Long> {
     ArrayList<StudyRoom> findStudyRoomsByBuilding(String building);
     ArrayList<StudyRoom> findStudyRoomsByUniversityAndBuilding(String university, String building);
 
-    @Query("SELECT o From Order o WHERE o.studyRoom = :studyRoom AND o.date = :date AND o.startTime BETWEEN :startTime AND :endTime")
+    @Query("SELECT o From Order o WHERE o.studyRoom = :studyRoom AND o.date = :date AND o.state != '반납' AND o.state != '취소' AND o.startTime BETWEEN :startTime AND :endTime")
     List<Order> findByDateBetweenTime(@Param("studyRoom") StudyRoom studyRoom, @Param("date") LocalDate date, @Param("startTime") float startTime, @Param("endTime") float endTime);
 }

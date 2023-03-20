@@ -110,4 +110,25 @@ public class OrderController {
         return ResponseEntity.ok(modify.getResponse());
     }
 
+    /**
+     * 예약반납
+     */
+    @PutMapping("/return/{id}")
+    public ResponseEntity return_(Authentication authentication, @PathVariable("id") Long id){
+        Optional<Order> order_ = orderService.getOrder(id);
+        User user = (User) ((MyUserDetails) authentication.getPrincipal()).getUser();
+
+        if(!order_.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 예약입니다.");
+        }
+        Order order = order_.get();
+
+        // 로그인한 유저와 order의 유저가 같은 사람인지 확인
+        if(!order.getUser().getUsername().equals(user.getUsername())){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("권한이 없습니다.");
+        }
+        this.orderService.return_(order);
+        return ResponseEntity.status(HttpStatus.OK).body("반납 완료");
+    }
+
 }

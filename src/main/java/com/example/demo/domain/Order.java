@@ -28,12 +28,19 @@ public class Order {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_room_id")
     private StudyRoom studyRoom;
+    // order의 상태를 나타내는 state 속성 추가
+    // 취소
+    // 정상
+    // 반납
+    @Column(columnDefinition = "varchar(255) default '정상'")
+    private String state = "정상";
 
-    // 예약날짜 ex: 2022-10-19
+    // 예약날짜
     private LocalDate date;
     // 예약시간.
     private float startTime;
     private float endTime;
+
     public void setStudyRoom(StudyRoom room){
         this.studyRoom = room;
     }
@@ -43,6 +50,7 @@ public class Order {
         reservation.put("orderId",id);
         reservation.put("studyRoomId",studyRoom.getId());
         reservation.put("studyRoomName",studyRoom.getName());
+        reservation.put("state", state);
         reservation.put("location",studyRoom.getBuilding() +" "+ studyRoom.getLocation());
         reservation.put("name",user.getName());
         reservation.put("date",date);
