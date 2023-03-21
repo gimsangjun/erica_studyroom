@@ -13,7 +13,7 @@ public class OrderDTO {
 
     private LocalDate date;
     // 예약시간.
-    private float startTime;
-    private float endTime;
+    private double startTime;
+    private double endTime;
 
 }

@@ -38,8 +38,8 @@ public class Order {
     // 예약날짜
     private LocalDate date;
     // 예약시간.
-    private float startTime;
-    private float endTime;
+    private double startTime;
+    private double endTime;
 
     public void setStudyRoom(StudyRoom room){
         this.studyRoom = room;

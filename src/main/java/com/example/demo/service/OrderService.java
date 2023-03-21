@@ -79,4 +79,9 @@ public class OrderService {
         order.setState(OrderState.RETURN.getState());
         this.orderRepository.save(order);
     }
+
+    // 특정 상태의 order를 모두 가져옴
+    public List<Order> getOrderByStateAndDate(String state, LocalDate date) {
+        return this.orderRepository.findByStateAndDate(state, date);
+    }
 }

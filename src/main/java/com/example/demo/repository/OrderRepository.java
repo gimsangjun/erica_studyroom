@@ -3,6 +3,7 @@ package com.example.demo.repository;
 import com.example.demo.domain.Order;
 import com.example.demo.domain.StudyRoom;
 import com.example.demo.domain.User;
+import com.example.demo.enums.OrderState;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,5 +20,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByStudyRoom(@Param("studyRoom") StudyRoom studyRoom);
     List<Order> findByUser(User user);
     List<Order> findByUserAndDate(User user, LocalDate date);
+
+    List<Order> findByStateAndDate(String state, LocalDate date);
 
 }
