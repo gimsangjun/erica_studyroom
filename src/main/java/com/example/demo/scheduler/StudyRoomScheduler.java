@@ -23,7 +23,7 @@ public class StudyRoomScheduler {
     @Scheduled(cron = "* 30 * * * *", zone = "Asia/Seoul")
     public void scheduleStudyRoomReturn() {
         // 오늘 날짜의 state가 정상인 order들을 모두 불러옴.
-        List<Order> orders = orderService.getOrderByStateAndDate(OrderState.NORMAL.getState(), LocalDate.now());
+        List<Order> orders = orderService.getOrderByStateAndDate(OrderState.NORMAL, LocalDate.now());
         // 현재시간을 시간.분 의 형태로 바꿈.
         double currentTime = (double) LocalDateTime.now().getHour() + (double) LocalDateTime.now().getMinute() * 0.01;
         for(Order order : orders){

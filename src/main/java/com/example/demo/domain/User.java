@@ -1,16 +1,13 @@
 package com.example.demo.domain;
 
 import com.example.demo.domain.common.Common;
-import com.example.demo.dto.request.SignUpDTO;
 import com.example.demo.dto.request.UserModifyDTO;
 import com.example.demo.enums.role.UserRole;
 import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 

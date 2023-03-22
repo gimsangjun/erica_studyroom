@@ -1,5 +1,6 @@
 package com.example.demo.domain;
 
+import com.example.demo.enums.OrderState;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -33,7 +34,8 @@ public class Order {
     // 정상
     // 반납
     @Column(columnDefinition = "varchar(255) default '정상'")
-    private String state = "정상";
+    @Enumerated(EnumType.STRING)
+    private OrderState state = OrderState.NORMAL;
 
     // 예약날짜
     private LocalDate date;
@@ -50,8 +52,9 @@ public class Order {
         reservation.put("orderId",id);
         reservation.put("studyRoomId",studyRoom.getId());
         reservation.put("studyRoomName",studyRoom.getName());
-        reservation.put("state", state);
-        reservation.put("location",studyRoom.getBuilding() +" "+ studyRoom.getLocation());
+        reservation.put("state", state.getState());
+        reservation.put("building", studyRoom.getBuilding());
+        reservation.put("location",studyRoom.getLocation());
         reservation.put("name",user.getName());
         reservation.put("date",date);
         reservation.put("startTime",startTime);

@@ -48,7 +48,7 @@ public class OrderService {
 
     public void delete(Order order){
         // this.orderRepository.delete(order);
-        order.setState(OrderState.CANCEL.getState());
+        order.setState(OrderState.CANCEL);
         this.orderRepository.save(order);
     }
 
@@ -76,12 +76,12 @@ public class OrderService {
 
     // 예약 반납
     public void return_(Order order) {
-        order.setState(OrderState.RETURN.getState());
+        order.setState(OrderState.RETURN);
         this.orderRepository.save(order);
     }
 
     // 특정 상태의 order를 모두 가져옴
-    public List<Order> getOrderByStateAndDate(String state, LocalDate date) {
+    public List<Order> getOrderByStateAndDate(OrderState state, LocalDate date) {
         return this.orderRepository.findByStateAndDate(state, date);
     }
 }

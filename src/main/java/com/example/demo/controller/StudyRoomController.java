@@ -129,7 +129,6 @@ public class StudyRoomController {
         } catch (DataNotFoundException e){ // 다른예외는 어떻게 처리해야하는지 잘모루
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 팀플실입니다.");
         }
-
     }
     /**
      * 팀플실 삭제.
@@ -172,6 +171,7 @@ public class StudyRoomController {
         LinkedHashMap reservation = new LinkedHashMap<>();
         reservation.put("orderId",order.getId());
         reservation.put("date",order.getDate());
+        reservation.put("state", order.getState().getState());
         reservation.put("name",order.getUser().getName());
         reservation.put("startTime",order.getStartTime());
         reservation.put("endTime",order.getEndTime());

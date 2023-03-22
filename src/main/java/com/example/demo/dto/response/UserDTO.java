@@ -7,7 +7,9 @@ import lombok.Data;
 public class UserDTO {
 
     private String username ; // aabbcde
-    private String nickname; // 홍길동
+    private String name; // 홍길동
+    private int studentNumber; // 학번
+    private String imgUrl;
     private int age; // 15
     private int grade; // 3
     private String email; // ddee@gmail.com -> 나중에 클래스라고 해야되나 따로 형식있는걸로 업그레이드

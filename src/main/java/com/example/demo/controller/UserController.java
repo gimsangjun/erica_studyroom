@@ -47,7 +47,7 @@ public class UserController {
         return new ResponseEntity<UserDTO>(userDTO, HttpStatus.OK);
     }
 
-    // 모든 유저리스트 리턴
+    // 모든 유저리스트 리턴, 테스트용
     @GetMapping
     public ResponseEntity<Object> findAll() {
 

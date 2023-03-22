@@ -16,22 +16,26 @@ public class UserModifyDTO {
     // 비밀번호 변경은 나중에에
 //   @NotBlank
 //    private String password;
-
+    private String imgUrl;
     @NotBlank
     private String name; // 사용자이름
 
+    private int studentNumber;
+
     @NotNull
-    private Integer age;
+    private int age;
 
     @NotNull
     @Range(min=1, max=10)
-    private Integer grade;
+    private int grade;
 
     @NotBlank
     @Email
     private String email;
+
     @NotBlank
     private String university;
+
     @NotBlank
     private String department;
 
