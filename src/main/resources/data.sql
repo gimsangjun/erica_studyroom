@@ -1,17 +1,27 @@
 -- 유저
 INSERT INTO users(username, password, name, student_number, img_url, created_at, role, age, grade, email, university, department, is_enable, update_at)
-VALUES ('test','$2a$10$dM/GwObkJcqYlGPAVMGEiuUYXq.aAh1XBeYr4QXOpuPBr1PiH4Sdm', '홍길동', 2018123123, '/user_profile_img/img1.png' ,'2023-03-03 22:11:52.583876', 'ROLE_USER', 25, 4, '홍길동@naver.com', '소프트웨어융합대학', '컴퓨터학부', true, '2023-03-03 22:11:52.583876');
+VALUES ('test','$2a$10$dM/GwObkJcqYlGPAVMGEiuUYXq.aAh1XBeYr4QXOpuPBr1PiH4Sdm', '홍길동', 2018123123, '/user_profile_img/img1.png' ,'2023-03-03 22:11:52.583876', 'ROLE_USER', 25, 4, '홍길동@naver.com', '소프트웨어융합대학', '컴퓨터학부', true, '2023-03-03 22:11:52.583876'),
+       ('test1','$2a$10$dM/GwObkJcqYlGPAVMGEiuUYXq.aAh1XBeYr4QXOpuPBr1PiH4Sdm', '광개토대왕', 2019781483, '/user_profile_img/img2.png' ,'2023-03-03 22:11:52.583876', 'ROLE_USER', 23, 2, '광개토대왕@naver.com', '공학대학', '전자공학부', true, '2023-03-03 22:11:52.583876'),
+       ('test2','$2a$10$dM/GwObkJcqYlGPAVMGEiuUYXq.aAh1XBeYr4QXOpuPBr1PiH4Sdm', '이순신', 2020137238, '/user_profile_img/img3.png' ,'2023-03-03 22:11:52.583876', 'ROLE_USER', 24, 3, '이순신@naver.com', '약학대학', '약학과', true, '2023-03-03 22:11:52.583876'),
+       ('test3','$2a$10$dM/GwObkJcqYlGPAVMGEiuUYXq.aAh1XBeYr4QXOpuPBr1PiH4Sdm', '강감찬', 2022394193, '/user_profile_img/img4.png' ,'2023-03-03 22:11:52.583876', 'ROLE_USER', 21, 2, '강감찬@naver.com', '과학기술융합대학', '화학분자공학과', true, '2023-03-03 22:11:52.583876'),
+       ('test4','$2a$10$dM/GwObkJcqYlGPAVMGEiuUYXq.aAh1XBeYr4QXOpuPBr1PiH4Sdm', '연개소문', 2021981473, '/user_profile_img/img5.png' ,'2023-03-03 22:11:52.583876', 'ROLE_USER', 22, 3, '연개소문@naver.com', '국제문화대학', '한국언어문학과', true, '2023-03-03 22:11:52.583876'),
+       ('test5','$2a$10$dM/GwObkJcqYlGPAVMGEiuUYXq.aAh1XBeYr4QXOpuPBr1PiH4Sdm', '세종대왕', 2020284493, '/user_profile_img/img6.png' ,'2023-03-03 22:11:52.583876', 'ROLE_USER', 23, 4, '세종대왕@naver.com', '언론정보대학', '광고홍보학과', true, '2023-03-03 22:11:52.583876'),
+       ('test6','$2a$10$dM/GwObkJcqYlGPAVMGEiuUYXq.aAh1XBeYr4QXOpuPBr1PiH4Sdm', '안중근', 2017451830, '/user_profile_img/img7.png' ,'2023-03-03 22:11:52.583876', 'ROLE_USER', 26, 4, '안중근@naver.com', '디자인대학', '커뮤니케이션디자인학과', true, '2023-03-03 22:11:52.583876'),
+       ('test7','$2a$10$dM/GwObkJcqYlGPAVMGEiuUYXq.aAh1XBeYr4QXOpuPBr1PiH4Sdm', '김구', 2022803299, '/user_profile_img/img8.png' ,'2023-03-03 22:11:52.583876', 'ROLE_USER', 22, 2, '김구@naver.com', '예체능대학', '무용학과', true, '2023-03-03 22:11:52.583876');
+
 
 -- 팀플실 : 소프트웨어융합대학
 INSERT INTO study_room(name, university, building, location, capacity)
-VALUES ('큐브0', '소프트웨어융합대학', '학연산클러스터지원센터', '5층', 4),
-       ('큐브1', '소프트웨어융합대학', '학연산클러스터지원센터', '5층', 4),
-       ('큐브2', '소프트웨어융합대학', '학연산클러스터지원센터', '5층', 4),
-       ('큐브3', '소프트웨어융합대학', '학연산클러스터지원센터', '5층', 4),
-       ('IC-PBL Making Maroon', '소프트웨어융합대학', '학연산클러스터지원센터', '5층', 60),
-       ('IC-PBL Buzzing Blue', '소프트웨어융합대학', '학연산클러스터지원센터', '5층', 60),
-       ('IC-PBL Playing Purple', '소프트웨어융합대학', '학연산클러스터지원센터', '5층', 60),
-       ('Steve Jobs', '소프트웨어융합대학', '4공학관', '1층 SMaSH', 4); -- 더 추가할 예정
+VALUES ('큐브 0', '소프트웨어융합대학', '학연산클러스터지원센터', '5층', 4),
+       ('큐브 1', '소프트웨어융합대학', '학연산클러스터지원센터', '5층', 4),
+       ('큐브 2', '소프트웨어융합대학', '학연산클러스터지원센터', '5층', 4),
+       ('큐브 3', '소프트웨어융합대학', '학연산클러스터지원센터', '5층', 4),
+       ('SMaSH 0', '소프트웨어융합대학', '4공학관', '1층 SMaSH', 6),
+       ('SMaSH 1', '소프트웨어융합대학', '4공학관', '1층 SMaSH', 6),
+       ('SMaSH 2', '소프트웨어융합대학', '4공학관', '1층 SMaSH', 6),
+       ('SMaSH 3', '소프트웨어융합대학', '4공학관', '1층 SMaSH', 6),
+       ('Alan Turing', '소프트웨어융합대학', '4공학관', '1층 SMaSH', 6),
+       ('Steve Jobs', '소프트웨어융합대학', '4공학관', '1층 SMaSH', 6); -- 더 추가할 예정
 
 -- 팀플실 : 공학대학
 INSERT INTO study_room(name, university, building, location, capacity)
@@ -110,7 +120,16 @@ VALUES ('101호 ICT실습준비실', '예체능대학', '체육관', '1층', 60)
 
 -- 스터디룸 태그
 INSERT INTO study_room_descriptions(study_room_id, descriptions)
-VALUES (1, '투명한 벽으로 구분된 팀플실');
+VALUES (1, '투명한 벽으로 구분된 팀플실'),
+       (2, '투명한 벽으로 구분된 팀플실'),
+       (3, '투명한 벽으로 구분된 팀플실'),
+       (4, '투명한 벽으로 구분된 팀플실'),
+       (5, '투명한 벽으로 구분된 팀플실'),
+       (6, '칸막이로 구분된 팀플실'),
+       (7, '칸막이로 구분된 팀플실'),
+       (8, '칸막이로 구분된 팀플실'),
+       (9, '투명한 벽으로 구분된 팀플실'),
+       (10, '투명한 벽으로 구분된 팀플실');
 
 INSERT INTO study_room_drinks(study_room_id, drinks)
 VALUES (1, '커피'),
@@ -124,3 +143,12 @@ INSERT INTO study_room_tags(study_room_id, tags)
 VALUES (1, '태그1'),
        (1, '태그2');
 
+-- 예약
+INSERT INTO orders(study_room_id, user_id , start_time, end_time, date, state)
+VALUES (1, 1, 13.5, 14.5, '2023-03-23', 'RETURN'), -- 소프트웨어융합대학
+       (1, 1, 14.5, 15.5, '2023-03-23', 'RETURN'),
+       (1, 1, 15.5, 16.5, '2023-03-23', 'RETURN'),
+       (1, 1, 16.5, 17.5, '2023-03-23', 'RETURN'),
+       (1, 1, 17.5, 18.5, '2023-03-23', 'NORMAL'),
+       (1, 1, 18.5, 19.5, '2023-03-23', 'NORMAL'),
+       (1, 1, 19.5, 20.5, '2023-03-23', 'NORMAL');

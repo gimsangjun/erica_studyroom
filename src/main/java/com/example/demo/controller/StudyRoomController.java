@@ -33,7 +33,7 @@ import java.util.Optional;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/studyRoom")
+@RequestMapping("/api/studyroom")
 public class StudyRoomController {
 
     private final StudyRoomService studyRoomService;
@@ -151,7 +151,6 @@ public class StudyRoomController {
      */
     @PostMapping("/{id}")
     public ResponseEntity reserve(Authentication authentication, @RequestBody OrderDTO orderDTO, @PathVariable("id") Long id){
-        // TODO: 조금더 고급적인 방법이 있는지
         try{
             StudyRoom studyRoom = studyRoomService.getStudyRoom(id);
             // 해당 날짜의 예약이 이미 차있는지 확인

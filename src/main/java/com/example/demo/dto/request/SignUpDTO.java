@@ -17,7 +17,11 @@ public class SignUpDTO {
     private String password;
 
     @NotBlank
-    private String nickname; // 사용자이름
+    private String name; // 사용자이름
+
+    private int studentNumber;
+
+    private String imgUrl;
 
     @NotNull
     private Integer age;
