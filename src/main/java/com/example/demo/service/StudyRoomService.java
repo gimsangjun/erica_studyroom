@@ -9,6 +9,7 @@ import com.example.demo.repository.StudyRoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -41,17 +42,19 @@ public class StudyRoomService {
         return studyRooms;
     }
 
-    public ArrayList<StudyRoom> findByUniversity(String university){
-        return this.studyRoomRepository.findStudyRoomsByUniversity(university);
-    }
-    public ArrayList<StudyRoom> findByBuilding(String building){
-        return this.studyRoomRepository.findStudyRoomsByBuilding(building);
-    }
+    public List<StudyRoom> findByCriteria(String university, String building) {
+        Specification<StudyRoom> specification = Specification.where(null);
 
-    public ArrayList<StudyRoom> findByUniversityandBuilding(String university, String building){
-        return this.studyRoomRepository.findStudyRoomsByUniversityAndBuilding(university, building);
+        if (university != null) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("university"), university));
+        }
+        if (building != null) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("building"), building));
+        }
+        return studyRoomRepository.findAll(specification);
     }
-
     // 스터디룸 생성
     public StudyRoom create(StudyRoomDTO studyRoomDTO){
         StudyRoom studyRoom = new StudyRoom();
@@ -81,5 +84,6 @@ public class StudyRoomService {
         if (orders.size() > 0) return false;
         else return true;
     }
+
 
 }

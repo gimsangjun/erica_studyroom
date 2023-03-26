@@ -15,5 +15,7 @@ public class OrderDTO {
     // 예약시간.
     private double startTime;
     private double endTime;
+    // 예약인원
+    private int bookingCapacity;
 
 }

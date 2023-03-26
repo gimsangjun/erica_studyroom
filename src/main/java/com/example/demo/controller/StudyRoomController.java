@@ -43,30 +43,16 @@ public class StudyRoomController {
      * @return 팀플실을 리스트형태로 반환
      */
     @GetMapping()
-    public ResponseEntity<Object> read(@RequestParam(name = "university") Optional<String> university,
-                                       @RequestParam(name = "building") Optional<String> building){
+    public ResponseEntity<Object> read(@RequestParam(name = "university", required = false) String university,
+                                       @RequestParam(name = "building", required = false) String building){
 
         ArrayList<StudyRoomResponseDTO> list = new ArrayList<>();
-        ArrayList<StudyRoom> studyRoomList = new ArrayList<>();
+        List<StudyRoom> studyRoomList = studyRoomService.findByCriteria(university, building);
 
-        // 이렇게 하는게 맞나? 더 효율적인 방법은 없나?
-        if(university.isPresent() && building.isPresent()){
-            studyRoomList = studyRoomService.findByUniversityandBuilding(university.get(), building.get());
-        } else if(university.isPresent()){
-            studyRoomList = studyRoomService.findByUniversity(university.get());
-        } else if(building.isPresent()){
-            studyRoomList = studyRoomService.findByBuilding(building.get());
-        } else {
-            studyRoomList = studyRoomService.findAll();
-        }
-
-        // Todo : 조금더 효율적인 방법은?
         for (StudyRoom studyRoom : studyRoomList){
-            LinkedHashMap map = new LinkedHashMap();
             StudyRoomResponseDTO studyRoomResponseDTO = modelMapper.map(studyRoom, StudyRoomResponseDTO.class);
             list.add(studyRoomResponseDTO);
         }
-
         return ResponseEntity.ok(list);
     }
     /**
@@ -174,6 +160,7 @@ public class StudyRoomController {
         reservation.put("name",order.getUser().getName());
         reservation.put("startTime",order.getStartTime());
         reservation.put("endTime",order.getEndTime());
+        reservation.put("bookingCapacity", order.getBookingCapacity());
         return reservation;
     }
 }

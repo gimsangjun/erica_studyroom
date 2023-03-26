@@ -42,6 +42,9 @@ public class Order {
     // 예약시간.
     private double startTime;
     private double endTime;
+    // 예약 인원
+    @Column(name = "booking_capacity")
+    private int bookingCapacity;
 
     public void setStudyRoom(StudyRoom room){
         this.studyRoom = room;

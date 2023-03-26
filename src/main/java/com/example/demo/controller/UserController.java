@@ -89,21 +89,24 @@ public class UserController {
 
     }
 
-    // 자기자신의 예약내용 리턴턴
+    // 자기자신의 예약내용 리턴
     @GetMapping("/order")
     public ResponseEntity order(Authentication authentication,
                                 @RequestParam(name = "date")
                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                Optional<LocalDate> date){
+                                Optional<LocalDate> date
+                                ){
         // 현재 로그인한 유저 객체를 가져옴
         User user = ((MyUserDetails) authentication.getPrincipal()).getUser();
         List<Order> orders ;
+
         // date가 param형태로 넘어왔다면
-        if(date.isPresent()){
-           orders = this.userService.getOrderByDate(user, date.get());
+        if(date.isPresent()) {
+            orders = this.userService.getOrderByDate(user, date.get());
         } else {
             orders = this.userService.gerOrder(user);
         }
+
         if (orders.size() == 0){
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body("유저의 예약 내용은 없습니다.");
         }else {
