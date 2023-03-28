@@ -38,7 +38,7 @@ dependencies {
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
 	// ngrok
-	compileOnly('io.github.kilmajster:ngrok-spring-boot-starter:0.6.0')
+	// compileOnly('io.github.kilmajster:ngrok-spring-boot-starter:0.6.0')
 	// Spring Security 추가 + jwt인증, 5.7이상부터는 WebSecurityConfigurerAdapter지원안함.
 	implementation 'org.springframework.boot:spring-boot-starter-security:2.5.6'
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'

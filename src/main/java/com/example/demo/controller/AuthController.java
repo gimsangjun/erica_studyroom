@@ -3,7 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.domain.MyUserDetails;
 import com.example.demo.domain.User;
 import com.example.demo.dto.request.JwtRequest;
-import com.example.demo.dto.request.SignUpDTO;
+import com.example.demo.dto.request.SignUpRequest;
 import com.example.demo.dto.response.JwtResponse;
 import com.example.demo.enums.role.UserRole;
 import com.example.demo.service.JwtUserDetailsService;
@@ -27,7 +27,6 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
 public class AuthController {
-
     private final UserService userService ;
     // 인증할때 필요
     private final AuthenticationManager authenticationManager;
@@ -37,14 +36,14 @@ public class AuthController {
 
     /**
      * 회원가입
-     * @param signUpDTO
+     * @param signUpRequest
      * @return JWT토큰
      */
     @PostMapping("/signUp")
-    public ResponseEntity signUp(@RequestBody final SignUpDTO signUpDTO){
-        return userService.isUsernameDuplicated(signUpDTO.getUsername())
+    public ResponseEntity signUp(@RequestBody final SignUpRequest signUpRequest){
+        return userService.isUsernameDuplicated(signUpRequest.getUsername())
                 ? ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 존재하는 유저입니다.")
-                : ResponseEntity.status(HttpStatus.CREATED).body(new JwtResponse(jwtTokenUtils.generateToken(userService.signUp(signUpDTO))));
+                : ResponseEntity.status(HttpStatus.CREATED).body(new JwtResponse(jwtTokenUtils.generateToken(userService.signUp(signUpRequest))));
     }
 
     /**
