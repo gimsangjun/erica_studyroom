@@ -10,7 +10,7 @@ Spring Framework
 
 Spring Data JPA
 ---
-- DB : postgresql, 사용한 이유는?
+- DB : mariadb, 사용한 이유는?
 - JPQL : 노션링크
 - 연관관계 매핑 : 노션링크
 - 이슈
