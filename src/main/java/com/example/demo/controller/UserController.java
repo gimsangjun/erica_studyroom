@@ -3,9 +3,9 @@ package com.example.demo.controller;
 import com.example.demo.domain.MyUserDetails;
 import com.example.demo.domain.Order;
 import com.example.demo.domain.User;
-import com.example.demo.dto.request.UserModifyDTO;
-import com.example.demo.dto.response.UserDTO;
-import com.example.demo.dto.response.UserResponseDTO;
+import com.example.demo.dto.request.UserModifyRequest;
+import com.example.demo.dto.response.UserResponse;
+import com.example.demo.service.OrderService;
 import com.example.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,20 +31,21 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService ;
+    private final OrderService orderService;
     private final ModelMapper modelMapper;
 
 
     // 특정 유저의 정보 출력
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> read(@PathVariable("id") String id){
+    public ResponseEntity<UserResponse> read(@PathVariable("id") String id){
         User user = userService.getUserByUsername(id);
         // API validation부분 다시 정리.
         if (user == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        UserDTO userDTO = new UserDTO();
-        userDTO = modelMapper.map(user,UserDTO.class);
-        return new ResponseEntity<UserDTO>(userDTO, HttpStatus.OK);
+        UserResponse userResponse = new UserResponse();
+        userResponse = modelMapper.map(user, UserResponse.class);
+        return new ResponseEntity<UserResponse>(userResponse, HttpStatus.OK);
     }
 
     // 모든 유저리스트 리턴, 테스트용
@@ -52,12 +53,12 @@ public class UserController {
     public ResponseEntity<Object> findAll() {
 
         List<User> users = userService.findAll();
-        ArrayList<UserResponseDTO> list = new ArrayList<>();
+        ArrayList<UserResponse> list = new ArrayList<>();
         // TODO: 조금더 효율적인 방법은 없을까? 위와 같은 방법
         // entity의 ToString을 어떻게 바꿔볼려고 햇으나 자꾸 스택오버플로우 일어남.
         for(User user : users){
-            UserResponseDTO userResponseDTO = modelMapper.map(user,UserResponseDTO.class);
-            list.add(userResponseDTO);
+            UserResponse userResponse = modelMapper.map(user,UserResponse.class);
+            list.add(userResponse);
         }
 
         return ResponseEntity.ok(list);
@@ -65,7 +66,7 @@ public class UserController {
 
     // 유저의 본인 정보 수정
     @PutMapping("/modify")
-    public ResponseEntity<Object> modify(Authentication authentication, @RequestBody final UserModifyDTO dto){
+    public ResponseEntity<Object> modify(Authentication authentication, @RequestBody final UserModifyRequest dto){
 
         // 현재 로그인한 유저객체를 가져옴
         User user = ((MyUserDetails) authentication.getPrincipal()).getUser();
@@ -92,20 +93,21 @@ public class UserController {
     // 자기자신의 예약내용 리턴
     @GetMapping("/order")
     public ResponseEntity order(Authentication authentication,
-                                @RequestParam(name = "date")
+                                @RequestParam(name = "university", required = false) String university,
+                                @RequestParam(name = "building", required = false) String building,
+                                @RequestParam(name = "date", required = false)
                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                Optional<LocalDate> date
-                                ){
+                                LocalDate date){
         // 현재 로그인한 유저 객체를 가져옴
         User user = ((MyUserDetails) authentication.getPrincipal()).getUser();
-        List<Order> orders ;
+        List<Order> orders = orderService.findByCriteria(user, university, building, date);
 
         // date가 param형태로 넘어왔다면
-        if(date.isPresent()) {
-            orders = this.userService.getOrderByDate(user, date.get());
-        } else {
-            orders = this.userService.gerOrder(user);
-        }
+//        if(date.isPresent()) {
+//            orders = this.userService.getOrderByDate(user, date.get());
+//        } else {
+//            orders = this.userService.gerOrder(user);
+//        }
 
         if (orders.size() == 0){
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body("유저의 예약 내용은 없습니다.");

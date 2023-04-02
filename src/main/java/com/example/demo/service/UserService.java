@@ -3,7 +3,7 @@ package com.example.demo.service;
 import com.example.demo.domain.Order;
 import com.example.demo.domain.User;
 import com.example.demo.dto.request.SignUpRequest;
-import com.example.demo.dto.request.UserModifyDTO;
+import com.example.demo.dto.request.UserModifyRequest;
 import com.example.demo.enums.role.UserRole;
 import com.example.demo.repository.OrderRepository;
 import com.example.demo.repository.UserRepository;
@@ -50,7 +50,7 @@ public class UserService {
     }
 
     // 유저 정보 수정
-    public User modify(User user, UserModifyDTO dto){
+    public User modify(User user, UserModifyRequest dto){
         user.update(dto);
         user.setUpdateAt(LocalDateTime.now());
         return this.userRepository.save(user);

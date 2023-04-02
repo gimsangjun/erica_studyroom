@@ -12,7 +12,7 @@ import java.util.LinkedHashMap;
 @Getter
 @Setter
 @Entity
-@Table(name = "ORDERS")
+@Table(name = "orders")
 @ToString
 public class Order {
 

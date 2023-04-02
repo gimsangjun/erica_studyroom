@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class UserModifyDTO {
+public class UserModifyRequest {
 
     @NotBlank // String 형태에만 사용,
     private String username; // 사용자 id

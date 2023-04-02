@@ -3,14 +3,14 @@ package com.example.demo.service;
 import com.example.demo.domain.Order;
 import com.example.demo.domain.StudyRoom;
 import com.example.demo.domain.User;
-import com.example.demo.dto.request.OrderDTO;
+import com.example.demo.dto.request.OrderRequest;
 import com.example.demo.enums.OrderState;
 import com.example.demo.repository.OrderRepository;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -24,8 +24,34 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
 
-    public void create(Order order){
-        this.orderRepository.save(order);
+    /**
+     *
+     * @param user : 로그인한 유저의 username(id)
+     * @param university
+     * @param building
+     * @param date
+     * @return 조건에 해당하는 order 리턴
+     */
+    public List<Order> findByCriteria(User user, String university, String building, LocalDate date) {
+        Specification<Order> specification = Specification.where(null);
+
+        if (user != null){
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.join("user").get("username"), user.getUsername()));
+        }
+        if (university != null) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.join("studyRoom").get("university"), university));
+        }
+        if (building != null) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.join("studyRoom").get("building"), building));
+        }
+        if (date != null){
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("date"), date));
+        }
+        return orderRepository.findAll(specification);
     }
 
     public Optional<Order> getOrder(Long id){return this.orderRepository.findById(id);}
@@ -42,10 +68,6 @@ public class OrderService {
     }
 
 
-    public List<Order> getAllList() {
-        return this.orderRepository.findAll();
-    }
-
     public void delete(Order order){
         // this.orderRepository.delete(order);
         order.setState(OrderState.CANCEL);
@@ -53,23 +75,23 @@ public class OrderService {
     }
 
     // 예약
-    public StudyRoom reserve(StudyRoom studyRoom, OrderDTO orderDTO, String username){
+    public StudyRoom reserve(StudyRoom studyRoom, OrderRequest orderRequest, String username){
         User user = this.userRepository.findByUsername(username).get();
         Order order = new Order();
         order.changeUser(user);
         order.changeStudyRoom(studyRoom);
-        order.setDate(orderDTO.getDate());
-        order.setStartTime(orderDTO.getStartTime());
-        order.setEndTime(orderDTO.getEndTime());
+        order.setDate(orderRequest.getDate());
+        order.setStartTime(orderRequest.getStartTime());
+        order.setEndTime(orderRequest.getEndTime());
         this.orderRepository.save(order);
         return studyRoom;
     }
 
     // 수정
-    public Order modify(Order order, OrderDTO orderDTO){
-        order.setDate(orderDTO.getDate());
-        order.setStartTime(orderDTO.getStartTime());
-        order.setEndTime(orderDTO.getEndTime());
+    public Order modify(Order order, OrderRequest orderRequest){
+        order.setDate(orderRequest.getDate());
+        order.setStartTime(orderRequest.getStartTime());
+        order.setEndTime(orderRequest.getEndTime());
         this.orderRepository.save(order);
         return order;
     }
@@ -84,4 +106,6 @@ public class OrderService {
     public List<Order> getOrderByStateAndDate(OrderState state, LocalDate date) {
         return this.orderRepository.findByStateAndDate(state, date);
     }
+
+
 }

@@ -1,6 +1,6 @@
 package com.example.demo.domain;
 
-import com.example.demo.dto.request.StudyRoomDTO;
+import com.example.demo.dto.request.StudyRoomRequest;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -53,16 +53,16 @@ public class StudyRoom {
     @CollectionTable(name = "study_room_tags", joinColumns = @JoinColumn(name = "study_room_id"))
     private Set<String> tags = new HashSet<>();
 
-    public void update(StudyRoomDTO studyRoomDTO){
-        this.name = studyRoomDTO.getName();
-        this.university = studyRoomDTO.getUniversity();
-        this.building = studyRoomDTO.getBuilding();
-        this.location = studyRoomDTO.getLocation();
-        this.capacity = studyRoomDTO.getCapacity();
-        this.descriptions = studyRoomDTO.getDescriptions();
-        this.cautions = studyRoomDTO.getCautions();
-        this.drinks = studyRoomDTO.getDrinks();
-        this.tags = studyRoomDTO.getTags();
+    public void update(StudyRoomRequest studyRoomRequest){
+        this.name = studyRoomRequest.getName();
+        this.university = studyRoomRequest.getUniversity();
+        this.building = studyRoomRequest.getBuilding();
+        this.location = studyRoomRequest.getLocation();
+        this.capacity = studyRoomRequest.getCapacity();
+        this.descriptions = studyRoomRequest.getDescriptions();
+        this.cautions = studyRoomRequest.getCautions();
+        this.drinks = studyRoomRequest.getDrinks();
+        this.tags = studyRoomRequest.getTags();
     }
 
 }

@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.util.ContentCachingRequestWrapper;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -35,8 +36,18 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         // Postman에서는 Key: "Authorization" , Value : "Bearer 토큰값" 임.
         final String requestTokenHeader = request.getHeader(AuthConstants.AUTH_HEADER);
 
-        log.info("{} request URL={}",request.getMethod(),request.getRequestURL());
-        log.info("인증헤더={}", requestTokenHeader);
+        // 오는 요청 출력
+        log.info("{} Request URL ={}",request.getMethod(),request.getRequestURL());
+        request.getParameterMap().forEach((name, values) -> {
+            for (String value : values) {
+                log.info("Request parameter - {} : {}", name, value);
+            }
+        });
+        ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(request);
+        String requestBody = new String(requestWrapper.getContentAsByteArray(), requestWrapper.getCharacterEncoding());
+        log.info("Request Body ={}", requestBody);
+        log.info("인증헤더 ={}", requestTokenHeader);
+
 
         String username = null;
         String jwtToken = null;

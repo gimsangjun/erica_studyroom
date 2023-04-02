@@ -4,7 +4,7 @@ import lombok.Data;
 
 
 @Data
-public class UserDTO {
+public class UserResponse {
 
     private String username ; // aabbcde
     private String name; // 홍길동

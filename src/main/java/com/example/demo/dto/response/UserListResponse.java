@@ -12,7 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @NoArgsConstructor(force = true) // TODO : 무슨뜻일까?
 // 아직 toString떄문에 오류가 나서 제대로 활용못함.
-public class UserListResponseDTO {
+public class UserListResponse {
 
-    private final List<UserDTO> userList;
+    private final List<UserResponse> userList;
 }

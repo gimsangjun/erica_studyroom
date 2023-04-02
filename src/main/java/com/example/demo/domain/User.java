@@ -1,7 +1,7 @@
 package com.example.demo.domain;
 
 import com.example.demo.domain.common.Common;
-import com.example.demo.dto.request.UserModifyDTO;
+import com.example.demo.dto.request.UserModifyRequest;
 import com.example.demo.enums.role.UserRole;
 import lombok.*;
 
@@ -16,7 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-@Table(name = "USERS")
+@Table(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends Common implements Serializable {
@@ -51,7 +51,7 @@ public class User extends Common implements Serializable {
     @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL)
     private List<Order> orders ;
 
-    public void update(UserModifyDTO dto){
+    public void update(UserModifyRequest dto){
         this.name = dto.getName();
         this.age = dto.getAge();
         this.grade = dto.getGrade();

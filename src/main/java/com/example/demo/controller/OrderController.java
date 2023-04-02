@@ -4,17 +4,18 @@ package com.example.demo.controller;
 import com.example.demo.domain.MyUserDetails;
 import com.example.demo.domain.Order;
 import com.example.demo.domain.User;
-import com.example.demo.dto.request.OrderDTO;
+import com.example.demo.dto.request.OrderRequest;
 import com.example.demo.service.OrderService;
 import com.example.demo.service.StudyRoomService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.weaver.ast.Or;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -34,12 +35,18 @@ public class OrderController {
      * @return 모든 예약 돌려줌. 테스트 용도
      */
     @GetMapping
-    public ResponseEntity<Object> getAll(){
-        // 대부분의 로직 나중에 Service부분으로 옮겨야됨.
-        List<Order> orders = orderService.getAllList();
+    public ResponseEntity<Object> read(@RequestParam(name = "university", required = false) String university,
+                                         @RequestParam(name = "building", required = false) String building,
+                                         @RequestParam(name = "date", required = false)
+                                         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date){
+        List<Order> orders = orderService.findByCriteria(null, university, building, date);
 
-        // 예약내용 추가 - reservation우
         ArrayList<LinkedHashMap> list = new ArrayList<>();
+
+        if (orders.size() == 0){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("해당하는 예약내용은 없습니다.");
+        }
+
         for(Order order : orders){
             list.add(order.getResponse());
         }
@@ -86,7 +93,7 @@ public class OrderController {
      * 예약수정
      */
     @PutMapping("/{id}")
-    public ResponseEntity modify(Authentication authentication, @PathVariable("id") Long id , @RequestBody OrderDTO orderDTO){
+    public ResponseEntity modify(Authentication authentication, @PathVariable("id") Long id , @RequestBody OrderRequest orderRequest){
         Optional<Order> order_ = orderService.getOrder(id);
         User user = (User) ((MyUserDetails) authentication.getPrincipal()).getUser();
 
@@ -101,11 +108,11 @@ public class OrderController {
         }
 
         // 해당 날짜의 예약이 이미 차있는지 확인
-        if(!studyRoomService.check(order.getStudyRoom(), orderDTO)){
+        if(!studyRoomService.check(order.getStudyRoom(), orderRequest)){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 예약되어 있습니다.");
         }
 
-        Order modify = this.orderService.modify(order, orderDTO);
+        Order modify = this.orderService.modify(order, orderRequest);
 
         return ResponseEntity.ok(modify.getResponse());
     }

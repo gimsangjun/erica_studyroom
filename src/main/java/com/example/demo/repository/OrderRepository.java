@@ -5,13 +5,14 @@ import com.example.demo.domain.StudyRoom;
 import com.example.demo.domain.User;
 import com.example.demo.enums.OrderState;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
 
-public interface OrderRepository extends JpaRepository<Order, Long> {
+public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecificationExecutor<Order> {
 
     @Query("SELECT o From Order o WHERE o.studyRoom = :studyRoom AND o.date = :date AND o.state != 'RETURN' AND o.state != 'CANCEL' ORDER BY o.startTime ASC")
     List<Order> findByStudyRoomAndDate(@Param("studyRoom") StudyRoom studyRoom, @Param("date") LocalDate date);
