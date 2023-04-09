@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 
+import com.example.demo.exception.DataNotFoundException;
 import com.example.demo.domain.MyUserDetails;
 import com.example.demo.domain.Order;
 import com.example.demo.domain.User;
@@ -19,7 +20,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin(origins = {"http://localhost:3000"}, methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT}, allowedHeaders = {"authorization", "content-type","ngrok-skip-browser-warning"},exposedHeaders = "authorization",allowCredentials = "true", maxAge = 3000)
 @RestController
@@ -58,14 +58,12 @@ public class OrderController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<Object> detail(@PathVariable("id") Long id ){
-        // 대부분의 로직 나중에 Service부분으로 옮겨야됨.
-        // TODO: validation , order가 비어있을때 처리
-        Optional<Order> order = orderService.getOrder(id);
-        if(!order.isPresent()) {
-            // TODO: 조금더 고급적으로 바꿀수 있나 확인
+        try {
+            Order order = orderService.getOrder(id);
+            return ResponseEntity.ok(order.getResponse());
+        } catch (DataNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 예약입니다.");
         }
-        return ResponseEntity.ok(order.get().getResponse());
     }
 
     /**
@@ -73,20 +71,17 @@ public class OrderController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(Authentication authentication ,@PathVariable("id") Long id){
-        Optional<Order> order_ = orderService.getOrder(id);
-        User user = (User) ((MyUserDetails) authentication.getPrincipal()).getUser();
-        if(!order_.isPresent()) {
+        try{
+            Order order = orderService.getOrder(id);
+            User user = (User) ((MyUserDetails) authentication.getPrincipal()).getUser();
+            if(!order.getUser().getUsername().equals(user.getUsername())){ // TODO: 이 부분도 Exception으로 처리?
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("권한이 없습니다.");
+            }
+            orderService.delete(order);
+            return ResponseEntity.ok("delete 성공");
+        } catch (DataNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 예약입니다.");
         }
-        Order order = order_.get();
-        // 로그인한 유저와 order의 유저가 같은 사람인지 확인
-        if(!order.getUser().getUsername().equals(user.getUsername())){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("권한이 없습니다.");
-        }
-
-        orderService.delete(order);
-
-        return ResponseEntity.ok("delete 성공");
     }
 
     /**
@@ -94,27 +89,28 @@ public class OrderController {
      */
     @PutMapping("/{id}")
     public ResponseEntity modify(Authentication authentication, @PathVariable("id") Long id , @RequestBody OrderRequest orderRequest){
-        Optional<Order> order_ = orderService.getOrder(id);
-        User user = (User) ((MyUserDetails) authentication.getPrincipal()).getUser();
+        // TODO: Exception을 던져서 처리하는 걸로 바꾸셈.
+        try{
+            Order order = orderService.getOrder(id);
+            User user = (User) ((MyUserDetails) authentication.getPrincipal()).getUser();
 
-        if(!order_.isPresent()) {
+            // 로그인한 유저와 order의 유저가 같은 사람인지 확인
+            if(!order.getUser().getUsername().equals(user.getUsername())){
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("권한이 없습니다.");
+            }
+
+            // 해당 날짜의 예약이 이미 차있는지 확인
+            if(!studyRoomService.check(order.getStudyRoom(), orderRequest)){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 예약되어 있습니다.");
+            }
+
+            Order modify = this.orderService.modify(order, orderRequest);
+
+            return ResponseEntity.ok(modify.getResponse());
+
+        }catch (DataNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 예약입니다.");
         }
-        Order order = order_.get();
-
-        // 로그인한 유저와 order의 유저가 같은 사람인지 확인
-        if(!order.getUser().getUsername().equals(user.getUsername())){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("권한이 없습니다.");
-        }
-
-        // 해당 날짜의 예약이 이미 차있는지 확인
-        if(!studyRoomService.check(order.getStudyRoom(), orderRequest)){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 예약되어 있습니다.");
-        }
-
-        Order modify = this.orderService.modify(order, orderRequest);
-
-        return ResponseEntity.ok(modify.getResponse());
     }
 
     /**
@@ -122,20 +118,20 @@ public class OrderController {
      */
     @PutMapping("/return/{id}")
     public ResponseEntity return_(Authentication authentication, @PathVariable("id") Long id){
-        Optional<Order> order_ = orderService.getOrder(id);
-        User user = (User) ((MyUserDetails) authentication.getPrincipal()).getUser();
+        try {
+            Order order = orderService.getOrder(id);
+            User user = (User) ((MyUserDetails) authentication.getPrincipal()).getUser();
 
-        if(!order_.isPresent()) {
+            // 로그인한 유저와 order의 유저가 같은 사람인지 확인
+            if(!order.getUser().getUsername().equals(user.getUsername())){
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("권한이 없습니다.");
+            }
+            this.orderService.return_(order);
+            return ResponseEntity.status(HttpStatus.OK).body("반납 완료");
+
+        } catch (DataNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 예약입니다.");
         }
-        Order order = order_.get();
-
-        // 로그인한 유저와 order의 유저가 같은 사람인지 확인
-        if(!order.getUser().getUsername().equals(user.getUsername())){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("권한이 없습니다.");
-        }
-        this.orderService.return_(order);
-        return ResponseEntity.status(HttpStatus.OK).body("반납 완료");
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.exception.DataNotFoundException;
 import com.example.demo.domain.Order;
 import com.example.demo.domain.StudyRoom;
 import com.example.demo.domain.User;
@@ -54,7 +55,14 @@ public class OrderService {
         return orderRepository.findAll(specification);
     }
 
-    public Optional<Order> getOrder(Long id){return this.orderRepository.findById(id);}
+    public Order getOrder(Long id) {
+        Optional<Order> order = this.orderRepository.findById(id);
+        if(order.isPresent()) {
+            return order.get();
+        } else{
+            throw new DataNotFoundException("존재 하지 않는 예약입니다.");
+        }
+    }
 
     // 특정 팀플실의 특정날짜의 order를 리턴
     public List<Order> getByStudyRoomAndDate(StudyRoom studyRoom, LocalDate date){
