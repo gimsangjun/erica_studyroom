@@ -70,6 +70,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 아래의 요청들은 토큰없이도 가능하도록
                 .authorizeRequests()
                     .antMatchers("/api/auth/**").permitAll()
+                    .antMatchers("/excel/**").permitAll() // 데이터를 Excel파일로 가져오기
                     // CORS options 허용
                     .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                     .antMatchers(HttpMethod.GET,"/api/studyRoom/**").permitAll()
