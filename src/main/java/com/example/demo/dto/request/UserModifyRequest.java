@@ -16,10 +16,12 @@ public class UserModifyRequest {
     // 비밀번호 변경은 나중에에
 //   @NotBlank
 //    private String password;
+    @NotNull
     private String imgUrl;
     @NotBlank
     private String name; // 사용자이름
 
+    @NotNull
     private int studentNumber;
 
     @NotNull

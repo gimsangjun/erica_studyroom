@@ -7,6 +7,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.DataNotFoundException;
+import com.example.demo.exception.DataNotFoundException;
 import com.example.demo.domain.Order;
 import com.example.demo.domain.StudyRoom;
 import com.example.demo.dto.request.OrderRequest;
@@ -31,7 +31,7 @@ public class StudyRoomService {
         if(studyRoom.isPresent()){
             return studyRoom.get();
         }else {
-            throw new DataNotFoundException("StudyRoom not found");
+            throw new DataNotFoundException("존재하는 않는 팀플실입니다.");
         }
     }
 
@@ -53,9 +53,18 @@ public class StudyRoomService {
             specification = specification.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.equal(root.get("building"), building));
         }
+        List<StudyRoom> studyRooms = studyRoomRepository.findAll(specification);
+        if (studyRooms.size() == 0){
+            throw new DataNotFoundException("팀플실이 존재하지 않습니다.");
+        } else{
+            return studyRooms;
+        }
 
-        return studyRoomRepository.findAll(specification);
     }
+    public boolean isNameDuplicated(String name){
+        return studyRoomRepository.existsByName(name);
+    }
+
     // 스터디룸 생성
     public StudyRoom create(StudyRoomRequest studyRoomRequest){
         StudyRoom studyRoom = new StudyRoom();

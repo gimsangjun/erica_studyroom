@@ -6,11 +6,14 @@ import com.example.demo.domain.StudyRoom;
 import com.example.demo.domain.User;
 import com.example.demo.dto.request.OrderRequest;
 import com.example.demo.enums.OrderState;
+import com.example.demo.exception.UnAuthorizedException;
 import com.example.demo.repository.OrderRepository;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -52,7 +55,12 @@ public class OrderService {
             specification = specification.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.equal(root.get("date"), date));
         }
-        return orderRepository.findAll(specification);
+        List<Order> orders = orderRepository.findAll(specification);
+        if (orders.size() == 0){
+            throw new DataNotFoundException("예약이 존재하지 않습니다.");
+        } else{
+            return orders;
+        }
     }
 
     public Order getOrder(Long id) {
@@ -61,6 +69,13 @@ public class OrderService {
             return order.get();
         } else{
             throw new DataNotFoundException("존재 하지 않는 예약입니다.");
+        }
+    }
+
+    // 내가 선택한 order의 User와 현재 로그인한 유저가 같은지 확인
+    public void authorizeUser(User user, Order order){
+        if(!order.getUser().getUsername().equals(user.getUsername())) { // TODO: 이 부분도 Exception으로 처리?
+            throw new UnAuthorizedException("권한이 없습니다.");
         }
     }
 

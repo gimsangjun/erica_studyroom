@@ -16,11 +16,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Optional;
 
 // allowedHeaders의 "ngrok-skip-browser-warning"는 ngrok의 "warn page"로 인한 오류 땜에 추가
 @CrossOrigin(origins = {"http://localhost:3000"}, methods = {RequestMethod.GET, RequestMethod.PUT}, allowedHeaders = {"authorization", "content-type","ngrok-skip-browser-warning"},exposedHeaders = "authorization",allowCredentials = "true", maxAge = 3000)
@@ -37,36 +37,28 @@ public class UserController {
 
     // 특정 유저의 정보 출력
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> read(@PathVariable("id") String id){
+    public ResponseEntity<Object> read(@PathVariable("id") String id){
         User user = userService.getUserByUsername(id);
-        // API validation부분 다시 정리.
-        if (user == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
         UserResponse userResponse = new UserResponse();
         userResponse = modelMapper.map(user, UserResponse.class);
-        return new ResponseEntity<UserResponse>(userResponse, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(userResponse);
     }
 
     // 모든 유저리스트 리턴, 테스트용
     @GetMapping
     public ResponseEntity<Object> findAll() {
-
         List<User> users = userService.findAll();
         ArrayList<UserResponse> list = new ArrayList<>();
-        // TODO: 조금더 효율적인 방법은 없을까? 위와 같은 방법
-        // entity의 ToString을 어떻게 바꿔볼려고 햇으나 자꾸 스택오버플로우 일어남.
         for(User user : users){
             UserResponse userResponse = modelMapper.map(user,UserResponse.class);
             list.add(userResponse);
         }
-
         return ResponseEntity.ok(list);
     }
 
     // 유저의 본인 정보 수정
     @PutMapping("/modify")
-    public ResponseEntity<Object> modify(Authentication authentication, @RequestBody final UserModifyRequest dto){
+    public ResponseEntity<Object> modify(Authentication authentication,@Valid @RequestBody final UserModifyRequest dto){
 
         // 현재 로그인한 유저객체를 가져옴
         User user = ((MyUserDetails) authentication.getPrincipal()).getUser();
@@ -83,11 +75,9 @@ public class UserController {
     // 자기자신의 유저정보 리턴
     @GetMapping("/info")
     public ResponseEntity info(Authentication authentication){
-
         // 현재 로그인한 유저 객체를 가져옴
         User user = ((MyUserDetails) authentication.getPrincipal()).getUser();
         return ResponseEntity.ok(user.info());
-
     }
 
     // 자기자신의 예약내용 리턴
@@ -101,22 +91,10 @@ public class UserController {
         // 현재 로그인한 유저 객체를 가져옴
         User user = ((MyUserDetails) authentication.getPrincipal()).getUser();
         List<Order> orders = orderService.findByCriteria(user, university, building, date);
-
-        // date가 param형태로 넘어왔다면
-//        if(date.isPresent()) {
-//            orders = this.userService.getOrderByDate(user, date.get());
-//        } else {
-//            orders = this.userService.gerOrder(user);
-//        }
-
-        if (orders.size() == 0){
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("유저의 예약 내용은 없습니다.");
-        }else {
-            ArrayList<LinkedHashMap> list = new ArrayList<>();
-            for(Order order : orders){
-                list.add(order.getResponse());
-            }
-            return ResponseEntity.ok(list);
+        ArrayList<LinkedHashMap> list = new ArrayList<>();
+        for(Order order : orders){
+            list.add(order.getResponse());
         }
+        return ResponseEntity.ok(list);
    }
 }

@@ -40,7 +40,7 @@ public class AuthController {
      * @return JWT토큰
      */
     @PostMapping("/signUp")
-    public ResponseEntity signUp(@RequestBody final SignUpRequest signUpRequest){
+    public ResponseEntity signUp(@Valid @RequestBody final SignUpRequest signUpRequest){
         return userService.isUsernameDuplicated(signUpRequest.getUsername())
                 ? ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 존재하는 유저입니다.")
                 : ResponseEntity.status(HttpStatus.CREATED).body(new JwtResponse(jwtTokenUtils.generateToken(userService.signUp(signUpRequest))));
@@ -53,6 +53,11 @@ public class AuthController {
      */
     @PostMapping("/login")
     public ResponseEntity<?> createAuthenticationToken(@Valid @RequestBody JwtRequest authenticationRequest) throws Exception{
+
+        // 유저가 있는지 확인
+        if (!userService.isUsernameDuplicated(authenticationRequest.getUsername())) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 유저입니다.");
+        }
 
         // 비밀번호 등이 틀렸는지 검증.
         authenticate(authenticationRequest.getUsername(),authenticationRequest.getPassword());
@@ -75,9 +80,9 @@ public class AuthController {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
-            throw new Exception("USER_DISABLED", e);
+            throw new Exception("비활성화된 유저 계정입니다.", e);
         } catch (BadCredentialsException e) { // 비밀번호 안맞음.
-            throw new Exception("INVALID_CREDENTIALS", e);
+            throw new Exception("잘못된 비밀번호입니다.", e);
         }
     }
 }

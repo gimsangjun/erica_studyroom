@@ -11,27 +11,27 @@ import javax.validation.constraints.*;
 @NoArgsConstructor(force = true)
 public class SignUpRequest {
 
-    @NotNull
+    @NotBlank
     private final String username; // 사용자 id
 
-    @NotNull
+    @NotBlank
     private final String password;
 
-    @NotNull
+    @NotBlank
     private final String name; // 사용자이름
 
     @NotNull
     private final Integer studentNumber;
 
     @NotNull
-    private final String imgUrl;
+    private final String imgUrl = "/";
 
     @NotNull
-    private final Integer age;
+    private final Integer age = 0;
 
     @NotNull
     @Range(min=1, max=10)
-    private final Integer grade;
+    private final Integer grade ;
 
     @NotNull
     @Email
@@ -40,6 +40,4 @@ public class SignUpRequest {
     private final String university;
     @NotNull
     private final String department;
-
-
 }

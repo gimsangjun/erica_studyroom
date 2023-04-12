@@ -16,4 +16,6 @@ public interface StudyRoomRepository extends JpaRepository<StudyRoom, Long>, Jpa
     Optional<StudyRoom> findById(Long id);
     @Query("SELECT o From Order o WHERE o.studyRoom = :studyRoom AND o.date = :date AND o.state != 'RETURN' AND o.state != 'CANCEL' AND o.startTime BETWEEN :startTime AND :endTime")
     List<Order> findByDateBetweenTime(@Param("studyRoom") StudyRoom studyRoom, @Param("date") LocalDate date, @Param("startTime") double startTime, @Param("endTime") double endTime);
+
+    boolean existsByName(String name);
 }

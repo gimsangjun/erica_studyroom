@@ -5,6 +5,7 @@ import com.example.demo.domain.User;
 import com.example.demo.dto.request.SignUpRequest;
 import com.example.demo.dto.request.UserModifyRequest;
 import com.example.demo.enums.role.UserRole;
+import com.example.demo.exception.DataNotFoundException;
 import com.example.demo.repository.OrderRepository;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -45,8 +47,13 @@ public class UserService {
     }
 
     public User getUserByUsername(String id){
-        // null처리 => Option<> 이부분 다시정리.
-        return userRepository.findByUsername(id).orElse(null);
+        Optional<User> user = userRepository.findByUsername(id);
+        if (user.isPresent()){
+            return user.get();
+        } else{
+            throw new DataNotFoundException("존재하지 않는 유저입니다.");
+        }
+
     }
 
     // 유저 정보 수정
@@ -54,16 +61,6 @@ public class UserService {
         user.update(dto);
         user.setUpdateAt(LocalDateTime.now());
         return this.userRepository.save(user);
-    }
-
-    // 유저의 예약내용 리턴
-    public List<Order> gerOrder(User user){
-        return this.orderRepository.findByUser(user);
-    }
-
-    public List<Order> getOrderByDate(User user, LocalDate date){
-        return this.orderRepository.findByUserAndDate(user, date);
-
     }
 
 }

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Getter
 @RequiredArgsConstructor
-@ResponseStatus(HttpStatus.NOT_FOUND)
-public class DataNotFoundException extends RuntimeException{
+@ResponseStatus(HttpStatus.UNAUTHORIZED)
+public class UnAuthorizedException extends RuntimeException{
     private final String message;
 }

@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.DataNotFoundException;
+import com.example.demo.exception.DataNotFoundException;
 import com.example.demo.domain.MyUserDetails;
 import com.example.demo.domain.Order;
 import com.example.demo.domain.StudyRoom;
@@ -46,10 +46,6 @@ public class StudyRoomController {
         ArrayList<StudyRoomResponse> list = new ArrayList<>();
         List<StudyRoom> studyRoomList = studyRoomService.findByCriteria(university, building);
 
-        if (studyRoomList.size() == 0){
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("해당하는 팀플실은 없습니다.");
-        }
-
         for (StudyRoom studyRoom : studyRoomList){
             StudyRoomResponse studyRoomResponse = modelMapper.map(studyRoom, StudyRoomResponse.class);
             list.add(studyRoomResponse);
@@ -64,15 +60,16 @@ public class StudyRoomController {
     public ResponseEntity<Object> detail(@PathVariable("id") Long id ,
                                          @RequestParam(name = "date")
                                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Optional<LocalDate> date){
-        // TODO: 대부분의 로직 나중에 Service부분으로 옮겨야됨
         StudyRoom studyRoom = studyRoomService.getStudyRoom(id);
         StudyRoomRequest studyRoomRequest = modelMapper.map(studyRoom, StudyRoomRequest.class);
-        List<Order> orders ;
+
+        List<Order> orders;
 
         // 예약내용 추가 - reservation
         ArrayList<LinkedHashMap> list = new ArrayList<>();
 
-        // TODO: 그냥 GetMapping처럼 동적으로 생성하게 바꿔야됨.
+
+        // TODO: 그냥 GetMapping처럼 동적으로 생성하게 바꿔야됨. QueryDSL사용해봐야할듯.
         // date가 param형태로 넘어왔다면
         if (date.isPresent()){
             // 해당 팀플실의 특정날짜의 orders 가져오기
@@ -84,7 +81,6 @@ public class StudyRoomController {
         } else { // Parameter가 넘어오지 않았을 때
             // 특정 팀플실의 예약현황 모두 가져오기
             orders = orderService.getByStudyRoom(studyRoom);
-           // TODO: date가 파라미터형태로 넘어올떄와 다르게 order를 가져옴. 그래서 다르게 정렬해야됨.
             for(Order order : orders){
                 list.add(orderToResponse(order));
             }
@@ -101,61 +97,48 @@ public class StudyRoomController {
      */
     @PostMapping
     public ResponseEntity<Object> createStudyRoom(@Valid @RequestBody StudyRoomRequest studyRoomRequest){
-        return ResponseEntity.ok(this.studyRoomService.create(studyRoomRequest));
+        return studyRoomService.isNameDuplicated(studyRoomRequest.getName())
+                ? ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 존재하는 팀플실 이름입니다.")
+                : ResponseEntity.ok(this.studyRoomService.create(studyRoomRequest));
     }
 
     /**
      * 팀플실 수정
      */
     @PutMapping ("/{id}")
-    public ResponseEntity modify(@RequestBody StudyRoomRequest studyRoomRequest, @PathVariable("id") Long id){
-        // TODO: 조금더 고급적인 방법이 있는지
-        try{
-            StudyRoom studyRoom = studyRoomService.getStudyRoom(id);
-            this.studyRoomService.modify(studyRoom, studyRoomRequest);
-            return ResponseEntity.ok("수정성공");
-        } catch (DataNotFoundException e){ // 다른예외는 어떻게 처리해야하는지 잘모루
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 팀플실입니다.");
-        }
+    public ResponseEntity modify(@Valid @RequestBody StudyRoomRequest studyRoomRequest, @PathVariable("id") Long id){
+        StudyRoom studyRoom = studyRoomService.getStudyRoom(id);
+        this.studyRoomService.modify(studyRoom, studyRoomRequest);
+        return ResponseEntity.ok("수정성공");
     }
     /**
      * 팀플실 삭제.
      */
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable("id") Long id){
-        // TODO: 조금더 고급적인 방법이 있는지
-        try{
-            StudyRoom studyRoom = studyRoomService.getStudyRoom(id);
-            this.studyRoomService.delete(studyRoom);
-            return ResponseEntity.ok("삭제성공");
-        } catch (DataNotFoundException e){ // 다른예외는 어떻게 처리해야하는지 잘모루
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 팀플실입니다.");
-        }
-
+        StudyRoom studyRoom = studyRoomService.getStudyRoom(id);
+        this.studyRoomService.delete(studyRoom);
+        return ResponseEntity.ok("삭제성공");
     }
 
     /**
      * 팀플실예약
      */
     @PostMapping("/{id}")
-    public ResponseEntity reserve(Authentication authentication, @RequestBody OrderRequest orderRequest, @PathVariable("id") Long id){
-        try{
-            StudyRoom studyRoom = studyRoomService.getStudyRoom(id);
-            // 예약인원 초가
-            if(orderRequest.getBookingCapacity() > studyRoom.getCapacity()){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이 팀플실의 예약가능한 인원 : " + studyRoom.getCapacity() + " 예약인원 초과");
-            }
-            // 해당 날짜의 예약이 이미 차있는지 확인
-            if(!studyRoomService.check(studyRoom, orderRequest)){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 예약되어 있습니다.");
-            }
-            // 현재 접근한 사용자의 정보를 가져옴.
-            User user = (User) ((MyUserDetails) authentication.getPrincipal()).getUser();
-            orderService.reserve(studyRoom, orderRequest,user.getUsername());
-            return ResponseEntity.ok("예약완료");
-        } catch (DataNotFoundException e){ // 다른예외는 어떻게 처리해야하는지 잘모루
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 팀플실입니다.");
+    public ResponseEntity reserve(Authentication authentication,@Valid @RequestBody OrderRequest orderRequest, @PathVariable("id") Long id){
+        StudyRoom studyRoom = studyRoomService.getStudyRoom(id);
+        // 예약인원 초가
+        if(orderRequest.getBookingCapacity() > studyRoom.getCapacity()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이 팀플실의 예약가능한 인원 : " + studyRoom.getCapacity() + " 예약인원 초과");
         }
+        // 해당 날짜의 예약이 이미 차있는지 확인
+        if(!studyRoomService.check(studyRoom, orderRequest)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 예약되어 있습니다.");
+        }
+        // 현재 접근한 사용자의 정보를 가져옴.
+        User user = (User) ((MyUserDetails) authentication.getPrincipal()).getUser();
+        orderService.reserve(studyRoom, orderRequest,user.getUsername());
+        return ResponseEntity.ok("예약완료");
     }
 
     public LinkedHashMap<String,String> orderToResponse(Order order){

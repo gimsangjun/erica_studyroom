@@ -4,6 +4,7 @@ import com.example.demo.enums.OrderState;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -43,6 +44,7 @@ public class Order {
     private double startTime;
     private double endTime;
     // 예약 인원
+    @Range(min = 1, message = "최소 인원은 1명이상이어야 합니다.")
     @Column(name = "booking_capacity")
     private int bookingCapacity;
 
