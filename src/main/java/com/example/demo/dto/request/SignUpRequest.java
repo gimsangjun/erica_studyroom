@@ -24,13 +24,13 @@ public class SignUpRequest {
     private final Integer studentNumber;
 
     @NotNull
-    private final String imgUrl = "/";
+    private final String imgUrl;
 
     @NotNull
-    private final Integer age = 0;
+    private final Integer age;
 
     @NotNull
-    @Range(min=1, max=10)
+    @Range(min=1, max=4)
     private final Integer grade ;
 
     @NotNull

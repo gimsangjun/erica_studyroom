@@ -32,7 +32,7 @@ public class User extends Common implements Serializable {
     private String name; // 사용자 이름
 
     @Column(name = "student_number", nullable = false, unique = true)
-    private int studentNumber ; // 학번
+    private Integer studentNumber ; // 학번
 
     @Column(name = "img_url")
     private String imgUrl;
@@ -40,8 +40,8 @@ public class User extends Common implements Serializable {
     @Column(nullable = false, length = 50)
     @Enumerated(EnumType.STRING)
     private UserRole role;
-    private int age;
-    private int grade;
+    private Integer age;
+    private Integer grade;
 
     @Email
     private String email;

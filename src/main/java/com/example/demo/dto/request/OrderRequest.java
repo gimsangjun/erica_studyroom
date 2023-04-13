@@ -17,11 +17,11 @@ public class OrderRequest {
     private LocalDate date;
     // 예약시간.
     @NotNull
-    private double startTime;
+    private Double startTime;
     @NotNull
-    private double endTime;
+    private Double endTime;
     // 예약인원
     @NotNull
-    private int bookingCapacity;
+    private Integer bookingCapacity;
 
 }

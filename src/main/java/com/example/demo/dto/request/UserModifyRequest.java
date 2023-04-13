@@ -22,14 +22,14 @@ public class UserModifyRequest {
     private String name; // 사용자이름
 
     @NotNull
-    private int studentNumber;
+    private Integer studentNumber;
 
     @NotNull
-    private int age;
+    private Integer age;
 
     @NotNull
-    @Range(min=1, max=10)
-    private int grade;
+    @Range(min=1, max=4)
+    private Integer grade;
 
     @NotBlank
     @Email

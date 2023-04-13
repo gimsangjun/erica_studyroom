@@ -23,10 +23,14 @@ public class StudyRoomRequest {
     @NotBlank
     private String location ; // 5층
     @NotNull
-    private int capacity ; // 10
+    private Integer capacity ; // 10
+    @NotNull
     private Set<String> descriptions = new HashSet<>(); // ex. 투명한 벽으로 구분된 팀플실
+    @NotNull
     private Set<String> cautions = new HashSet<>(); // ex. 음식물 반입금지, 시끄럽게 떠드는 행위 금지
+    @NotNull
     private Set<String> drinks = new HashSet<>(); // ex. 커피, 물
+    @NotNull
     private Set<String> tags = new HashSet<>();
 
 }

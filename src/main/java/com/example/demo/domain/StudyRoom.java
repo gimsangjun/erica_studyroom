@@ -35,7 +35,7 @@ public class StudyRoom {
     // 수용인원
     @Column(name = "capacity")
     @Range(min = 1)
-    private int capacity;
+    private Integer capacity;
     // 설명
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "study_room_descriptions", joinColumns = @JoinColumn(name = "study_room_id"))

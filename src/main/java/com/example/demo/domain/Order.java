@@ -41,12 +41,12 @@ public class Order {
     // 예약날짜
     private LocalDate date;
     // 예약시간.
-    private double startTime;
-    private double endTime;
+    private Double startTime;
+    private Double endTime;
     // 예약 인원
     @Range(min = 1, message = "최소 인원은 1명이상이어야 합니다.")
     @Column(name = "booking_capacity")
-    private int bookingCapacity;
+    private Integer bookingCapacity;
 
     public void setStudyRoom(StudyRoom room){
         this.studyRoom = room;
