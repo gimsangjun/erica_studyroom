@@ -21,21 +21,23 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+        // JwtRequestFilter에서 따로 request에 넣어둠.
         Integer exception = (Integer) request.getAttribute("exception");
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         PrintWriter writer = response.getWriter();
         if(exception == null){
-            writer.println("HTTP Status 401 UNAUTHORIZED - " + authException.getMessage());
+            log.info("error message={}",authException.getMessage());
+            writer.println(authException.getMessage());
         }
         else if(exception == JwtException.WRONG_TOKEN.getCode()){
-            writer.println("HTTP Status 401 UNAUTHORIZED - " + JwtException.WRONG_TOKEN.getMessage());
+            writer.println(JwtException.WRONG_TOKEN.getMessage());
         }
         else if(exception == JwtException.EXPIRED_TOKEN.getCode()){
-            writer.println("HTTP Status 401 UNAUTHORIZED - " + JwtException.EXPIRED_TOKEN.getMessage());
+            writer.println(JwtException.EXPIRED_TOKEN.getMessage());
         }
         else if(exception == JwtException.SIGNATURE_ERROR.getCode()){
-            writer.println("HTTP Status 401 UNAUTHORIZED - " + JwtException.SIGNATURE_ERROR.getMessage());
+            writer.println(JwtException.SIGNATURE_ERROR.getMessage());
         }
         else {
             log.warn("Nothing catching");
