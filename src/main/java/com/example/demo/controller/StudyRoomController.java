@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import com.example.demo.exception.DataNotFoundException;
 import com.example.demo.domain.MyUserDetails;
 import com.example.demo.domain.Order;
 import com.example.demo.domain.StudyRoom;
@@ -68,7 +67,6 @@ public class StudyRoomController {
         // 예약내용 추가 - reservation
         ArrayList<LinkedHashMap> list = new ArrayList<>();
 
-
         // TODO: 그냥 GetMapping처럼 동적으로 생성하게 바꿔야됨. QueryDSL사용해봐야할듯.
         // date가 param형태로 넘어왔다면
         if (date.isPresent()){
@@ -99,7 +97,7 @@ public class StudyRoomController {
     public ResponseEntity<Object> createStudyRoom(@Valid @RequestBody StudyRoomRequest studyRoomRequest){
         return studyRoomService.isNameDuplicated(studyRoomRequest.getName())
                 ? ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 존재하는 팀플실 이름입니다.")
-                : ResponseEntity.ok(this.studyRoomService.create(studyRoomRequest));
+                : ResponseEntity.ok(modelMapper.map(this.studyRoomService.create(studyRoomRequest), StudyRoomResponse.class));
     }
 
     /**
@@ -137,7 +135,7 @@ public class StudyRoomController {
         }
         // 현재 접근한 사용자의 정보를 가져옴.
         User user = (User) ((MyUserDetails) authentication.getPrincipal()).getUser();
-        orderService.reserve(studyRoom, orderRequest,user.getUsername());
+        orderService.reserve(studyRoom, orderRequest, user.getUsername());
         return ResponseEntity.ok("예약완료");
     }
 
