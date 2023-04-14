@@ -106,6 +106,7 @@ public class OrderService {
         order.setDate(orderRequest.getDate());
         order.setStartTime(orderRequest.getStartTime());
         order.setEndTime(orderRequest.getEndTime());
+        order.setBookingCapacity(orderRequest.getBookingCapacity());
         this.orderRepository.save(order);
         return studyRoom;
     }
