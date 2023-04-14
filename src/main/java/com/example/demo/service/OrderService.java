@@ -55,6 +55,9 @@ public class OrderService {
             specification = specification.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.equal(root.get("date"), date));
         }
+        // OrderState == "정상"만, "반납", "취소" 상태는 안됨.
+        specification = specification.and(((root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("state"), OrderState.NORMAL)));
         List<Order> orders = orderRepository.findAll(specification);
         if (orders.size() == 0){
             throw new DataNotFoundException("예약이 존재하지 않습니다.");
