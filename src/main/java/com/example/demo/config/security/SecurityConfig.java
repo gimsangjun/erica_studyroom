@@ -73,7 +73,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/excel/**").permitAll() // 데이터를 Excel파일로 가져오기
                     // CORS options 허용
                     .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                    .antMatchers(HttpMethod.GET,"/api/studyRoom/**").permitAll()
+                    .antMatchers(HttpMethod.GET,"/api/studyroom/**").permitAll()
                     // 위를 제외한 다른 요청들은 인증이 필요
                     .anyRequest().authenticated()
                 .and()
