@@ -54,16 +54,17 @@ public class Order {
 
     public LinkedHashMap<String, String> getResponse(){
         LinkedHashMap reservation = new LinkedHashMap<>();
-        reservation.put("orderId",id);
-        reservation.put("studyRoomId",studyRoom.getId());
-        reservation.put("studyRoomName",studyRoom.getName());
+        reservation.put("orderId", id);
+        reservation.put("studyRoomId", studyRoom.getId());
+        reservation.put("studyRoomName", studyRoom.getName());
         reservation.put("state", state.getState());
         reservation.put("building", studyRoom.getBuilding());
-        reservation.put("location",studyRoom.getLocation());
-        reservation.put("name",user.getName());
-        reservation.put("date",date);
-        reservation.put("startTime",startTime);
-        reservation.put("endTime",endTime);
+        reservation.put("location", studyRoom.getLocation());
+        reservation.put("name", user.getName());
+        reservation.put("date", date);
+        reservation.put("startTime", startTime);
+        reservation.put("endTime", endTime);
+        reservation.put("bookingCapacity", bookingCapacity);
         return reservation;
     }
 
