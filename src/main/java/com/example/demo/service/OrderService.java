@@ -36,7 +36,7 @@ public class OrderService {
      * @param date
      * @return 조건에 해당하는 order 리턴
      */
-    public List<Order> findByCriteria(User user, String university, String building, LocalDate date) {
+    public List<Order> findByCriteria(User user, String university, String building, LocalDate date, OrderState state) {
         Specification<Order> specification = Specification.where(null);
 
         if (user != null){
@@ -55,9 +55,10 @@ public class OrderService {
             specification = specification.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.equal(root.get("date"), date));
         }
-        // OrderState == "정상"만, "반납", "취소" 상태는 안됨.
-        specification = specification.and(((root, query, criteriaBuilder) ->
-                criteriaBuilder.equal(root.get("state"), OrderState.NORMAL)));
+        if (state == OrderState.NORMAL){ // OrderState == "정상"만, "반납", "취소" 상태는 안됨.
+            specification = specification.and(((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("state"), OrderState.NORMAL)));
+        }
         List<Order> orders = orderRepository.findAll(specification);
         if (orders.size() == 0){
             throw new DataNotFoundException("예약이 존재하지 않습니다.");
@@ -103,13 +104,13 @@ public class OrderService {
     // 예약
     public StudyRoom reserve(StudyRoom studyRoom, OrderRequest orderRequest, String username){
         User user = this.userRepository.findByUsername(username).get();
-        Order order = new Order();
-        order.changeUser(user);
-        order.changeStudyRoom(studyRoom);
-        order.setDate(orderRequest.getDate());
-        order.setStartTime(orderRequest.getStartTime());
-        order.setEndTime(orderRequest.getEndTime());
-        order.setBookingCapacity(orderRequest.getBookingCapacity());
+        Order order = Order.builder()
+                .user(user)
+                .date(orderRequest.getDate())
+                .startTime(orderRequest.getStartTime())
+                .endTime(orderRequest.getEndTime())
+                .bookingCapacity(orderRequest.getBookingCapacity())
+                .build();
         this.orderRepository.save(order);
         return studyRoom;
     }
@@ -117,8 +118,7 @@ public class OrderService {
     // 수정
     public Order modify(Order order, OrderRequest orderRequest){
         order.setDate(orderRequest.getDate());
-        order.setStartTime(orderRequest.getStartTime());
-        order.setEndTime(orderRequest.getEndTime());
+        order.setTime(orderRequest.getStartTime(), orderRequest.getEndTime());
         this.orderRepository.save(order);
         return order;
     }

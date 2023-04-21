@@ -1,14 +1,13 @@
 package com.example.demo.controller;
 
 import com.example.demo.domain.Order;
+import com.example.demo.enums.OrderState;
 import com.example.demo.service.OrderService;
 import com.example.demo.service.StudyRoomService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -28,13 +27,11 @@ import java.util.List;
 public class ExcelController {
 
     private final OrderService orderService;
-    private final StudyRoomService studyRoomService;
-
 
     @GetMapping("/order")
     public void downloadExcelOrder(HttpServletResponse response) throws IOException {
         // DB에서 정보 조회
-        List<Order> orders = orderService.findByCriteria(null,null,null, null);
+        List<Order> orders = orderService.findByCriteria(null,null,null, null, OrderState.NORMAL);
         log.info("orders ={}", orders.size());
 
         // Workbook 객체 생성

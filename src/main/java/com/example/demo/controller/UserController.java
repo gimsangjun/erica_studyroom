@@ -90,7 +90,7 @@ public class UserController {
                                 LocalDate date){
         // 현재 로그인한 유저 객체를 가져옴
         User user = ((MyUserDetails) authentication.getPrincipal()).getUser();
-        List<Order> orders = orderService.findByCriteria(user, university, building, date);
+        List<Order> orders = orderService.findByCriteria(user, university, building, date, null);
         ArrayList<LinkedHashMap> list = new ArrayList<>();
         for(Order order : orders){
             list.add(order.getResponse());

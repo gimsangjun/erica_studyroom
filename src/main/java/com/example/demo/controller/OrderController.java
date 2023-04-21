@@ -4,6 +4,7 @@ import com.example.demo.domain.MyUserDetails;
 import com.example.demo.domain.Order;
 import com.example.demo.domain.User;
 import com.example.demo.dto.request.OrderRequest;
+import com.example.demo.enums.OrderState;
 import com.example.demo.service.OrderService;
 import com.example.demo.service.StudyRoomService;
 import lombok.RequiredArgsConstructor;
@@ -31,14 +32,14 @@ public class OrderController {
     private final StudyRoomService studyRoomService;
 
     /**
-     * @return 모든 예약 돌려줌. 테스트 용도
+     * @return 모든 예약 돌려줌.
      */
     @GetMapping
     public ResponseEntity<Object> read(@RequestParam(name = "university", required = false) String university,
                                          @RequestParam(name = "building", required = false) String building,
                                          @RequestParam(name = "date", required = false)
                                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date){
-        List<Order> orders = orderService.findByCriteria(null, university, building, date);
+        List<Order> orders = orderService.findByCriteria(null, university, building, date, OrderState.NORMAL);
         ArrayList<LinkedHashMap> list = new ArrayList<>();
         for(Order order : orders){
             list.add(order.getResponse());
