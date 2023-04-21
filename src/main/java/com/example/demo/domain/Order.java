@@ -1,9 +1,7 @@
 package com.example.demo.domain;
 
 import com.example.demo.enums.OrderState;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
@@ -11,10 +9,11 @@ import java.time.LocalDate;
 import java.util.LinkedHashMap;
 
 @Getter
-@Setter
 @Entity
 @Table(name = "orders")
-@ToString
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Order {
 
     @Id
@@ -36,6 +35,7 @@ public class Order {
     // 반납
     @Column(columnDefinition = "varchar(255) default '정상'")
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     private OrderState state = OrderState.NORMAL;
 
     // 예약날짜
@@ -78,6 +78,19 @@ public class Order {
     public void changeStudyRoom(StudyRoom studyRoom){
         this.studyRoom = studyRoom;
         studyRoom.getOrders().add(this);
+    }
+
+    public void setState(OrderState state) {
+        this.state = state;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public void setTime(Double startTime, Double endTime) {
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
 }

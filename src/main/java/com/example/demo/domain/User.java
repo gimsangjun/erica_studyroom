@@ -7,7 +7,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -15,11 +14,10 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @Builder
 @Table(name = "users")
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class User extends Common implements Serializable {
 
     @Column(unique = true, nullable = false , length = 50)
@@ -39,7 +37,8 @@ public class User extends Common implements Serializable {
 
     @Column(nullable = false, length = 50)
     @Enumerated(EnumType.STRING)
-    private UserRole role;
+    @Builder.Default
+    private UserRole role = UserRole.ROLE_USER;
     private Integer age;
     private Integer grade;
 
@@ -59,6 +58,10 @@ public class User extends Common implements Serializable {
         this.email = dto.getEmail();
         this.university = dto.getUniversity();
         this.department = dto.getDepartment();
+    }
+
+    public void setPassword(String password){
+        this.password = password;
     }
 
     // DTO 출력용용

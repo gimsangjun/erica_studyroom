@@ -1,10 +1,8 @@
 package com.example.demo.service;
 
-import com.example.demo.domain.Order;
 import com.example.demo.domain.User;
 import com.example.demo.dto.request.SignUpRequest;
 import com.example.demo.dto.request.UserModifyRequest;
-import com.example.demo.enums.role.UserRole;
 import com.example.demo.exception.DataNotFoundException;
 import com.example.demo.repository.OrderRepository;
 import com.example.demo.repository.UserRepository;
@@ -14,7 +12,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +30,6 @@ public class UserService {
     public User signUp(final SignUpRequest signUpRequest){
         final User user = modelMapper.map(signUpRequest,User.class);
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
-        user.setRole(UserRole.ROLE_USER);
         return userRepository.save(user);
     }
 
