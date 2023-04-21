@@ -22,12 +22,12 @@ public class Order {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="user_id", nullable = false)
     private User user;
 
     // 주인: 외래키값이 있는곳, 여기에는 꼭 값을 넣어줘야한다.
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "study_room_id")
+    @JoinColumn(name = "study_room_id", nullable = false)
     private StudyRoom studyRoom;
     // order의 상태를 나타내는 state 속성 추가
     // 취소
@@ -39,13 +39,16 @@ public class Order {
     private OrderState state = OrderState.NORMAL;
 
     // 예약날짜
+    @Column(nullable = false)
     private LocalDate date;
     // 예약시간.
+    @Column(nullable = false)
     private Double startTime;
+    @Column(nullable = false)
     private Double endTime;
     // 예약 인원
     @Range(min = 1, message = "최소 인원은 1명이상이어야 합니다.")
-    @Column(name = "booking_capacity")
+    @Column(name = "booking_capacity", nullable = false)
     private Integer bookingCapacity;
 
     public void setStudyRoom(StudyRoom room){

@@ -106,6 +106,7 @@ public class OrderService {
         User user = this.userRepository.findByUsername(username).get();
         Order order = Order.builder()
                 .user(user)
+                .studyRoom(studyRoom)
                 .date(orderRequest.getDate())
                 .startTime(orderRequest.getStartTime())
                 .endTime(orderRequest.getEndTime())

@@ -10,6 +10,7 @@ import java.util.*;
 @Entity
 @Table(name = "study_room")
 @Getter
+@Setter // modelMapper을 사용할 경우 @Setter를 사용하여 매핑함.
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

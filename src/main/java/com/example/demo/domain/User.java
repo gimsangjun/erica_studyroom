@@ -14,6 +14,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter // modelMapper을 사용할 경우 @Setter를 사용하여 매핑함.
 @Builder
 @Table(name = "users")
 @AllArgsConstructor
