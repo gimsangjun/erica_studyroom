@@ -40,12 +40,27 @@ public class OrderController {
                                          @RequestParam(name = "date", required = false)
                                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date){
         List<Order> orders = orderService.findByCriteria(null, university, building, date, OrderState.NORMAL);
+        // TODO: statistics랑 겹침.
         ArrayList<LinkedHashMap> list = new ArrayList<>();
         for(Order order : orders){
             list.add(order.getResponse());
         }
         return ResponseEntity.ok(list);
     }
+
+    @GetMapping("/statistics")
+    public ResponseEntity<Object> statistics( @RequestParam(name = "year") int year,
+                                              @RequestParam(name = "month") int month,
+                                              @RequestParam(name = "dayofweek") int dayofweek){
+        List<Order> orders = orderService.findStatistics(year, month, dayofweek);
+        ArrayList<LinkedHashMap> list = new ArrayList<>();
+        for(Order order : orders){
+            list.add(order.getResponse());
+        }
+        return ResponseEntity.ok(list);
+    }
+
+
     /**
      * @return 특정 order의 정보를 리턴.
      */
@@ -90,7 +105,7 @@ public class OrderController {
      * 예약반납
      */
     @PutMapping("/return/{id}")
-    public ResponseEntity return_(Authentication authentication, @PathVariable("id") Long id){
+    public ResponseEntity<Object> return_(Authentication authentication, @PathVariable("id") Long id){
         Order order = orderService.getOrder(id);
         User user = (User) ((MyUserDetails) authentication.getPrincipal()).getUser();
         // 로그인한 유저와 order의 유저가 같은 사람인지 확인

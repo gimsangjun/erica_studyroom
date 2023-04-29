@@ -12,10 +12,7 @@ import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -136,4 +133,14 @@ public class OrderService {
     }
 
 
+    // mariadb에서는 일요일~ 토요일까지 1~7이다.
+    public List<Order> findStatistics(int year, int month, int dayofweek) {
+        List<Order> orders = this.orderRepository.findStatistics(year, month, dayofweek);
+        if (orders.size() == 0){
+            throw new DataNotFoundException("예약이 존재하지 않습니다.");
+        } else{
+            return orders;
+        }
+
+    }
 }
