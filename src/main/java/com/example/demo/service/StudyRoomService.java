@@ -95,5 +95,27 @@ public class StudyRoomService {
         else return true;
     }
 
-
+    // TODO: 좀더 효율적인 방법으로 리팩토링필요
+    /**
+     * 예약연장을 할 떄, 자기자신은 뺴고 예약이 차있는지 확인
+     * 위의 check함수와 합칠려고 했으나, 오류발생(이미 예약되있는데 예약가능)
+     * @param studyRoom
+     * @param orderRequest
+     * @param order
+     * @return
+     */
+    public boolean extendCheck(StudyRoom studyRoom, OrderRequest orderRequest, Order order) {
+        List<Order> orders = this.studyRoomRepository.findByDateBetweenTime(studyRoom, orderRequest.getDate(), orderRequest.getStartTime(), orderRequest.getEndTime());
+        for(Order o : orders){
+            log.info("orders={}", o.getResponse());
+        }
+        log.info("order={]",order.getResponse());
+        //TODO: List에서 remove가 정확히 어떻게 동작하느지
+        orders.remove(order);
+        for(Order o : orders){
+            log.info("orders={}", o.getResponse());
+        }
+        if (orders.size() > 0) return false;
+        else return true;
+    }
 }

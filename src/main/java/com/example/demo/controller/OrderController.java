@@ -114,4 +114,23 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).body("반납 완료");
     }
 
+    /**
+     * 예약연장
+     */
+    @PutMapping("/extend/{id}")
+    public ResponseEntity<Object> extend(Authentication authentication, @PathVariable("id") Long id, @Valid @RequestBody OrderRequest orderRequest){
+        Order order = orderService.getOrder(id);
+        User user = (User) ((MyUserDetails) authentication.getPrincipal()).getUser();
+
+        // 로그인한 유저와 order의 유저가 같은 사람인지 확인
+        orderService.authorizeUser(user, order);
+
+        if(!studyRoomService.extendCheck(order.getStudyRoom(), orderRequest, order)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 예약 되어있습니다.");
+        }
+        Order modify = this.orderService.modify(order, orderRequest);
+        return ResponseEntity.ok(modify.getResponse());
+
+    }
+
 }
