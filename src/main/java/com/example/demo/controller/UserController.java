@@ -86,8 +86,7 @@ public class UserController {
                                 @RequestParam(name = "university", required = false) String university,
                                 @RequestParam(name = "building", required = false) String building,
                                 @RequestParam(name = "date", required = false)
-                                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                LocalDate date){
+                                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date){
         // 현재 로그인한 유저 객체를 가져옴
         User user = ((MyUserDetails) authentication.getPrincipal()).getUser();
         List<Order> orders = orderService.findByCriteria(user, university, building, date, null);

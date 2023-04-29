@@ -28,7 +28,7 @@ public class UserService {
 
     // 회원가입
     public User signUp(final SignUpRequest signUpRequest){
-        final User user = modelMapper.map(signUpRequest,User.class);
+        User user = modelMapper.map(signUpRequest, User.class);
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
         return userRepository.save(user);
     }

@@ -12,4 +12,8 @@ public class JwtResponse {
         return this.jwtToken;
     }
 
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }
