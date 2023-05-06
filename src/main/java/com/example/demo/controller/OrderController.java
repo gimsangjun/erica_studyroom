@@ -49,9 +49,9 @@ public class OrderController {
     }
 
     @GetMapping("/statistics")
-    public ResponseEntity<Object> statistics( @RequestParam(name = "year") int year,
-                                              @RequestParam(name = "month") int month,
-                                              @RequestParam(name = "dayofweek") int dayofweek){
+    public ResponseEntity<Object> statistics( @RequestParam(name = "year", required = false) Integer year,
+                                              @RequestParam(name = "month", required = false) Integer month,
+                                              @RequestParam(name = "dayofweek", required = false) Integer dayofweek){
         List<Order> orders = orderService.findStatistics(year, month, dayofweek);
         ArrayList<LinkedHashMap> list = new ArrayList<>();
         for(Order order : orders){
@@ -128,6 +128,7 @@ public class OrderController {
         if(!studyRoomService.extendCheck(order.getStudyRoom(), orderRequest, order)){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 예약 되어있습니다.");
         }
+        
         Order modify = this.orderService.modify(order, orderRequest);
         return ResponseEntity.ok(modify.getResponse());
 

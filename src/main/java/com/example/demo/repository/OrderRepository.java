@@ -24,7 +24,4 @@ public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecific
 
     List<Order> findByStateAndDate(OrderState state, LocalDate date);
 
-    // 취소상태인 Order빼고 전체
-    @Query("SELECT o From Order o WHERE year(o.date) = :year AND month(o.date) = :month AND dayofweek(o.date) = :dayofweek AND o.state != 'CANCEL' ")
-    List<Order> findStatistics(@Param("year") int year, @Param("month") int month, @Param("dayofweek") int dayofweek);
 }

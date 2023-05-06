@@ -134,13 +134,32 @@ public class OrderService {
 
 
     // mariadb에서는 일요일~ 토요일까지 1~7이다.
-    public List<Order> findStatistics(int year, int month, int dayofweek) {
-        List<Order> orders = this.orderRepository.findStatistics(year, month, dayofweek);
+    public List<Order> findStatistics(Integer year, Integer month, Integer dayofweek) {
+        Specification<Order> specification = Specification.where(null);
+
+        if (year != null) {
+            specification = specification.and(((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(criteriaBuilder.function("year", Integer.class, root.get("date")), year)));
+        }
+        if (month != null) {
+            specification = specification.and(((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(criteriaBuilder.function("month", Integer.class, root.get("date")), month)));
+        }
+        if (dayofweek != null) {
+            specification = specification.and(((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(criteriaBuilder.function("dayofweek", Integer.class, root.get("date")), dayofweek)));
+        }
+
+        specification = specification.and(((root, query, criteriaBuilder) ->
+                criteriaBuilder.notEqual(root.get("state"), OrderState.CANCEL)));
+
+        // List<Order> orders = this.orderRepository.findStatistics(year, month, dayofweek);
+        List<Order> orders = orderRepository.findAll(specification);
+
         if (orders.size() == 0){
             throw new DataNotFoundException("예약이 존재하지 않습니다.");
         } else{
             return orders;
         }
-
     }
 }
