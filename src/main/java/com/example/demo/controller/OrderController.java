@@ -51,8 +51,9 @@ public class OrderController {
     @GetMapping("/statistics")
     public ResponseEntity<Object> statistics( @RequestParam(name = "year", required = false) Integer year,
                                               @RequestParam(name = "month", required = false) Integer month,
-                                              @RequestParam(name = "dayofweek", required = false) Integer dayofweek){
-        List<Order> orders = orderService.findStatistics(year, month, dayofweek);
+                                              @RequestParam(name = "dayofweek", required = false) Integer dayofweek,
+                                              @RequestParam(name = "university", required = false) String university){
+        List<Order> orders = orderService.findStatistics(year, month, dayofweek, university);
         ArrayList<LinkedHashMap> list = new ArrayList<>();
         for(Order order : orders){
             list.add(order.getResponse());
