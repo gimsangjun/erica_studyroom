@@ -134,7 +134,7 @@ public class OrderService {
 
 
     // mariadb에서는 일요일~ 토요일까지 1~7이다.
-    public List<Order> findStatistics(Integer year, Integer month, Integer dayofweek) {
+    public List<Order> findStatistics(Integer year, Integer month, Integer dayofweek, String university) {
         Specification<Order> specification = Specification.where(null);
 
         if (year != null) {
@@ -149,7 +149,12 @@ public class OrderService {
             specification = specification.and(((root, query, criteriaBuilder) ->
                     criteriaBuilder.equal(criteriaBuilder.function("dayofweek", Integer.class, root.get("date")), dayofweek)));
         }
+        if (university != null) { // studyRoom과 join후에 가져오기
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.join("studyRoom").get("university"), university));
+        }
 
+        // Order의 상태가 '취소'인것을 빼고 전부
         specification = specification.and(((root, query, criteriaBuilder) ->
                 criteriaBuilder.notEqual(root.get("state"), OrderState.CANCEL)));
 
