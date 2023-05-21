@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3000)
+// @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3000)
 @RestController
 @Slf4j
 @RequiredArgsConstructor

@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3000)
+//@CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3000)
 @Controller
 @Slf4j
 @RequiredArgsConstructor

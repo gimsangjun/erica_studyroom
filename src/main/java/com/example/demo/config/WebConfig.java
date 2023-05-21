@@ -12,4 +12,15 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     public ModelMapper modelMapper(){ return new ModelMapper(); }
 
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:3000", "http://localhost:3001", "https://friendly-dango-f48d5f.netlify.app")
+                .allowedMethods("GET", "POST", "DELETE", "PUT")
+                .allowedHeaders("authorization", "content-type", "ngrok-skip-browser-warning")
+                .exposedHeaders("authorization")
+                .allowCredentials(true)
+                .maxAge(3000);
+    }
+
 }
