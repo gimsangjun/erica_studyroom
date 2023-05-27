@@ -125,14 +125,16 @@ public class StudyRoomController {
     @PostMapping("/{id}")
     public ResponseEntity reserve(Authentication authentication,@Valid @RequestBody OrderRequest orderRequest, @PathVariable("id") Long id){
         StudyRoom studyRoom = studyRoomService.getStudyRoom(id);
-        // 예약인원 초가
+        // 예약인원 초과
         if(orderRequest.getBookingCapacity() > studyRoom.getCapacity()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이 팀플실의 예약가능한 인원 : " + studyRoom.getCapacity() + " 예약인원 초과");
         }
+
         // 해당 날짜의 예약이 이미 차있는지 확인
         if(!studyRoomService.check(studyRoom, orderRequest)){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 예약되어 있습니다.");
         }
+
         // 현재 접근한 사용자의 정보를 가져옴.
         User user = (User) ((MyUserDetails) authentication.getPrincipal()).getUser();
         orderService.reserve(studyRoom, orderRequest, user.getUsername());
