@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.domain.User;
 import com.example.demo.exception.DataNotFoundException;
 import com.example.demo.domain.Order;
 import com.example.demo.domain.StudyRoom;
@@ -117,5 +118,18 @@ public class StudyRoomService {
         }
         if (orders.size() > 0) return false;
         else return true;
+    }
+
+    /**
+     * 현재 시용자가 같은 시간대에 두곳 이상을 예약하고 있으면 안됨.
+     * @param orderRequest
+     * @param user
+     * @return
+     */
+    public boolean userCheck(OrderRequest orderRequest, User user) {
+        List<Order> orders = this.studyRoomRepository.findByDateBetweenTimeAndUser(orderRequest.getDate(), orderRequest.getStartTime(), orderRequest.getEndTime(), user);
+        if (orders.size() > 0) return false;
+        else return true;
+
     }
 }

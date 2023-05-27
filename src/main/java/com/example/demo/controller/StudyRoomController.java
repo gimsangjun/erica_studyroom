@@ -137,6 +137,12 @@ public class StudyRoomController {
 
         // 현재 접근한 사용자의 정보를 가져옴.
         User user = (User) ((MyUserDetails) authentication.getPrincipal()).getUser();
+
+        // 현재 시용자가 같은 시간대에 두곳 이상을 예약하고 있으면 안됨.
+        if(!studyRoomService.userCheck(orderRequest, user)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 같은 시간대에 예약을 하셨습니다.");
+        }
+
         orderService.reserve(studyRoom, orderRequest, user.getUsername());
         return ResponseEntity.ok("예약완료");
     }
